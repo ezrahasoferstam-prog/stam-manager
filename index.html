@@ -1131,7 +1131,7 @@ init();
 var privateSyncBusy=false;
 function privateSyncPick(o,keys){var r={};keys.forEach(function(k){if(o[k]!==undefined)r[k]=o[k]});return r}
 function privateSyncProject(s){
- return {schema:1,sourceTs:s.ts||0,orders:(s.orders||[]).map(function(o){var q=privateSyncPick(o,['id','name','date','due','item','status','rid','rdate']);q.parts={};Object.keys(o.parts||{}).filter(function(k){return ['rp','tp','p'].includes(k)}).forEach(function(k){q.parts[k]=privateSyncPick(o.parts[k]||{},['ok','self'])});return q}),writing:(s.writing||[]).map(function(w){return privateSyncPick(w,['id','date','oid','pair','part','words'])}),recurring:(s.recurring||[]).map(function(t){var q=privateSyncPick(t,['id','name','item','mode','wd','start','first','count','dueDays','next','off']);q.partKeys=Object.keys(t.parts||{});return q}),cfg:privateSyncPick(s.cfg||{},['head','hand'])};
+ return {schema:1,sourceTs:Date.now(),orders:(s.orders||[]).map(function(o){var q=privateSyncPick(o,['id','name','date','due','item','status','rid','rdate']);q.parts={};Object.keys(o.parts||{}).filter(function(k){return ['rp','tp','p'].includes(k)}).forEach(function(k){q.parts[k]=privateSyncPick(o.parts[k]||{},['ok','self'])});return q}),writing:(s.writing||[]).map(function(w){return privateSyncPick(w,['id','date','oid','pair','part','words'])}),recurring:(s.recurring||[]).map(function(t){var q=privateSyncPick(t,['id','name','item','mode','wd','start','first','count','dueDays','next','off']);q.partKeys=Object.keys(t.parts||{});return q}),cfg:privateSyncPick(s.cfg||{},['head','hand'])};
 }
 async function privateSyncHash(text){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
 function privateSyncInfo(){try{return JSON.parse(localStorage.getItem('sofer_private_sync')||'null')}catch(e){return null}}
@@ -1150,7 +1150,7 @@ async function privateSyncUpload(){
   var c=new AbortController(),timer=setTimeout(function(){c.abort()},45000),res;
   try{var r=await fetch(siteEndpoint(),{method:'POST',credentials:'omit',signal:c.signal,body:new URLSearchParams({type:'snapshot_upload',admin_key:adminKey(),base_digest:remote.digest||'',digest:digest,payload:text})});if(!r.ok)throw Error('לא התקבל מענה תקין מהשרת');res=await r.json()}finally{clearTimeout(timer)}
   if(!res.ok||res.digest!==digest||res.count!==snapshot.orders.length||!res.received_at)throw Error(res.error||'לא התקבל אישור קליטה מלא');
-  try{localStorage.setItem('sofer_private_sync',JSON.stringify({digest:res.digest,count:res.count,received_at:res.received_at,source_ts:snapshot.sourceTs}))}catch(e){throw Error('העותק נקלט, אך אישור הסנכרון לא נשמר במכשיר')}
+  try{localStorage.setItem('sofer_private_sync',JSON.stringify({digest:res.digest,count:res.count,received_at:res.received_at,source_ts:S.ts||0}))}catch(e){throw Error('העותק נקלט, אך אישור הסנכרון לא נשמר במכשיר')}
   privateSyncRender();toast('העותק הפרטי נקלט ✓ · '+res.count+' הזמנות');
  }catch(e){privateSyncShow('הסנכרון לא אושר. המקור בטלפון לא השתנה. אפשר לנסות שוב.');toast('סנכרון פרטי: '+(e.name==='AbortError'?'תם הזמן. ייתכן שנקלט; ניסיון נוסף בטוח.':e.message))}
  finally{privateSyncBusy=false;if(btn)btn.disabled=false}
