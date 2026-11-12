@@ -74,7 +74,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 </main>
 <script>
 var S={courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],cfg:{head:400,hand:400}},ref=null,tab='sum',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
-var TABS=[['sum','סיכום'],['lessons','שיעורים'],['orders','תפילין'],['write','כתיבה'],['buys','קניות'],['pay','תשלומים']];
+var TABS=[['sum','סיכום'],['lessons','שיעורים'],['orders','תפילין'],['write','כתיבה'],['buys','קניות'],['pay','תשלומים'],['links','קישורים']];
 var STAT=['הוזמן','בכתיבה','מוכן','נמסר'];
 var IDS=['l_wrote','l_hours','c_new','l_course','l_name','l_date','l_price','l_topic','o_name','o_item','o_date','o_due','o_price','o_paid','o_status','p_name','p_date','p_amt','p_note'];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -1110,13 +1110,36 @@ function quietSections(){
  // Only one order-state group open inside its parent.
  app.querySelectorAll('details.order-group').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)app.querySelectorAll('details.order-group').forEach(function(o){if(o!==d)o.open=false})})});
 }
+// --- קישורים: עריכת הגיליון וקישור האתר ללקוחות ---
+var SHEET_EDIT_URL='https://docs.google.com/spreadsheets/d/1PlFuYt-8UqGTMqgmqP0PgGE7c7ZkZiGXLnHtLF4NTyo/edit?authuser=ezrahasofer.stam%40gmail.com';
+var ORDER_PAGE_URL='https://files.instinct.com/pe2rpk05vw2w';
+function viewLinks(){
+  var h='<div class="card"><b>קישורים</b>';
+  h+='<div class="mut" style="margin:2px 0 10px">העריכה רק אצלך. לקוחות רק רואים ומזמינים.</div>';
+  h+='<a class="add" style="display:block;text-align:center;text-decoration:none;margin-top:0" href="'+SHEET_EDIT_URL+'" target="_blank" rel="noopener">✏️ עריכת מחירים ופריטים</a>';
+  h+='<button class="add" onclick="shareOrderLink()">🔗 קישור ללקוחות</button>';
+  h+='<div class="mut" style="margin-top:10px;font-size:12px;direction:ltr;text-align:center;word-break:break-all">'+ORDER_PAGE_URL+'</div>';
+  h+='</div>';
+  return h;
+}
+async function shareOrderLink(){
+  var data={title:'עזרא הסופר — הזמנות באתר',text:'להזמנה אצל עזרא הסופר:',url:ORDER_PAGE_URL};
+  try{
+    if(navigator.share){await navigator.share(data);return}
+    throw new Error('share-unsupported');
+  }catch(e){
+    if(e&&e.name==='AbortError')return;
+    try{await navigator.clipboard.writeText(ORDER_PAGE_URL);toast('הקישור הועתק ✓ אפשר לשלוח בוואטסאפ')}
+    catch(x){toast(ORDER_PAGE_URL)}
+  }
+}
 function render(){
   if(typeof privateSyncRender==='function')privateSyncRender();
   var keep={};
   document.querySelectorAll('#app input[id],#app select[id],#app textarea[id]').forEach(function(e){keep[e.id]=e.type==='checkbox'?e.checked:e.value});
   var ae=document.activeElement,aid=ae&&ae.id;
   document.getElementById('nav').innerHTML=TABS.map(function(t){return '<button class="'+(t[0]===tab?'on':'')+'" onclick="setTab(\''+t[0]+'\')">'+t[1]+'</button>'}).join('');
-  var v={sum:viewSum,lessons:viewLessons,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay}[tab]();
+  var v={sum:viewSum,lessons:viewLessons,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
   document.getElementById('app').innerHTML=names()+v;quietSections();
   setTimeout(calcTotal,0);
   setTimeout(hydrateImgs,0);
