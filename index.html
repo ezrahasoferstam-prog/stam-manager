@@ -70,7 +70,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.6 - אחסון מקומי</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.7 - אחסון מקומי</div>
 </main>
 <script>
 var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='sum',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
@@ -91,7 +91,7 @@ function save(quiet){
   try{localStorage.setItem('sofer',JSON.stringify(S))}catch(e){toast('שגיאת שמירה במכשיר. אל תסגור לפני יצירת גיבוי: '+e.message);throw e}
   if(!quiet)render();
 }
-function norm(d){d=JSON.parse(JSON.stringify(d||{}));S={income:(d.income&&typeof d.income==='object'?d.income:{}),courses:d.courses||[],lessons:d.lessons||[],orders:d.orders||[],payments:d.payments||[],expenses:d.expenses||[],writing:d.writing||[],buys:d.buys||[],plans:d.plans||[],contacts:d.contacts||{},cprog:d.cprog||{},recurring:d.recurring||[],billing:(d.billing&&typeof d.billing==='object'?{rates:d.billing.rates||{},inst:d.billing.inst||{}}:{rates:{},inst:{}}),cfg:d.cfg||{head:400,hand:400},ts:d.ts||0}}
+function norm(d){d=JSON.parse(JSON.stringify(d||{}));S={income:(d.income&&typeof d.income==='object'?d.income:{}),courses:d.courses||[],lessons:d.lessons||[],orders:d.orders||[],payments:d.payments||[],expenses:d.expenses||[],writing:d.writing||[],buys:d.buys||[],plans:d.plans||[],contacts:d.contacts||{},cprog:d.cprog||{},recurring:d.recurring||[],billing:(d.billing&&typeof d.billing==='object'?{rates:d.billing.rates||{},inst:d.billing.inst||{}}:{rates:{},inst:{}}),cfg:d.cfg||{head:400,hand:400},sfiles:(d.sfiles&&typeof d.sfiles==='object'&&!Array.isArray(d.sfiles)?d.sfiles:{}),ts:d.ts||0}}
 async function init(){
   try{
     if(window.claude){
@@ -128,7 +128,7 @@ async function backupData(){
     a.download='sofer-backup-'+today()+'.json';
     document.body.appendChild(a);a.click();
     setTimeout(function(){try{URL.revokeObjectURL(a.href)}catch(e){}a.remove()},500);
-    toast('הגיבוי ירד ✓'+(keys.length?' כולל '+keys.length+' תמונות':'')+' — שמור במקום בטוח');
+    var mb=Math.round(raw.length/1048576);toast('הגיבוי ירד ✓'+(keys.length?' כולל '+keys.length+' תמונות':'')+' ('+mb+'MB) — שמור במקום בטוח'+(mb>=80?'. שים לב: הגיבוי גדל ('+mb+'MB). שמור אותו גם מחוץ לטלפון, ואם הוא נהיה כבד מדי תגיד לי':''));
   }catch(e){toast('הגיבוי נכשל: '+e.message)}
 }
 function importData(inp){
@@ -427,6 +427,7 @@ async function shareFile(pid,cid){
 
 function findO(id){return S.orders.filter(function(o){return o.id===id})[0]}
 async function doUpload(f,t){
+  if(t.kind==='s')return upStu(f,t);
   if(t.kind==='f')return upPlanFile(f,t);
   var o=t.kind==='o',key=o?'o'+t.lid+t.key:(t.i<0?t.lid:'s'+t.lid+'_'+t.i),n=null;
   var l0=o?findO(t.lid):findL(t.lid);
@@ -1017,9 +1018,9 @@ function stuEntries(n){
 function stuRender(){
   var n=stuName,all=stuEntries(n),only=document.getElementById('stu_f').checked;
   var list=only?all.filter(function(e){return e.w||e.im.length}):all;
-  var photos=all.reduce(function(a,e){return a+e.im.length},0);
+  var sf=sfList(n),photos=all.reduce(function(a,e){return a+e.im.length},0)+sf.length;
   document.getElementById('stu_t').textContent='תיק תלמיד · '+n;
-  var h='<div class="mut">'+all.length+' שיעורים · '+photos+' תמונות</div>';
+  var h='<div class="mut">'+all.length+' שיעורים · '+photos+' תמונות</div>'+stuTop(n,sf);
   h+=list.length?list.map(function(e){
     return '<div class="row" style="display:block"><b>'+fdate(e.d)+'</b> <span class="mut">'+(e.cn?esc(e.cn)+' · ':'')+(e.g?'שיעור קבוצתי · ':'')+(e.t?esc(e.t):'')+'</span>'+(e.w?'<div style="white-space:pre-wrap;margin-top:2px">'+esc(e.w)+'</div>':'')+(e.im.length?'<div>'+e.im.map(function(id){return '<span class="th"><img data-iid="'+id+'" src="'+(isLocalImg(id)?'':'/_blob/'+id)+'" alt="" onclick="showImg(\''+id+'\')"></span>'}).join('')+'</div>':'')+'</div>';
   }).join(''):'<div class="empty">'+(all.length?'עדיין אין כתיבה או תמונות. הסר את הסימון למעלה כדי לראות את כל השיעורים.':'אין שיעורים לתלמיד הזה')+'</div>';
@@ -1260,6 +1261,88 @@ function render(){
   var t=document.getElementById('today');if(t)t.textContent=hdate(today());
   updThm();
 }
+// ===== v2.7: צילום והורדה בתיק תלמיד =====
+var stuArm='',lastCap=null;
+function sfList(n){return (S.sfiles&&S.sfiles[n])||[]}
+function stuPick(cam){pickCore({kind:'s',name:stuName},cam?'cam':'')}
+async function upStu(f,t){
+  toast('שומר תמונה בתיק…');
+  try{
+    var b=await shrink(f),r=await assets.upload(b);
+    S.sfiles=S.sfiles||{};(S.sfiles[t.name]=S.sfiles[t.name]||[]).push({id:r.id,d:today()});
+    lastCap={id:r.id,name:t.name};save();stuRender();
+    toast('התמונה נשמרה בתיק ✓ לחץ "שמור עותק בטלפון" כדי שתישאר גם אצלך בטלפון');
+  }catch(e){toast('השמירה נכשלה: '+((e&&(e.code||e.message))||e))}
+}
+function stuDel(i){
+  var k=stuName+'_'+i;
+  if(stuArm===k){stuArm='';var a=sfList(stuName);if(a[i]){var gone=a[i].id;a.splice(i,1);if(lastCap&&lastCap.id===gone)lastCap=null;save();}stuRender();return}
+  stuArm=k;stuRender();setTimeout(function(){if(stuArm===k){stuArm='';stuRender()}},3000);
+}
+function dlBlob(b,fn){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();setTimeout(function(){try{URL.revokeObjectURL(a.href)}catch(e){}a.remove()},1500)}
+function asciiName(n){var a=String(n||'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');return 'student-'+(a||('n'+(allStudents().indexOf(n)+1)))}
+function extOf(b){var t=(b&&b.type)||'';return t.indexOf('png')>-1?'png':t.indexOf('pdf')>-1?'pdf':t.indexOf('webp')>-1?'webp':'jpg'}
+async function saveCopy(id){
+  try{
+    var b=await idbGet(id);if(!b)throw new Error('התמונה לא נמצאה');
+    var fn=asciiName(stuName)+'-'+today()+'-'+String(id).slice(-4)+'.'+extOf(b);
+    var f=new File([b],fn,{type:b.type||'image/jpeg'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){
+      try{await navigator.share({files:[f]});toast('נפתח חלון שיתוף. בחר "שמור תמונה" או את הגלריה');return}catch(e){if(e&&e.name==='AbortError')return}
+    }
+    dlBlob(b,fn);toast('הקובץ ירד לטלפון (תיקיית ההורדות)');
+  }catch(e){toast('השמירה נכשלה: '+((e&&e.message)||e))}
+}
+var crcT=null;
+function crc32(u){if(!crcT){crcT=new Uint32Array(256);for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;crcT[n]=c>>>0}}var c2=0xFFFFFFFF;for(var i=0;i<u.length;i++)c2=crcT[(c2^u[i])&255]^(c2>>>8);return (c2^0xFFFFFFFF)>>>0}
+function zipBuild(files){
+  var enc=new TextEncoder(),parts=[],cd=[],off=0,dt=new Date(),cdsz=0;
+  var dtime=(dt.getHours()<<11)|(dt.getMinutes()<<5)|(dt.getSeconds()>>1),ddate=((dt.getFullYear()-1980)<<9)|((dt.getMonth()+1)<<5)|dt.getDate();
+  files.forEach(function(f){
+    var nm=enc.encode(f.name),crc=crc32(f.data),sz=f.data.length;
+    var h=new DataView(new ArrayBuffer(30));
+    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,0,true);h.setUint16(10,dtime,true);h.setUint16(12,ddate,true);h.setUint32(14,crc,true);h.setUint32(18,sz,true);h.setUint32(22,sz,true);h.setUint16(26,nm.length,true);h.setUint16(28,0,true);
+    parts.push(h.buffer,nm,f.data);
+    var c=new DataView(new ArrayBuffer(46));
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,0,true);c.setUint16(12,dtime,true);c.setUint16(14,ddate,true);c.setUint32(16,crc,true);c.setUint32(20,sz,true);c.setUint32(24,sz,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+    cd.push(c.buffer,nm);cdsz+=46+nm.length;off+=30+nm.length+sz;
+  });
+  var e=new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdsz,true);e.setUint32(16,off,true);
+  return new Blob(parts.concat(cd,[e.buffer]),{type:'application/zip'});
+}
+async function stuZip(){
+  var n=stuName;
+  try{
+    toast('אורז את כל הקבצים של '+n+'…');
+    var items=[],txt=['תיק תלמיד: '+n,''];
+    stuEntries(n).slice().reverse().forEach(function(e){
+      txt.push(e.d+(e.cn?' · '+e.cn:'')+(e.t?' · '+e.t:'')+(e.w?' · '+e.w:''));
+      e.im.forEach(function(id,j){items.push({id:id,base:e.d+'_שיעור_'+(j+1)})});
+    });
+    sfList(n).forEach(function(x,j){items.push({id:x.id,base:(x.d||'')+'_צילום_בתיק_'+(j+1)})});
+    var files=[],used={},skipped=0,total=0;
+    for(var i=0;i<items.length;i++){
+      var b=isLocalImg(items[i].id)?await idbGet(items[i].id):null;
+      if(!b){skipped++;continue}
+      var nm=items[i].base+'.'+extOf(b),q=2;while(used[nm]){nm=items[i].base+'_'+(q++)+'.'+extOf(b)}used[nm]=1;
+      var data=new Uint8Array(await b.arrayBuffer());total+=data.length;files.push({name:nm,data:data});
+    }
+    if(!files.length){toast('אין תמונות להורדה בתיק של '+n);return}
+    files.push({name:'סיכום.txt',data:new TextEncoder().encode(txt.join('\n'))});
+    var z=zipBuild(files);
+    dlBlob(z,asciiName(n)+'-'+today()+'.zip');
+    var mb=Math.round(total/1048576);
+    toast('ירד קובץ zip עם '+(files.length-1)+' תמונות ('+mb+'MB)'+(skipped?'. '+skipped+' תמונות לא נמצאו במכשיר':'')+(mb>=150?'. הקובץ גדול, אם לא נפתח תגיד לי':''));
+  }catch(e){toast('ההורדה נכשלה: '+((e&&e.message)||e))}
+}
+function stuTop(n,sf){
+  var th=sf.map(function(x,i){var a=stuArm===n+'_'+i;return '<span class="th"><img data-iid="'+x.id+'" src="" alt="" onclick="showImg(\''+x.id+'\')"><button class="x'+(a?' arm':'')+'" onclick="stuDel('+i+')">'+(a?'בטוח?':'×')+'</button><button class="x" style="position:static;display:block;margin:3px 0 0;width:64px;padding:3px 0;font-size:11px;border-radius:8px;border:1px solid var(--line)" onclick="saveCopy(\''+x.id+'\')">💾 שמור</button></span>'}).join('');
+  var cap=lastCap&&lastCap.name===n&&sf.some(function(x){return x.id===lastCap.id})?'<div style="margin:8px 0;padding:8px;border:1px solid var(--line);border-radius:10px"><b>✓ התמונה נשמרה בתיק.</b><div class="mut">כדי שתישאר גם בטלפון (גלריה/קבצים):</div><button class="add" style="margin:6px 0 0" onclick="saveCopy(lastCap.id)">💾 שמור עותק בטלפון</button></div>':'';
+  return '<div class="row" style="display:block"><b>📸 תמונות בתיק</b> <span class="mut">'+sf.length+'</span><div>'+th+'</div>'+cap+'<div style="margin-top:6px"><button class="x" onclick="stuPick(1)">📸 צלם</button> <button class="x" onclick="stuPick(0)">📷 מהגלריה</button> <button class="x" onclick="stuZip()">⬇️ הורד הכל (zip)</button></div></div>';
+}
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+
 init();
 
 // Manual one-way queue snapshot. Never alters S or restores from the server.
