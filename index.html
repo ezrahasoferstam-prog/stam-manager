@@ -28,9 +28,9 @@ h1{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:28px;line-height:1.1;m
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .logo{filter:invert(1)}}
 :root[data-theme="dark"] .logo{filter:invert(1)}
 nav{display:flex;gap:3px;margin-bottom:14px;overflow-x:auto}
-nav button{flex:1 1 0;min-width:0;white-space:nowrap;padding:10px 2px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-size:12px}
+nav button{flex:1 0 auto;min-width:0;white-space:nowrap;padding:10px 8px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-size:12px}
 nav button.on{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(60,40,10,.06)}
+.bcard,.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(60,40,10,.06)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .full{grid-column:1/-1}
 label{font-size:12px;color:var(--mut);display:block;margin-bottom:2px}
@@ -70,11 +70,11 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.4 - אחסון מקומי</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.5 - אחסון מקומי</div>
 </main>
 <script>
-var S={courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],cfg:{head:400,hand:400}},ref=null,tab='sum',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
-var TABS=[['sum','סיכום'],['lessons','שיעורים'],['orders','תפילין'],['write','כתיבה'],['buys','קניות'],['pay','תשלומים'],['links','קישורים']];
+var S={courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='sum',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
+var TABS=[['sum','סיכום'],['lessons','שיעורים'],['bill','חיוב קורסים'],['orders','תפילין'],['write','כתיבה'],['buys','קניות'],['pay','תשלומים'],['links','קישורים']];
 var STAT=['הוזמן','בכתיבה','מוכן','נמסר'];
 var IDS=['l_wrote','l_hours','c_new','l_course','l_name','l_date','l_price','l_topic','o_name','o_item','o_date','o_due','o_price','o_paid','o_status','p_name','p_date','p_amt','p_note'];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -91,7 +91,7 @@ function save(quiet){
   try{localStorage.setItem('sofer',JSON.stringify(S))}catch(e){toast('שגיאת שמירה במכשיר. אל תסגור לפני יצירת גיבוי: '+e.message);throw e}
   if(!quiet)render();
 }
-function norm(d){d=JSON.parse(JSON.stringify(d||{}));S={courses:d.courses||[],lessons:d.lessons||[],orders:d.orders||[],payments:d.payments||[],expenses:d.expenses||[],writing:d.writing||[],buys:d.buys||[],plans:d.plans||[],contacts:d.contacts||{},cprog:d.cprog||{},recurring:d.recurring||[],cfg:d.cfg||{head:400,hand:400},ts:d.ts||0}}
+function norm(d){d=JSON.parse(JSON.stringify(d||{}));S={courses:d.courses||[],lessons:d.lessons||[],orders:d.orders||[],payments:d.payments||[],expenses:d.expenses||[],writing:d.writing||[],buys:d.buys||[],plans:d.plans||[],contacts:d.contacts||{},cprog:d.cprog||{},recurring:d.recurring||[],billing:(d.billing&&typeof d.billing==='object'?{rates:d.billing.rates||{},inst:d.billing.inst||{}}:{rates:{},inst:{}}),cfg:d.cfg||{head:400,hand:400},ts:d.ts||0}}
 async function init(){
   try{
     if(window.claude){
@@ -1133,13 +1133,67 @@ async function shareOrderLink(){
     catch(x){toast(ORDER_PAGE_URL)}
   }
 }
+
+// ===== חיוב קורסים (v2.5): חישוב בלבד. לא מוציא ולא שולח שום מסמך. =====
+var INSTS=[{k:'levi',name:'בית לוי יצחק',crn:'580033249',ch:'מייל'},{k:'derech',name:'דרכי מנחם מענדל',crn:'580627495',ch:'וואטסאפ'}];
+var billMonth='';
+function bill(){if(!S.billing)S.billing={rates:{},inst:{}};if(!S.billing.rates)S.billing.rates={};if(!S.billing.inst)S.billing.inst={};return S.billing}
+function curMonth(){return billMonth||today().slice(0,7)}
+function billShift(n){var p=curMonth().split('-'),d=new Date(Number(p[0]),Number(p[1])-1+n,1);billMonth=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');render()}
+function billMonthName(m){try{return new Intl.DateTimeFormat('he-IL',{month:'long',year:'numeric'}).format(new Date(m+'-15T12:00:00'))}catch(e){return m}}
+function guessInst(c){var n=c.name||'';if(/חח/.test(n))return 'levi';if(/פישי|ישיבה/.test(n))return 'derech';return ''}
+function instOf(c){var v=bill().inst[c.id];return v!==undefined?v:guessInst(c)}
+function rateOf(c){var v=bill().rates[c.id];return v!==undefined&&v!==''?Number(v):300}
+function setRate(cid,v){bill().rates[cid]=Number(v)>=0&&v!==''?Number(v):300;save()}
+function setInst(cid,v){bill().inst[cid]=v;save()}
+function billHours(cid,m){
+  var byDate={},n=0;
+  S.lessons.forEach(function(l){if(inCourse(l,cid)&&(l.date||'').slice(0,7)===m){var h=Number(l.hours)||1;if(!byDate[l.date]||h>byDate[l.date])byDate[l.date]=h}});
+  var tot=0;for(var d in byDate){tot+=byDate[d];n++}
+  return {hours:tot,days:n}
+}
+function fh(h){return String(Math.round(h*100)/100)}
+function billRows(m){return S.courses.map(function(c){var b=billHours(c.id,m),r=rateOf(c);return {c:c,hours:b.hours,days:b.days,rate:r,amt:b.hours*r,inst:instOf(c)}})}
+function billDraft(k){
+  var m=curMonth(),inst=INSTS.filter(function(x){return x.k===k})[0];if(!inst)return;
+  var rows=billRows(m).filter(function(r){return r.inst===k&&r.hours>0});
+  if(!rows.length){toast('אין שעות בחודש הזה');return}
+  var tot=rows.reduce(function(a,r){return a+r.amt},0);
+  var tx='לכבוד: '+inst.name+'\nח.פ.: '+inst.crn+'\nעבור חודש '+billMonthName(m)+'\n\n'+rows.map(function(r){return '• '+r.c.name+' - '+fh(r.hours)+' שעות × '+money(r.rate)+' = '+money(r.amt)}).join('\n')+'\n\nסה״כ: '+money(tot);
+  showInv('טיוטה בלבד · '+inst.name,tx,null,null);
+}
+function viewBill(){
+  var m=curMonth(),rows=billRows(m);
+  var h='<div class="bcard"><b>חיוב קורסים</b><div class="mut" style="margin:4px 0 8px">שעות שלימדת בחודש × תעריף לשעה. החישוב לפי השיעורים שרשמת בלשונית שיעורים. כאן לא מוציאים ולא שולחים כלום.</div>'+
+  '<div class="row" style="align-items:center"><button class="x" onclick="billShift(-1)">→ חודש קודם</button><b style="flex:1;text-align:center">'+esc(billMonthName(m))+'</b><button class="x" onclick="billShift(1)">חודש הבא ←</button></div></div>';
+  if(!S.courses.length)return h+'<div class="bcard"><div class="empty">אין קורסים</div></div>';
+  var groups=INSTS.map(function(i){return {i:i,rows:rows.filter(function(r){return r.inst===i.k})}});
+  groups.push({i:{k:'',name:'לא משויך למוסד',crn:'',ch:''},rows:rows.filter(function(r){return !INSTS.some(function(i){return i.k===r.inst})})});
+  groups.forEach(function(g){
+    if(!g.rows.length)return;
+    var tot=g.rows.reduce(function(a,r){return a+r.amt},0);
+    h+='<div class="bcard"><b>'+esc(g.i.name)+'</b>'+(g.i.crn?'<span class="mut"> · ח.פ. '+g.i.crn+' · שליחה ב'+g.i.ch+'</span>':'');
+    g.rows.forEach(function(r){
+      var c=r.c;
+      h+='<div class="sub"><b>'+esc(c.name)+'</b><div class="mut">'+fh(r.hours)+' שעות ב־'+r.days+' ימי לימוד</div>'+
+      '<div class="grid" style="margin-top:6px"><div><label for="br_'+c.id+'">תעריף לשעה ₪</label><input id="br_'+c.id+'" type="number" inputmode="decimal" value="'+r.rate+'" onchange="setRate('+c.id+',this.value)"></div>'+
+      '<div><label for="bi_'+c.id+'">מוסד</label><select id="bi_'+c.id+'" onchange="setInst('+c.id+',this.value);render()"><option value="">ללא</option>'+INSTS.map(function(i){return '<option value="'+i.k+'"'+(i.k===r.inst?' selected':'')+'>'+i.name+'</option>'}).join('')+'</select></div></div>'+
+      '<div style="margin-top:4px"><span class="amt">'+fh(r.hours)+' × '+money(r.rate)+' = '+money(r.amt)+'</span></div></div>';
+    });
+    if(g.i.k)h+='<div class="row" style="margin-top:8px"><b>סה״כ לחשבונית אחת</b><span class="amt">'+money(tot)+'</span></div><button class="add" onclick="billDraft(\''+g.i.k+'\')">הצג טיוטה לבדיקה</button><div class="mut">הטיוטה היא טקסט להצגה בלבד. שום דבר לא מונפק ולא נשלח.</div>';
+    h+='</div>';
+  });
+  h+='<div class="mut" style="text-align:center">שיעורים באותו קורס באותו יום נספרים פעם אחת (המקסימום של אותו יום), כדי שלא יוכפלו כשרשמת כמה תלמידים.</div>';
+  return h;
+}
+
 function render(){
   if(typeof privateSyncRender==='function')privateSyncRender();
   var keep={};
   document.querySelectorAll('#app input[id],#app select[id],#app textarea[id]').forEach(function(e){keep[e.id]=e.type==='checkbox'?e.checked:e.value});
   var ae=document.activeElement,aid=ae&&ae.id;
   document.getElementById('nav').innerHTML=TABS.map(function(t){return '<button class="'+(t[0]===tab?'on':'')+'" onclick="setTab(\''+t[0]+'\')">'+t[1]+'</button>'}).join('');
-  var v={sum:viewSum,lessons:viewLessons,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
+  var v={sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
   document.getElementById('app').innerHTML=names()+v;quietSections();
   setTimeout(calcTotal,0);
   setTimeout(hydrateImgs,0);
@@ -1182,3 +1236,4 @@ async function privateSyncUpload(){
 </script>
 </body>
 </html>
+
