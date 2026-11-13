@@ -70,10 +70,10 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.5 - אחסון מקומי</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.6 - אחסון מקומי</div>
 </main>
 <script>
-var S={courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='sum',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
+var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='sum',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
 var TABS=[['sum','סיכום'],['lessons','שיעורים'],['bill','חיוב קורסים'],['orders','תפילין'],['write','כתיבה'],['buys','קניות'],['pay','תשלומים'],['links','קישורים']];
 var STAT=['הוזמן','בכתיבה','מוכן','נמסר'];
 var IDS=['l_wrote','l_hours','c_new','l_course','l_name','l_date','l_price','l_topic','o_name','o_item','o_date','o_due','o_price','o_paid','o_status','p_name','p_date','p_amt','p_note'];
@@ -91,7 +91,7 @@ function save(quiet){
   try{localStorage.setItem('sofer',JSON.stringify(S))}catch(e){toast('שגיאת שמירה במכשיר. אל תסגור לפני יצירת גיבוי: '+e.message);throw e}
   if(!quiet)render();
 }
-function norm(d){d=JSON.parse(JSON.stringify(d||{}));S={courses:d.courses||[],lessons:d.lessons||[],orders:d.orders||[],payments:d.payments||[],expenses:d.expenses||[],writing:d.writing||[],buys:d.buys||[],plans:d.plans||[],contacts:d.contacts||{},cprog:d.cprog||{},recurring:d.recurring||[],billing:(d.billing&&typeof d.billing==='object'?{rates:d.billing.rates||{},inst:d.billing.inst||{}}:{rates:{},inst:{}}),cfg:d.cfg||{head:400,hand:400},ts:d.ts||0}}
+function norm(d){d=JSON.parse(JSON.stringify(d||{}));S={income:(d.income&&typeof d.income==='object'?d.income:{}),courses:d.courses||[],lessons:d.lessons||[],orders:d.orders||[],payments:d.payments||[],expenses:d.expenses||[],writing:d.writing||[],buys:d.buys||[],plans:d.plans||[],contacts:d.contacts||{},cprog:d.cprog||{},recurring:d.recurring||[],billing:(d.billing&&typeof d.billing==='object'?{rates:d.billing.rates||{},inst:d.billing.inst||{}}:{rates:{},inst:{}}),cfg:d.cfg||{head:400,hand:400},ts:d.ts||0}}
 async function init(){
   try{
     if(window.claude){
@@ -1086,6 +1086,7 @@ function viewPay(){
 
 var sectionOpen={};
 function quietSections(){
+ if(tab==='income')return;
  var app=document.getElementById('app');
  Array.from(app.children).filter(function(e){return e.classList.contains('card')}).forEach(function(card,i){
   var key=tab+':'+i,title='פרטים',count=null;
@@ -1187,17 +1188,74 @@ function viewBill(){
   return h;
 }
 
+// ===== חישוב חודשי (v2.6): תזרים שהתקבל בלבד, מקומי בלבד =====
+var incomeMonth='',incomeEdit='';
+var INCOME_CATS=[['w','כתיבה'],['s','מכירות'],['c','קורסים'],['u','ללא סיווג']];
+function incomeCatOptions(v){return INCOME_CATS.map(function(c){return '<option value="'+c[0]+'"'+(v===c[0]?' selected':'')+'>'+c[1]+'</option>'}).join('')}
+function incomeCents(v){return Math.round((Number(v)||0)*100)}
+function incomeDate(v){return /^\d{4}-\d{2}-\d{2}$/.test(v||'')&&!isNaN(new Date(v+'T12:00:00').getTime())&&new Date(v+'T12:00:00').toISOString().slice(0,10)===v}
+function incomeSources(){
+ var a=[];
+ S.payments.forEach(function(p){if(incomeCents(p.amount)>0)a.push({key:'p'+p.id,name:p.name,kind:'תשלום ביומן',amount:Number(p.amount),date:p.date,cat:p.for==='l'?'c':'u'})});
+ S.orders.forEach(function(o){if(incomeCents(o.paid)>0)a.push({key:'o'+o.id,name:o.name,kind:'שולם בהזמנה'+(o.item?' · '+o.item:''),amount:Number(o.paid),cat:'u'})});
+ S.lessons.forEach(function(l){if(st(l)==='paid'&&incomeCents(lc(l))>0)a.push({key:'l'+l.id,name:l.name,kind:'שיעור שסומן כשולם · '+fdate(l.date),amount:lc(l),cat:'c'})});
+ return a;
+}
+function incomeMeta(src){var m=S.income&&S.income[src.key];return m&&Array.isArray(m.rows)?m:{rows:src.date?[{date:src.date,amount:src.amount,cat:src.cat}]:[]}}
+function incomeData(){
+ var sources=incomeSources(),rows=[],missing=[],excluded=[];
+ sources.forEach(function(src){var m=incomeMeta(src);if(m.exclude){excluded.push(src);return}
+  var allocated=0,valid=true;
+  m.rows.forEach(function(r){if(!incomeDate(r.date)||incomeCents(r.amount)<=0){valid=false;return}allocated+=incomeCents(r.amount)});
+  if(!valid||allocated>incomeCents(src.amount)){missing.push({src:src,amount:src.amount,invalid:true});return}
+  m.rows.forEach(function(r){rows.push({key:src.key,name:src.name,kind:src.kind,date:r.date,amount:incomeCents(r.amount)/100,cat:['w','s','c'].indexOf(r.cat)>=0?r.cat:'u'})});
+  if(allocated<incomeCents(src.amount))missing.push({src:src,amount:(incomeCents(src.amount)-allocated)/100});
+ });
+ return {sources:sources,rows:rows,missing:missing,excluded:excluded};
+}
+function openIncome(){incomeMonth=incomeMonth||today().slice(0,7);setTab('income')}
+function setIncomeMonth(v){if(/^\d{4}-\d{2}$/.test(v)){incomeMonth=v;render()}}
+function shiftIncomeMonth(n){var d=new Date((incomeMonth||today().slice(0,7))+'-15T12:00:00');d.setMonth(d.getMonth()+n);incomeMonth=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');render()}
+function incomeEditSource(k){incomeEdit=incomeEdit===k?'':k;render()}
+function incomeSaveSource(k){
+ var src=incomeSources().find(function(s){return s.key===k});if(!src)return;
+ var rows=[],bad=false;
+ document.querySelectorAll('[data-income-row]').forEach(function(el){var date=el.querySelector('[data-date]').value,amount=el.querySelector('[data-amount]').value,cat=el.querySelector('[data-cat]').value;if(!date&&!amount)return;if(!incomeDate(date)||incomeCents(amount)<=0)bad=true;rows.push({date:date,amount:incomeCents(amount)/100,cat:cat})});
+ var exclude=document.getElementById('income_exclude').checked;
+ if(!exclude&&(bad||rows.reduce(function(t,r){return t+incomeCents(r.amount)},0)>incomeCents(src.amount))){toast('בדוק תאריך וסכום בכל שורה. הסך לא יכול לעלות על הסכום ששולם');return}
+ if(!S.income)S.income={};var before=S.income[k];S.income[k]={rows:exclude?incomeMeta(src).rows:rows,exclude:exclude};
+ try{save(true);incomeEdit='';render();toast('השיוך לחישוב נשמר ✓')}catch(e){if(before)S.income[k]=before;else delete S.income[k]}
+}
+function incomeRowHtml(r){r=r||{};return '<div data-income-row style="border-top:1px dashed var(--line);padding:10px 0"><div class="grid"><div><label>תאריך קבלת הכסף<input data-date type="date" value="'+esc(r.date||'')+'"></label></div><div><label>סכום שהתקבל ₪<input data-amount type="number" min="0.01" step="0.01" inputmode="decimal" value="'+esc(r.amount||'')+'"></label></div><div class="full"><label>סוג הכנסה<select data-cat>'+incomeCatOptions(r.cat||'u')+'</select></label></div></div><button class="x" type="button" onclick="this.parentNode.remove()">הסר שורת שיוך</button></div>'}
+function incomeAddRow(){var e=document.getElementById('income_rows');if(e)e.insertAdjacentHTML('beforeend',incomeRowHtml())}
+function incomeEditor(src){var m=incomeMeta(src);return '<div class="sub"><p class="mut">שייך רק כסף שכבר התקבל. אם התקבל בכמה תאריכים או מכמה סוגים, הוסף שורה לכל חלק. הסך לשיוך: '+money(src.amount)+'. השיוך לא משנה יתרות או רישומים מקוריים.</p><div id="income_rows">'+(m.rows.length?m.rows:[{}]).map(incomeRowHtml).join('')+'</div><button class="x" onclick="incomeAddRow()">+ פיצול לעוד תאריך / סוג</button><label style="display:block;margin:12px 0"><input id="income_exclude" type="checkbox" style="width:auto"'+(m.exclude?' checked':'')+'> לא לכלול בחישוב (למשל: אותו כסף כבר נרשם ברשומה אחרת)</label><button class="add" onclick="incomeSaveSource(\''+src.key+'\')">שמור שיוך לחישוב</button></div>'}
+function viewIncome(){
+ incomeMonth=incomeMonth||today().slice(0,7);var d=incomeData(),rs=d.rows.filter(function(r){return r.date.slice(0,7)===incomeMonth}),totals={w:0,s:0,c:0,u:0},total=0;
+ rs.forEach(function(r){totals[r.cat]+=incomeCents(r.amount);total+=incomeCents(r.amount)});
+ var h='<div class="card"><button class="x" onclick="setTab(\'sum\')">חזרה לסיכום</button><h2 style="margin:8px 0">חישוב חודשי</h2><label for="income_month">חודש קבלת הכסף</label><input id="income_month" type="month" value="'+incomeMonth+'" onchange="setIncomeMonth(this.value)"><div style="display:flex;justify-content:space-between;margin-top:8px"><button class="x" onclick="shiftIncomeMonth(-1)">חודש קודם</button><button class="x" onclick="shiftIncomeMonth(1)">חודש הבא</button></div><p class="mut">כסף שהתקבל בפועל, לפי תאריך קבלת הכסף. לא חיובים צפויים ולא רווח נקי לאחר הוצאות. שום דבר לא נשלח.</p>';
+ h+=INCOME_CATS.map(function(c){return '<div class="row"><span>'+c[1]+'</span><span class="amt">'+money(totals[c[0]]/100)+'</span></div>'}).join('');
+ h+='<div class="row"><b>סה״כ מתוארך לחודש</b><strong class="amt ok">'+money(total/100)+'</strong></div>';
+ if(!rs.length)h+='<p class="mut">אין תקבולים עם תאריך בחודש הזה. אין פירוש הדבר שלא התקבל כסף.</p>';
+ if(totals.u)h+='<p style="color:var(--gold)">יש '+money(totals.u/100)+' ללא סיווג. בחר כתיבה / מכירות / קורסים בשיוך הרישומים למטה.</p>';
+ if(d.missing.length)h+='<p role="status" style="color:var(--gold)">החישוב עדיין חלקי: '+d.missing.length+' רישומים מכל התקופות, בסך '+money(d.missing.reduce(function(t,x){return t+x.amount},0))+', חסרים תאריך קבלת כסף או דורשים תיקון שיוך. הם לא נכללו בסך החודשי. תאריך ההזמנה או השיעור אינו תאריך התשלום.</p>';
+ h+='<p class="mut">הסך מבוסס על הרישומים באפליקציה. אם אותו כסף נרשם גם כתשלום וגם כשולם בהזמנה או בשיעור, יש להסיר את הכפל בשיוך למטה.</p>';
+ h+='</div><div class="card"><b>פירוט התקבולים בחודש</b>'+ (rs.length?rs.sort(function(a,b){return a.date.localeCompare(b.date)}).map(function(r){return '<div class="row"><div><b>'+esc(r.name)+'</b><span class="mut">'+fdate(r.date)+' · '+INCOME_CATS.find(function(c){return c[0]===r.cat})[1]+' · '+esc(r.kind)+'</span></div><span class="amt">'+money(r.amount)+'</span></div>'}).join(''):'<div class="empty">אין פירוט מתוארך לחודש שנבחר</div>')+'</div>';
+ h+='<div class="card"><details'+(incomeEdit?' open':'')+'><summary>בדיקה ושיוך רישומים ('+d.sources.length+')</summary><p class="mut">השיוך נשמר רק במכשיר ונכלל בגיבוי. שיעורים משויכים לקורסים; תשלומי תפילין דורשים בחירה בין כתיבה למכירות. אם אותו תקבול מופיע גם ביומן וגם בהזמנה או בשיעור ששולם, בחר שלא לכלול אחד מהם כדי למנוע כפל.</p>';
+ h+=d.sources.map(function(src){var m=incomeMeta(src),miss=d.missing.find(function(x){return x.src.key===src.key});return '<div class="sub"><b>'+esc(src.name)+'</b><span class="mut">'+esc(src.kind)+' · '+money(src.amount)+(m.exclude?' · לא נכלל בחישוב':miss?' · '+(miss.invalid?'השיוך דורש תיקון':'חסר תאריך ל-'+money(miss.amount)):' · משויך לפי תאריך')+'</span><button class="x" onclick="incomeEditSource(\''+src.key+'\')">'+(incomeEdit===src.key?'סגור':'תאריך וסיווג / פיצול')+'</button>'+(incomeEdit===src.key?incomeEditor(src):'')+'</div>'}).join('');
+ h+='</details></div>';return h;
+}
+
 function render(){
   if(typeof privateSyncRender==='function')privateSyncRender();
   var keep={};
   document.querySelectorAll('#app input[id],#app select[id],#app textarea[id]').forEach(function(e){keep[e.id]=e.type==='checkbox'?e.checked:e.value});
   var ae=document.activeElement,aid=ae&&ae.id;
   document.getElementById('nav').innerHTML=TABS.map(function(t){return '<button class="'+(t[0]===tab?'on':'')+'" onclick="setTab(\''+t[0]+'\')">'+t[1]+'</button>'}).join('');
-  var v={sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
-  document.getElementById('app').innerHTML=names()+v;quietSections();
+  var v={income:viewIncome,sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
+  document.getElementById('app').innerHTML=names()+((tab==='sum'||tab==='pay')?'<button class="add" style="margin:0 0 12px" onclick="openIncome()">חישוב חודשי</button>':'')+v;quietSections();
   setTimeout(calcTotal,0);
   setTimeout(hydrateImgs,0);
-  for(var k in keep){var e=document.getElementById(k);if(e&&k!=='l_course'&&k!=='w_order'){if(e.type==='checkbox')e.checked=keep[k];else e.value=keep[k]}}
+  for(var k in keep){var e=document.getElementById(k);if(e&&k!=='l_course'&&k!=='w_order'&&k!=='income_month'&&k!=='income_exclude'){if(e.type==='checkbox')e.checked=keep[k];else e.value=keep[k]}}
   document.querySelectorAll('#app input[type=date]').forEach(updHd);
   var t=document.getElementById('today');if(t)t.textContent=hdate(today());
   updThm();
@@ -1236,4 +1294,3 @@ async function privateSyncUpload(){
 </script>
 </body>
 </html>
-
