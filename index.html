@@ -344,7 +344,7 @@ function viewToday(){
   h+='<div class="card"><b>הזמנות שעברו את היעד</b> <span class="'+(late.length?'bad':'ok')+'">'+(late.length?late.length+' באיחור':'אין ✓')+'</span>';
   h+=late.map(function(o){return '<div class="row"><div><b>'+esc(o.name)+'</b><span class="mut">'+(o.item?esc(o.item)+' · ':'')+'יעד '+fdate(o.due)+'</span></div><div style="text-align:left"><button class="x" onclick="editOrder('+o.id+')">פתח</button></div></div>'}).join('');
   h+='</div>';
-  var openW=S.orders.filter(function(o){return o.status!=='נמסר'&&writingRemaining(o)>0});
+  var openW=S.orders.filter(function(o){return wopen(o)&&writingRemaining(o)>0});
   var tw=S.writing.filter(function(w){return w.date===t0}).reduce(function(a,w){return a+w.words},0);
   var goal=0;
   openW.forEach(function(o){if(!o.due)return;var dl=o.due<t0?1:Math.max(1,dayNum(o.due)-dayNum(t0));goal+=Math.ceil(writingRemaining(o)/dl)});
@@ -615,13 +615,31 @@ var curW='';
 function fmtL(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function isoAdd(n){var d=new Date();d.setDate(d.getDate()+n);return fmtL(d)}
 function hasPar(o,k){return !!(o.parts&&o.parts[k+'p'])}
+function hasW(o,k){return hasPar(o,k)||!!(o.wx&&o.wx[k])}
+function wopen(o){return o.status!=='נמסר'||!!(o.wx&&Object.keys(o.wx).length)}
+function sumPair(o,k){return {h:sumW(o.id,k,'h'),y:sumW(o.id,k,'y')}}
+function contWrite(id){
+  var o=findO(id);if(!o)return;
+  var cand=PAIRS.filter(function(pr){return !hasPar(o,pr[0])&&!(o.wx&&o.wx[pr[0]])});
+  if(!cand.length){toast('כל הזוגות כבר בהזמנה');return}
+  var pr=cand[0],sm=sumPair(o,pr[0]);
+  var msg='להמשיך לכתוב '+pr[1]+' בהזמנה "'+o.name+(o.item?' · '+o.item:'')+' · הוזמן '+fdate(o.date)+'"?\n\nזה רק יחזיר את ההזמנה למסך עדכון כתיבה. לא ישתנו סטטוס, מחיר, תשלום או רישומי כתיבה קיימים.\nכבר רשום בזוג הזה: ראש '+sm.h+', יד '+sm.y+'.';
+  if(!confirm(msg))return;
+  try{localStorage.setItem('sofer_backup_before_wx',JSON.stringify({at:new Date().toISOString(),orders:S.orders,writing:S.writing}))}catch(e){}
+  o.wx=o.wx||{};o.wx[pr[0]]=true;save();toast('ההזמנה חזרה למסך עדכון כתיבה ✓ ('+pr[1]+')');
+}
+function stopWrite(id){
+  var o=findO(id);if(!o||!o.wx)return;
+  if(!confirm('להפסיק המשך כתיבה בהזמנה הזאת? הרישומים שנכתבו נשמרים.'))return;
+  delete o.wx;save();toast('הוסר ✓');
+}
 function sumW(oid,pair,part){return S.writing.filter(function(w){return w.oid===oid&&w.pair===pair&&w.part===part}).reduce(function(a,w){return a+w.words},0)}
 function progressHtml(o,k){
   var hd=sumW(o.id,k,'h'),hn=sumW(o.id,k,'y'),th=S.cfg.head||400,ty=S.cfg.hand||400;
   function bar(l,v,t){var pc=Math.min(100,Math.round(v/t*100));return '<div class="mut">'+l+' '+v+'/'+t+' ('+pc+'%)</div><div class="pb'+(v>=t?' done':'')+'"><i style="width:'+pc+'%"></i></div>'}
   return '<div class="wp">'+bar('ראש',hd,th)+bar('יד',hn,ty)+(hd>=th&&hn>=ty?'<span class="ok">✓ כתיבת הפרשיות הושלמה</span>':'')+'</div>';
 }
-function ordLabel(o){var pr=PAIRS.filter(function(p){return hasPar(o,p[0])}).map(function(p){return p[1].replace('תפילין ','')}).join('+'),d=(o.date||'').split('-'),ds=d.length===3?d[2]+'.'+d[1]:'';return esc(o.name)+(o.item&&pr.indexOf(o.item)<0?' · '+esc(o.item):'')+(ds?' · '+ds:'')+(pr?' · '+pr:'')}
+function ordLabel(o){var pr=PAIRS.filter(function(p){return hasW(o,p[0])}).map(function(p){return p[1].replace('תפילין ','')}).join('+'),d=(o.date||'').split('-'),ds=d.length===3?d[2]+'.'+d[1]:'';return esc(o.name)+(o.item&&pr.indexOf(o.item)<0?' · '+esc(o.item):'')+(ds?' · '+ds:'')+(pr?' · '+pr:'')}
 function pickW(v){curW=v;render()}
 function setCfg(){S.cfg.head=Number(val('cfg_h'))||400;S.cfg.hand=Number(val('cfg_y'))||400;save()}
 function addW(){
@@ -634,10 +652,10 @@ function addW(){
 }
 function delW(id){arm('w'+id,function(){S.writing=S.writing.filter(function(w){return w.id!==id})})}
 function viewWriteActive(){
-  var el=S.orders.filter(function(o){return o.status!=='נמסר'&&writingRemaining(o)>0&&(hasPar(o,'r')||hasPar(o,'t'))});
+  var el=S.orders.filter(function(o){return wopen(o)&&writingRemaining(o)>0&&(hasW(o,'r')||hasW(o,'t'))});
   if(!el.length)return availCard()+recPace()+'<div class="card"><div class="empty">אין הזמנות עם פרשיות פתוחות. כשתסמן פרשיות בהזמנת תפילין, תוכל לעקוב כאן אחרי הכתיבה.</div></div>';
   var co=findO(Number(curW));if(!co||el.indexOf(co)<0)co=el[0];curW=String(co.id);
-  var pairs=PAIRS.filter(function(pr){return hasPar(co,pr[0])});
+  var pairs=PAIRS.filter(function(pr){return hasW(co,pr[0])});
   var t0=today(),from=isoAdd(-6);
   var tw=S.writing.filter(function(w){return w.date===t0}).reduce(function(a,w){return a+w.words},0);
   var w7=S.writing.filter(function(w){return w.date>=from&&w.date<=t0}).reduce(function(a,w){return a+w.words},0);
@@ -646,13 +664,13 @@ function viewWriteActive(){
   h+=recPace();
   h+=availCard();
   h+='<div class="card"><b>רישום כתיבה</b><div class="grid" style="margin-top:8px"><div class="full"><label for="w_order">הזמנה</label><select id="w_order" onchange="pickW(this.value)">'+el.map(function(o){return '<option value="'+o.id+'"'+(o.id===co.id?' selected':'')+'>'+ordLabel(o)+'</option>'}).join('')+'</select></div>'+
-  '<div><label for="w_pair">זוג</label><select id="w_pair">'+pairs.map(function(pr){return '<option value="'+pr[0]+'">'+pr[1].replace('תפילין ','')+'</option>'}).join('')+'</select></div>'+
+  '<div><label for="w_pair">זוג</label><select id="w_pair">'+(function(){var dp=(pairs.filter(function(pr){var m=sumPair(co,pr[0]);return m.h<(S.cfg.head||400)||m.y<(S.cfg.hand||400)})[0]||pairs[0])[0];return pairs.map(function(pr){var m=sumPair(co,pr[0]),dn=m.h>=(S.cfg.head||400)&&m.y>=(S.cfg.hand||400);return '<option value="'+pr[0]+'"'+(pr[0]===dp?' selected':'')+'>'+pr[1].replace('תפילין ','')+(dn?' (הושלם)':'')+'</option>'}).join('')})()+'</select></div>'+
   '<div><label for="w_part">חלק</label><select id="w_part"><option value="h">ראש</option><option value="y">יד</option></select></div>'+
   field('w_date','תאריך','date','value="'+today()+'"')+field('w_words','כמה מילים כתבת','number','inputmode="numeric"')+
   '</div><button class="add" onclick="addW()">רשום כתיבה</button>'+
   '<div class="mut" style="margin-top:8px">יעד לכל זוג: ראש <input class="paid" id="cfg_h" type="number" value="'+(S.cfg.head||400)+'" onchange="setCfg()"> יד <input class="paid" id="cfg_y" type="number" value="'+(S.cfg.hand||400)+'" onchange="setCfg()"> מילים</div></div>';
   var items=[];
-  el.forEach(function(o){PAIRS.forEach(function(pr){if(hasPar(o,pr[0])){
+  el.forEach(function(o){PAIRS.forEach(function(pr){if(hasW(o,pr[0])){
     var rem=Math.max(0,(S.cfg.head||400)-sumW(o.id,pr[0],'h'))+Math.max(0,(S.cfg.hand||400)-sumW(o.id,pr[0],'y'));
     items.push({o:o,k:pr[0],lab:pr[1].replace('תפילין ',''),rem:rem})}})});
   items.sort(function(a,b){var da=a.o.due||'9999',db=b.o.due||'9999';return da<db?-1:da>db?1:a.o.id-b.o.id});
@@ -661,18 +679,18 @@ function viewWriteActive(){
     cum+=it.rem;
     var eta='';
     if(it.rem>0&&avg>0){var dt=isoAdd(Math.ceil(cum/avg)),late=it.o.due&&dt>it.o.due;eta=' · סיום משוער <span class="'+(late?'bad':'')+'">'+fdate(dt)+(late?' (אחרי היעד)':'')+'</span>'}
-    h+='<div class="card"><b>'+ordLabel(it.o)+'</b> <span class="mut">'+it.lab+(it.o.due?' · יעד '+fdate(it.o.due):'')+'</span>'+progressHtml(it.o,it.k)+(it.rem>0?'<div class="mut">נשארו '+it.rem+' מילים'+eta+'</div>':'')+'</div>';
+    h+='<div class="card"><b>'+esc(it.o.name)+(it.o.item&&it.o.item!==it.lab?' · '+esc(it.o.item):'')+' · '+(function(d){return d.length===3?d[2]+'.'+d[1]:''})((it.o.date||'').split('-'))+' · '+it.lab+'</b> <span class="mut">'+(it.o.due?' · יעד '+fdate(it.o.due):'')+'</span>'+progressHtml(it.o,it.k)+(it.rem>0?'<div class="mut">נשארו '+it.rem+' מילים'+eta+'</div>':'')+'</div>';
   });
-  var log=S.writing.filter(function(w){var o=findO(w.oid);return o&&o.status!=='נמסר'&&writingRemaining(o)>0}).slice(0,30);
+  var log=S.writing.filter(function(w){var o=findO(w.oid);return o&&wopen(o)&&writingRemaining(o)>0}).slice(0,30);
   h+='<div class="card"><b>יומן כתיבה</b>'+(log.length?log.map(function(w){var o=findO(w.oid);return '<div class="row"><div><b>'+w.words+' מילים</b><span class="mut">'+fdate(w.date)+' · '+ordLabel(o)+' · '+(w.pair==='t'?'ר״ת':'רש״י')+' · '+(w.part==='h'?'ראש':'יד')+'</span></div>'+xb('w'+w.id,'delW('+w.id+')','מחק')+'</div>'}).join(''):'<div class="empty">עוד לא נרשמה כתיבה</div>')+'</div>';
   return h;
 }
-function writingRemaining(o){var n=0;PAIRS.forEach(function(pr){if(hasPar(o,pr[0]))n+=Math.max(0,(S.cfg.head||400)-sumW(o.id,pr[0],'h'))+Math.max(0,(S.cfg.hand||400)-sumW(o.id,pr[0],'y'))});return n}
-function writingClosed(o){return (hasPar(o,'r')||hasPar(o,'t'))&&(o.status==='נמסר'||writingRemaining(o)===0)}
+function writingRemaining(o){var n=0;PAIRS.forEach(function(pr){if(hasW(o,pr[0]))n+=Math.max(0,(S.cfg.head||400)-sumW(o.id,pr[0],'h'))+Math.max(0,(S.cfg.hand||400)-sumW(o.id,pr[0],'y'))});return n}
+function writingClosed(o){return (hasW(o,'r')||hasW(o,'t'))&&(!wopen(o)||writingRemaining(o)===0)}
 function viewWrite(){
  var h=viewWriteActive(),done=S.orders.filter(writingClosed);
  h+='<div class="card" data-section-title="ארכיון כתיבה" data-section-count="'+done.length+'"><b>ארכיון כתיבה ('+done.length+')</b><p class="mut">הזמנות שנמסרו או שהגיעו ליעד המילים שהוגדר. הגעה ליעד מילים אינה אישור מסירה או תשלום.</p>';
- h+=done.map(function(o){return '<div class="sub"><b>'+esc(o.name)+'</b><span class="mut">'+(o.status==='נמסר'?'נמסר':'יעד הכתיבה הושלם')+'</span>'+PAIRS.filter(function(pr){return hasPar(o,pr[0])}).map(function(pr){return progressHtml(o,pr[0])}).join('')+'<button class="x" onclick="editOrder('+o.id+')">פתח הזמנה</button></div>'}).join('');
+ h+=done.map(function(o){return '<div class="sub"><b>'+esc(o.name)+'</b><span class="mut">'+(o.status==='נמסר'?'נמסר':'יעד הכתיבה הושלם')+'</span>'+PAIRS.filter(function(pr){return hasW(o,pr[0])}).map(function(pr){return progressHtml(o,pr[0])}).join('')+'<button class="x" onclick="editOrder('+o.id+')">פתח הזמנה</button></div>'}).join('');
  var logs=S.writing.filter(function(w){var o=findO(w.oid);return o&&writingClosed(o)});
  h+='<details><summary>רישומי כתיבה בארכיון ('+logs.length+')</summary>'+logs.map(function(w){var o=findO(w.oid);return '<div class="row"><span>'+esc(o.name)+' · '+fdate(w.date)+' · '+w.words+' מילים</span>'+xb('w'+w.id,'delW('+w.id+')','מחק')+'</div>'}).join('')+'</details></div>';
  return h;
@@ -1085,7 +1103,7 @@ function recWeekly(){
 }
 function backlogWords(){
   var rem=0,hd=S.cfg.head||400,hn=S.cfg.hand||400;
-  S.orders.forEach(function(o){if(o.status==='נמסר')return;PAIRS.forEach(function(pr){if(hasPar(o,pr[0]))rem+=Math.max(0,hd-sumW(o.id,pr[0],'h'))+Math.max(0,hn-sumW(o.id,pr[0],'y'))})});
+  S.orders.forEach(function(o){if(!wopen(o))return;PAIRS.forEach(function(pr){if(hasW(o,pr[0]))rem+=Math.max(0,hd-sumW(o.id,pr[0],'h'))+Math.max(0,hn-sumW(o.id,pr[0],'y'))})});
   return rem;
 }
 function avgPace(){var t0=today(),from=isoAdd(-6);return S.writing.filter(function(w){return w.date>=from&&w.date<=t0}).reduce(function(a,w){return a+w.words},0)/7}
@@ -1121,7 +1139,7 @@ function viewOrders(){
     (x.rid?'<span class="mut">🔁 הזמנה קבועה</span>':'')+(x.email?'<span class="mut">✉️ '+esc(x.email)+'</span>':'')+(x.phone?'<span class="mut">📞 <a href="tel:'+telNum(x.phone)+'">'+esc(x.phone)+'</a> · <a target="_blank" rel="noopener" href="https://wa.me/'+waNum(x.phone)+'">וואטסאפ</a></span>':'')+(x.note?'<span class="mut">'+esc(x.note)+'</span>':'')+(x.adj?'<span class="mut">'+(x.adj>0?'תוספת ':'הנחה ')+money(Math.abs(x.adj))+'</span>':'')+(x.extras||[]).map(function(e){return '<span class="mut">'+esc(e.l||(e.a>0?'תוספת':'הנחה'))+' '+moneyS(e.a)+'</span>'}).join('')+'<span class="mut">סך הכל '+money(owed(x))+' · שולם '+money(x.paid)+' · <span class="'+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם במלואו')+'</span></span>'+
     (x.svc?'<span class="mut">עמלת תיווך שלי '+money(x.svc)+'</span>':'')+(x.brk?'<span class="mut">מתוכו עמלת המתווך '+money(brkFee(x))+(x.brkn?' · '+esc(x.brkn):'')+' · לי '+money(x.price+(x.svc||0))+'</span>':'')+(buyTot(x.id)?'<span class="mut">קניות להזמנה '+money(buyTot(x.id))+' · יתרה אחרי קניות, ספק והגהה '+moneyS(x.price-buyTot(x.id)-proofAmount(x)-supplierCost(x).total)+'</span>':'')+partsRow(x)+supplierInfo(x)+proofOrderInfo(x)+docBlock(x)+'<div style="display:flex;gap:6px;margin-top:4px;align-items:center"><select class="st" onchange="setStatus('+x.id+',this.value)">'+STAT.map(function(s){return '<option'+(s===x.status?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'+
     '<input class="paid" type="number" inputmode="decimal" placeholder="עדכן שולם" onchange="setPaid('+x.id+',this.value)"></div>'+waBtns(x)+'</div>'+
-    '<div style="text-align:left"><span class="amt">'+money(owed(x))+'</span><br><button class="x" onclick="editOrder('+x.id+')">✏️ ערוך</button><br><button class="x" onclick="invOrder('+x.id+')">🧾 חשבונית</button><br>'+delBtn('orders',x.id)+'</div></div>'};
+    '<div style="text-align:left"><span class="amt">'+money(owed(x))+'</span><br><button class="x" onclick="editOrder('+x.id+')">✏️ ערוך</button><br>'+(x.status==='נמסר'&&x.wx&&Object.keys(x.wx).length?'<button class="x" onclick="stopWrite('+x.id+')">הפסק המשך כתיבה</button><br>':(x.status==='נמסר'&&PAIRS.some(function(p){return !hasPar(x,p[0])})?'<button class="x" onclick="contWrite('+x.id+')">✍️ המשך כתיבה בזוג חסר</button><br>':''))+'<button class="x" onclick="invOrder('+x.id+')">🧾 חשבונית</button><br>'+delBtn('orders',x.id)+'</div></div>'};
   var groups=[['הוזמן','הזמנות חדשות'],['בכתיבה','הזמנות בכתיבה'],['מוכן','מוכנות למסירה'],['deliveredDue','נמסרו - יתרה לבדיקה'],['settled','נמסרו ושולמו']];
   h+=groups.map(function(g){var list=S.orders.filter(function(x){var done=x.status==='נמסר',due=owed(x)-(x.paid||0);return g[0]==='settled'?done&&due<=0:g[0]==='deliveredDue'?done&&due>0:x.status===g[0]});return '<details class="order-group"><summary>'+g[1]+' ('+list.length+')</summary>'+list.map(ordRow).join('')+'</details>'}).join('');
   return h+'</div>';
@@ -1425,7 +1443,7 @@ init();
 var privateSyncBusy=false;
 function privateSyncPick(o,keys){var r={};keys.forEach(function(k){if(o[k]!==undefined)r[k]=o[k]});return r}
 function privateSyncProject(s){
- return {schema:1,sourceTs:Date.now(),orders:(s.orders||[]).map(function(o){var q=privateSyncPick(o,['id','name','date','due','item','status','rid','rdate']);q.parts={};Object.keys(o.parts||{}).filter(function(k){return ['rp','tp','p'].includes(k)}).forEach(function(k){q.parts[k]=privateSyncPick(o.parts[k]||{},['ok','self'])});return q}),writing:(s.writing||[]).map(function(w){return privateSyncPick(w,['id','date','oid','pair','part','words'])}),recurring:(s.recurring||[]).map(function(t){var q=privateSyncPick(t,['id','name','item','mode','wd','start','first','count','dueDays','next','off']);q.partKeys=Object.keys(t.parts||{});return q}),cfg:privateSyncPick(s.cfg||{},['head','hand'])};
+ return {schema:1,sourceTs:Date.now(),orders:(s.orders||[]).map(function(o){var q=privateSyncPick(o,['id','name','date','due','item','status','rid','rdate','wx']);q.parts={};Object.keys(o.parts||{}).filter(function(k){return ['rp','tp','p'].includes(k)}).forEach(function(k){q.parts[k]=privateSyncPick(o.parts[k]||{},['ok','self'])});return q}),writing:(s.writing||[]).map(function(w){return privateSyncPick(w,['id','date','oid','pair','part','words'])}),recurring:(s.recurring||[]).map(function(t){var q=privateSyncPick(t,['id','name','item','mode','wd','start','first','count','dueDays','next','off']);q.partKeys=Object.keys(t.parts||{});return q}),cfg:privateSyncPick(s.cfg||{},['head','hand'])};
 }
 async function privateSyncHash(text){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
 function privateSyncInfo(){try{return JSON.parse(localStorage.getItem('sofer_private_sync')||'null')}catch(e){return null}}
@@ -1453,3 +1471,4 @@ async function privateSyncUpload(){
 </script>
 </body>
 </html>
+
