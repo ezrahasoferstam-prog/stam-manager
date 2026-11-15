@@ -50,12 +50,12 @@ h1{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:28px;line-height:1.1;m
 nav{display:flex;gap:3px;margin-bottom:14px;overflow-x:auto}
 nav button{flex:1 0 auto;min-width:0;white-space:nowrap;padding:10px 8px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-size:12px}
 nav button.on{background:linear-gradient(160deg,#a5762c,#8b5e1a);color:var(--accfg);border-color:#8b5e1a}
-.bcard,.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(60,40,10,.06)}
+.bcard,.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(60,40,10,.06)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .full{grid-column:1/-1}
 label{font-size:12px;color:var(--mut);display:block;margin-bottom:2px}
-input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:16px}
-.add{width:100%;margin-top:10px;padding:11px;border:0;border-radius:10px;background:linear-gradient(160deg,#a5762c,#8b5e1a);color:var(--accfg);font:inherit;font-weight:700;box-shadow:0 2px 6px rgba(139,94,26,.30)}
+input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;font-size:16px}
+.add{width:100%;margin-top:10px;padding:11px;border:0;border-radius:14px;background:linear-gradient(160deg,#a5762c,#8b5e1a);color:var(--accfg);font:inherit;font-weight:700;box-shadow:0 2px 6px rgba(139,94,26,.30)}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
 .row:last-child{border:0}
 .row b{display:block}
@@ -81,10 +81,19 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 .home-hdr{text-align:center;padding:10px 0 4px}
 .home-logo{width:72px;height:72px;border-radius:16px}
 .home-title{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:24px;margin-top:6px}
+.swipe{overflow:hidden;margin:12px 0 2px}
+.swipe-track{display:flex;transition:transform .35s cubic-bezier(.22,.8,.3,1)}
+.slide{flex:0 0 76%;padding:0 5px}
+.slide .tile{width:100%;height:118px;justify-content:center;font-size:17px}
+.swipe-dots{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:6px}
+.swipe-dots .dot{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:var(--line);transition:all .25s;cursor:pointer}
+.swipe-dots .dot.on{background:var(--gold);width:18px;border-radius:4px}
+.swipe-arr{border:0;background:none;color:var(--mut);font-size:20px;padding:2px 10px;cursor:pointer}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;font:inherit;cursor:pointer;color:var(--ink);box-shadow:0 1px 3px rgba(60,40,10,.06)}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;transition:transform .2s ease,box-shadow .2s ease;padding:14px 10px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;font:inherit;cursor:pointer;color:var(--ink);box-shadow:0 1px 3px rgba(60,40,10,.06)}
 .home-foot{display:none}
 .tile .tic{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;margin-bottom:2px}
+.tile:active{transform:scale(.97)}
 .tile .tnm{font-weight:700;font-size:16px}
 .tile .tbd{font-size:12px;color:var(--mut)}
 .tile .tbd.alert{color:#a33;font-weight:700}
@@ -122,7 +131,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10.2-preview · עיצוב א׳ (קלאסי אישי) - תצוגת דוגמה</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10.2-preview · דוגמה א׳ · כרטיס מרכזי - תצוגת דוגמה</div>
 </main>
 <script>
 var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='home',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
@@ -1460,11 +1469,35 @@ function homeTiles(){
    ['links','קישורים','link','מחירים ואתר הזמנות',false]
   ];
   var TC={orders:'#2563eb',pen:'#b5832a',cap:'#7c3aed',books:'#0d9488',cart:'#ea580c',coin:'#16a34a',sum:'#0284c7',receipt:'#e11d48',link:'#4f46e5'};
-  return '<div class="tiles">'+tiles.map(function(t){var c=TC[t[2]]||'#8b5e1a';return '<button class="tile" onclick="setTab(\''+t[0]+'\')"><span class="tic" style="background:'+c+'1f">'+ico(t[2],30,c)+'</span><span class="tnm">'+t[1]+'</span><span class="tbd'+(t[4]?' alert':'')+'">'+t[3]+'</span></button>'}).join('')+'</div>';
+  var slides=tiles.map(function(t){var c=TC[t[2]]||'#8b5e1a';return '<div class="slide" dir="rtl"><button class="tile" onclick="setTab(\''+t[0]+'\')"><span class="tic" style="background:'+c+'1f">'+ico(t[2],30,c)+'</span><span class="tnm">'+t[1]+'</span><span class="tbd'+(t[4]?' alert':'')+'">'+t[3]+'</span></button></div>'}).join('');
+  var dots=tiles.map(function(t,i){return '<button class="dot" onclick="swipeTo('+i+')" aria-label="'+t[1]+'"></button>'}).join('');
+  return '<div class="swipe" dir="ltr"><div class="swipe-track" id="swtrack">'+slides+'</div></div><div class="swipe-dots" dir="ltr"><button class="swipe-arr" onclick="swipeTo(swI-1)">&#8249;</button>'+dots+'<button class="swipe-arr" onclick="swipeTo(swI+1)">&#8250;</button></div>';
 }
 function hRow(ic,txt,btn,cb,alert){
   return '<div class="hrow'+(alert?' alert':'')+'"><span class="hic">'+ico(ic,20)+'</span><span class="htx">'+txt+'</span>'+(btn?'<button class="x hbtn" onclick="'+cb+'">'+btn+'</button>':'')+'</div>';
 }
+
+var swI=0;
+function swipeTo(i,instant){
+  var tr=document.getElementById('swtrack');if(!tr)return;
+  var n=tr.children.length;i=Math.max(0,Math.min(n-1,i));swI=i;
+  var w=tr.children[0].offsetWidth;
+  tr.style.transition=instant?'none':'';
+  tr.style.transform='translateX('+(-i*w)+'px)';
+  var ds=document.querySelectorAll('.swipe-dots .dot');
+  for(var k=0;k<ds.length;k++)ds[k].classList.toggle('on',k===i);
+}
+function swipeInit(){
+  var tr=document.getElementById('swtrack');if(!tr)return;
+  var sx=0,sy=0;
+  tr.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  tr.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy))swipeTo(swI+(dx<0?1:-1));
+  },{passive:true});
+  swipeTo(swI,true);
+}
+
 function viewHome(){
   var t0=today(),rows=[];
   var lb=lastBackup(),days=lb?Math.floor((Date.now()-lb)/864e5):-1;
@@ -1503,6 +1536,7 @@ function render(){
   setTimeout(calcTotal,0);
   setTimeout(hydrateImgs,0);
   if(tab==='today'||tab==='home')setTimeout(todaySiteCount,0);
+  if(tab==='home')setTimeout(swipeInit,0);
   for(var k in keep){var e=document.getElementById(k);if(e&&k!=='l_course'&&k!=='w_order'&&k!=='income_month'&&k!=='income_exclude'){if(e.type==='checkbox')e.checked=keep[k];else e.value=keep[k]}}
   document.querySelectorAll('#app input[type=date]').forEach(updHd);
   var t=document.getElementById('today');if(t)t.textContent=hdate(today());
