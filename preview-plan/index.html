@@ -73,6 +73,9 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 .section-fold>summary{cursor:pointer;list-style:none;font-weight:700;display:flex;justify-content:space-between;gap:10px;padding:4px 0}.section-fold>summary:after{content:'▾';color:var(--gold)}.section-fold[open]>summary:after{content:'▴'}.fold-body{padding-top:10px}.section-fold .card{margin:8px 0}.order-group{border-top:1px solid var(--line);padding:10px 0}
 
 .navback{display:block;width:calc(100% - 20px);margin:0 10px 10px;background:linear-gradient(160deg,#a5762c,#8b5e1a);color:var(--accfg);border:none;font-size:17px;font-weight:700;padding:12px;border-radius:12px;cursor:pointer;text-align:center}
+.top.tophome{display:block;text-align:center;padding:18px 12px 14px;border-bottom-width:3px}
+.tophome .hdr-logo{float:none;margin:0 auto 8px;width:88px;height:88px;border-radius:22px;box-shadow:0 4px 14px rgba(60,40,10,.22);border:1px solid var(--line)}
+.tophome h1{font-size:30px}
 .hdr-logo{width:56px;height:56px;border-radius:12px;float:right;margin-left:10px;background:#fff url(../3-logo-finalB-192.png) center 43%/158% no-repeat}
 .home-hdr{text-align:center;padding:10px 0 4px}
 .home-logo{width:72px;height:72px;border-radius:16px}
@@ -117,7 +120,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10.2-preview · עיצוב א׳ (קלאסי) - תצוגת דוגמה</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10.2-preview · עיצוב א׳ (קלאסי אישי) - תצוגת דוגמה</div>
 </main>
 <script>
 var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='home',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
@@ -1492,6 +1495,7 @@ function render(){
   document.querySelectorAll('#app input[id],#app select[id],#app textarea[id]').forEach(function(e){keep[e.id]=e.type==='checkbox'?e.checked:e.value});
   var ae=document.activeElement,aid=ae&&ae.id;
   document.getElementById('nav').innerHTML=tab==='home'?'':'<button class="navback" onclick="setTab(\'home\')">&#8594; בית</button>';;
+  document.querySelector('.top').classList.toggle('tophome',tab==='home');
   var v={home:viewHome,today:viewToday,income:viewIncome,cash:viewCash,sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
   document.getElementById('app').innerHTML=names()+((tab==='sum'||tab==='pay')?'<button class="add" style="margin:0 0 12px" onclick="openIncome()">חישוב חודשי</button>':'')+v;quietSections();
   setTimeout(calcTotal,0);
