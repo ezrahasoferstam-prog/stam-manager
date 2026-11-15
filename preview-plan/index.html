@@ -73,7 +73,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 .section-fold>summary{cursor:pointer;list-style:none;font-weight:700;display:flex;justify-content:space-between;gap:10px;padding:4px 0}.section-fold>summary:after{content:'▾';color:var(--gold)}.section-fold[open]>summary:after{content:'▴'}.fold-body{padding-top:10px}.section-fold .card{margin:8px 0}.order-group{border-top:1px solid var(--line);padding:10px 0}
 
 .navback{display:block;width:calc(100% - 20px);margin:0 10px 10px;background:var(--acc);color:var(--accfg);border:none;font-size:17px;font-weight:700;padding:12px;border-radius:12px;cursor:pointer;text-align:center}
-.hdr-logo{width:46px;height:46px;border-radius:12px;float:right;margin-left:10px}
+.hdr-logo{width:56px;height:56px;border-radius:12px;float:right;margin-left:10px;background:#fff url(../3-logo-finalB-192.png) center 43%/158% no-repeat}
 .home-hdr{text-align:center;padding:10px 0 4px}
 .home-logo{width:72px;height:72px;border-radius:16px}
 .home-title{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:24px;margin-top:6px}
@@ -101,7 +101,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 </head>
 <body><div style="position:sticky;top:0;z-index:99;background:#8b5e1a;color:#fff8e8;text-align:center;padding:8px;font-size:14px;font-weight:700">תצוגה מקדימה · נתוני דוגמה בלבד · הנתונים האמיתיים שלך לא מושפעים</div>
 <main>
-<header class="top"><div><img class="hdr-logo" src="../3-logo-finalB-192.png" alt="לוגו עזרא הסופר"><h1>ניהול סת״ם</h1><div class="mut">שיעורים · תפילין · תשלומים</div><div class="mut" id="today"></div><button class="x" id="thm" onclick="toggleTheme()" style="padding:4px 0"></button><button class="x" onclick="backupData()" style="padding:4px 0">💾 גיבוי</button><button class="x" onclick="document.getElementById('impfile').click()" style="padding:4px 0">📥 שחזור</button><button class="x" onclick="siteOrders()" style="padding:4px 0">🌐 מהאתר<span id="sitebdg"></span></button></div></header>
+<header class="top"><div><div class="hdr-logo" role="img" aria-label="לוגו עזרא הסופר"></div><h1>ניהול סת״ם</h1><div class="mut">שיעורים · תפילין · תשלומים</div><div class="mut" id="today"></div><button class="x" id="thm" onclick="toggleTheme()" style="padding:4px 0"></button><button class="x" onclick="backupData()" style="padding:4px 0">💾 גיבוי</button><button class="x" onclick="document.getElementById('impfile').click()" style="padding:4px 0">📥 שחזור</button><button class="x" onclick="siteOrders()" style="padding:4px 0">🌐 מהאתר<span id="sitebdg"></span></button></div></header>
 <section style="padding:8px 16px;border-bottom:1px solid var(--line);margin-bottom:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="x" id="private-sync-btn" onclick="privateSyncUpload()" style="padding:10px 14px;min-height:44px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;border-radius:8px">🔒 סנכרון פרטי</button><span class="mut" id="private-sync-info" aria-live="polite">טרם סונכרן עותק פרטי</span></section>
 <nav id="nav"></nav>
 <div id="app"></div>
