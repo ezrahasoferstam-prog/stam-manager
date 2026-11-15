@@ -923,6 +923,18 @@ function updatePlanTitles(){
   if(!upd&&!skip){toast('הדבק שורות בצורה: 27. שם השיעור');return}
   save();toast('עודכנו '+upd+' שמות ✓'+(skip?' · דולגו '+skip+' שורות בלי מספר תקין':''));
 }
+var KNOWN_TITLES={'1':'הכרת הקולמוס','2':'הכרת הדף','3':'אות ב','4':'אות ד','5':'אות ת','6':'אות ה','7':'אות ו','8':'אות י','9':'אות מ','10':'עצירה לבדיקה וביקורת','27':'סיום אותיות ועמוד ניסיון','28':'תחילת מגילה','29':'ביקורת מגילה','30':'סיום קורס'};
+function applyKnownTitles(){
+  if(!S.plans.length){toast('אין עדיין שיעורים בתכנית');return}
+  if(!confirm('לעדכן את שמות השיעורים שהוכתבו (1-10 ו-27-30)? משנה שמות בלבד בשורות קיימות. שיעורים 11-26, ההתקדמות, הקבצים והרישומים נשארים בדיוק כמו שהם.'))return;
+  var upd=0,skip=0;
+  Object.keys(KNOWN_TITLES).forEach(function(k){
+    var pos=Number(k);
+    if(pos>S.plans.length){skip++;return}
+    if(S.plans[pos-1].title!==KNOWN_TITLES[k]){S.plans[pos-1].title=KNOWN_TITLES[k];upd++}
+  });
+  save();toast('עודכנו '+upd+' שמות ✓'+(skip?' · דולגו '+skip+' שאין להם שורה':'')+(upd===0&&!skip?' · הכל כבר מעודכן':''));
+}
 function fillPlanTitles(){
   var e=document.getElementById('mp_rename');if(!e)return;
   e.value=S.plans.map(function(p,i){return (i+1)+'. '+p.title}).join('\n');
@@ -938,15 +950,18 @@ function masterBlock(){
   if(!op)return h+'</div>';
   var units=[];S.plans.forEach(function(p){if(p.unit&&units.indexOf(p.unit)<0)units.push(p.unit)});
   if(!n)h+='<div style="margin-top:8px"><button class="add" onclick="seedPlans()">צור 30 שיעורים ריקים לעריכה</button></div>';
-  h+='<div class="sub"><b>הוספת שיעור</b><div class="grid" style="margin-top:6px"><input id="mp_t" type="text" placeholder="כותרת השיעור" style="grid-column:1/-1"><input id="mp_u" type="text" list="mpu" placeholder="יחידה / פרק (לא חובה)" style="grid-column:1/-1"><textarea id="mp_b" placeholder="תוכן השיעור (אפשר לשלוח במייל)" style="grid-column:1/-1;height:90px"></textarea></div><datalist id="mpu">'+units.map(function(u){return '<option value="'+esc(u)+'">'}).join('')+'</datalist><button class="add" onclick="addPlan()">הוסף לתכנית</button></div>';
-  h+='<div class="sub"><label for="mp_bulk">או הדבק רשימה, שורה לכל שיעור (ייכנסו ליחידה שכתבת למעלה)</label><textarea id="mp_bulk" style="height:90px"></textarea><button class="add" onclick="bulkPlans()">הוסף את הרשימה</button></div>';
-  if(n)h+='<div class="sub"><label for="mp_rename">עדכון שמות לפי מספר שיעור - שורה בצורה ״27. שם השיעור״. משנה רק שמות של שורות קיימות, בלי להוסיף ולמחוק. ההתקדמות, הקבצים והרישומים נשמרים. אם התכנית ריקה, צרו קודם 30 שיעורים בכפתור למעלה.</label><textarea id="mp_rename" style="height:180px"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="x" onclick="fillPlanTitles()">מלא את השמות הנוכחיים</button><button class="add" style="margin:0" onclick="updatePlanTitles()">עדכן שמות לפי הרשימה</button></div></div>';
+  var tools='';
+  if(n)tools+='<div class="sub"><b>עדכון שמות שהוכתבו</b><div class="mut" style="margin:2px 0 6px">מלחיצה אחת: מעדכן את השמות של שיעורים 1-10 ו-27-30 לפי מה שהוכתב. משנה שמות בלבד; שיעורים 11-26, ההתקדמות, הקבצים והרישומים נשארים כמו שהם.</div><button class="add" style="margin:0" onclick="applyKnownTitles()">עדכן את השמות שהוכתבו</button></div>';
+  tools+='<div class="sub"><b>הוספת שיעור</b><div class="grid" style="margin-top:6px"><input id="mp_t" type="text" placeholder="כותרת השיעור" style="grid-column:1/-1"><input id="mp_u" type="text" list="mpu" placeholder="יחידה / פרק (לא חובה)" style="grid-column:1/-1"><textarea id="mp_b" placeholder="תוכן השיעור (אפשר לשלוח במייל)" style="grid-column:1/-1;height:90px"></textarea></div><datalist id="mpu">'+units.map(function(u){return '<option value="'+esc(u)+'">'}).join('')+'</datalist><button class="add" onclick="addPlan()">הוסף לתכנית</button></div>';
+  tools+='<div class="sub"><label for="mp_bulk">או הדבק רשימה, שורה לכל שיעור (ייכנסו ליחידה שכתבת למעלה)</label><textarea id="mp_bulk" style="height:90px"></textarea><button class="add" onclick="bulkPlans()">הוסף את הרשימה</button></div>';
+  if(n)tools+='<div class="sub"><label for="mp_rename">עדכון שמות לפי מספר שיעור - שורה בצורה ״27. שם השיעור״. משנה רק שמות של שורות קיימות, בלי להוסיף ולמחוק. ההתקדמות, הקבצים והרישומים נשמרים.</label><textarea id="mp_rename" style="height:140px"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="x" onclick="fillPlanTitles()">מלא את השמות הנוכחיים</button><button class="add" style="margin:0" onclick="updatePlanTitles()">עדכן שמות לפי הרשימה</button></div></div>';
   var prev='';
   h+=S.plans.map(function(p,i){
     var k=S.courses.filter(function(c){return planTaught(p.id,c.id)}).length,u=p.unit||'',head='';
     if(u!==prev){head=u?'<div class="mut" style="margin-top:8px;font-weight:700;color:var(--gold)">'+esc(u)+'</div>':'';prev=u}
     return head+'<div class="row"><div style="flex:1"><b>'+(i+1)+'. '+esc(p.title)+'</b><span class="mut">נלמד ב־'+k+' קורסים</span>'+(p.body?'<div class="mut" style="white-space:pre-wrap">'+esc(p.body.length>110?p.body.slice(0,110)+'…':p.body)+'</div>':'')+(p.file?'<div><a href="/_blob/'+p.file.id+'" target="_blank" rel="noopener" style="color:var(--acc)">📎 '+esc(p.file.name)+'</a> '+xb('pf'+p.id,'delPlanFile('+p.id+')','הסר קובץ')+'</div>':(busy==='f'+p.id?'<div class="mut">מעלה קובץ…</div>':''))+'</div><div style="text-align:left"><button class="x" onclick="movePlan('+p.id+',-1)">▲</button><button class="x" onclick="movePlan('+p.id+',1)">▼</button><br><button class="x" onclick="editPlan('+p.id+')">✏️ ערוך</button><br><button class="x" onclick="pickFile('+p.id+')">📎 '+(p.file?'החלף קובץ':'קובץ')+'</button><br>'+xb('pl'+p.id,'delPlan('+p.id+')','מחק')+'</div></div>';
   }).join('');
+  h+='<details class="sub" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">⚙️ ניהול התכנית (הוספה ועריכת שמות)</summary><div style="margin-top:6px">'+tools+'</div></details>';
   return h+'</div>';
 }
 function plansBlock(c){
