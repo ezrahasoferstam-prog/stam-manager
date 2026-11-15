@@ -51,11 +51,30 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 .crs{border-top:1px solid var(--line);margin-top:10px;padding-top:6px}.chip{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:1px 8px;margin:0 0 4px 4px;font-size:14px}.chip .x{padding:0 2px}input.paid{width:110px;padding:5px;font-size:14px}.th{display:inline-block;position:relative;margin:4px 0 0 6px}.th img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block}.th .x{position:absolute;top:-4px;left:-4px;background:var(--card);border-radius:50%;padding:0 5px}#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);align-items:center;justify-content:center;z-index:70}#lb img{max-width:96%;max-height:92%}.row.done{opacity:.55}select.s-invoiced{border-color:var(--acc)}select.s-paid{color:var(--ok)}input.wr{margin-top:4px;padding:5px;font-size:14px}.chd{cursor:pointer}.arr{color:var(--mut);font-size:18px}.cb{padding:2px 0 10px}.sub{border-top:1px dashed var(--line);margin-top:10px;padding-top:8px}.hd{font-weight:400;color:var(--gold)}#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--acc);color:var(--accfg);padding:10px 18px;border-radius:22px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;font-size:15px}#toast.show{opacity:1}.pb{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin:2px 0 4px}.pb i{display:block;height:100%;background:var(--gold)}.pb.done i{background:var(--ok)}.wp{margin:4px 0}#led,#ped,#stu,#sbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:56;align-items:center;justify-content:center;padding:14px}#inv{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:55;align-items:center;justify-content:center;padding:14px}.invbox{background:var(--card);color:var(--ink);border-radius:14px;padding:14px;width:100%;max-width:560px;max-height:92%;overflow:auto}textarea{width:100%;height:280px;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:15px;line-height:1.5}.pc{display:inline-block;min-width:32px;text-align:center;border:1px solid var(--line);border-radius:8px;padding:5px 0;margin:0 0 4px 4px;font-size:13px;background:var(--bg);color:var(--ink);font-family:inherit}.pc.on{background:var(--ok);color:#fff;border-color:var(--ok)}.pc.nx{border:2px solid var(--gold)}select.st{width:auto;padding:5px;font-size:13px}
 
 .section-fold>summary{cursor:pointer;list-style:none;font-weight:700;display:flex;justify-content:space-between;gap:10px;padding:4px 0}.section-fold>summary:after{content:'▾';color:var(--gold)}.section-fold[open]>summary:after{content:'▴'}.fold-body{padding-top:10px}.section-fold .card{margin:8px 0}.order-group{border-top:1px solid var(--line);padding:10px 0}
+
+.navback{display:block;width:calc(100% - 20px);margin:0 10px 10px;background:var(--acc);color:var(--accfg);border:none;font-size:17px;font-weight:700;padding:12px;border-radius:12px;cursor:pointer;text-align:center}
+.hdr-logo{width:46px;height:46px;border-radius:12px;float:right;margin-left:10px}
+.home-hdr{text-align:center;padding:10px 0 4px}
+.home-logo{width:72px;height:72px;border-radius:16px}
+.home-title{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:24px;margin-top:6px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;font:inherit;cursor:pointer;color:var(--ink);box-shadow:0 1px 3px rgba(60,40,10,.06)}
+.tile .tnm{font-weight:700;font-size:16px}
+.tile .tbd{font-size:12px;color:var(--mut)}
+.tile .tbd.alert{color:#a33;font-weight:700}
+.orow{flex-direction:column;align-items:stretch}
+.osum{display:flex;align-items:center;gap:8px;cursor:pointer;width:100%}
+.osum .chev{transition:transform .2s;color:var(--mut);font-size:12px;flex:none}
+.osum.open .chev{transform:rotate(90deg)}
+.osum .oitem{color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.osum .oleft{margin-inline-start:auto;font-weight:700;white-space:nowrap;font-size:13px;flex:none}
+.obody{display:none;margin-top:6px}
+.obody.open{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 </style>
 </head>
 <body>
 <main>
-<header class="top"><div><h1>ניהול סת״ם</h1><div class="mut">שיעורים · תפילין · תשלומים</div><div class="mut" id="today"></div><button class="x" id="thm" onclick="toggleTheme()" style="padding:4px 0"></button><button class="x" onclick="backupData()" style="padding:4px 0">💾 גיבוי</button><button class="x" onclick="document.getElementById('impfile').click()" style="padding:4px 0">📥 שחזור</button><button class="x" onclick="siteOrders()" style="padding:4px 0">🌐 מהאתר<span id="sitebdg"></span></button></div></header>
+<header class="top"><div><img class="hdr-logo" src="./3-logo-finalB-192.png" alt="לוגו עזרא הסופר"><h1>ניהול סת״ם</h1><div class="mut">שיעורים · תפילין · תשלומים</div><div class="mut" id="today"></div><button class="x" id="thm" onclick="toggleTheme()" style="padding:4px 0"></button><button class="x" onclick="backupData()" style="padding:4px 0">💾 גיבוי</button><button class="x" onclick="document.getElementById('impfile').click()" style="padding:4px 0">📥 שחזור</button><button class="x" onclick="siteOrders()" style="padding:4px 0">🌐 מהאתר<span id="sitebdg"></span></button></div></header>
 <section style="padding:8px 16px;border-bottom:1px solid var(--line);margin-bottom:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="x" id="private-sync-btn" onclick="privateSyncUpload()" style="padding:10px 14px;min-height:44px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;border-radius:8px">🔒 סנכרון פרטי</button><span class="mut" id="private-sync-info" aria-live="polite">טרם סונכרן עותק פרטי</span></section>
 <nav id="nav"></nav>
 <div id="app"></div>
@@ -70,11 +89,11 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.9.1 - אחסון מקומי</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10 - אחסון מקומי</div>
 </main>
 <script>
-var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='today',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
-var TABS=[['today','היום'],['sum','סיכום'],['cash','הכנסות בפועל'],['lessons','שיעורים'],['bill','חיוב קורסים'],['orders','תפילין'],['write','כתיבה'],['buys','קניות'],['pay','תשלומים'],['links','קישורים']];
+var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='home',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
+var TABS=[['sum','סיכום'],['cash','הכנסות בפועל'],['lessons','שיעורים'],['bill','חיוב קורסים'],['orders','תפילין'],['write','כתיבה'],['buys','קניות'],['pay','תשלומים'],['links','קישורים']];
 var STAT=['הוזמן','בכתיבה','מוכן','נמסר'];
 var IDS=['l_wrote','l_hours','c_new','l_course','l_name','l_date','l_price','l_topic','o_name','o_item','o_date','o_due','o_price','o_paid','o_status','p_name','p_date','p_amt','p_note'];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -130,7 +149,7 @@ async function backupData(shareAnd){
     document.body.appendChild(a);a.click();
     try{localStorage.setItem('sofer_last_backup',String(Date.now()))}catch(e){}
     setTimeout(function(){try{URL.revokeObjectURL(a.href)}catch(e){}a.remove()},500);
-    if(tab==='today')render();
+    if(tab==='today'||tab==='home')render();
     var mb=Math.round(raw.length/1048576);toast('הגיבוי ירד ✓'+(keys.length?' כולל '+keys.length+' תמונות':'')+' ('+mb+'MB) — שמור במקום בטוח'+(mb>=80?'. שים לב: הגיבוי גדל ('+mb+'MB). שמור אותו גם מחוץ לטלפון, ואם הוא נהיה כבד מדי תגיד לי':''));
   }catch(e){toast('הגיבוי נכשל: '+e.message)}
 }
@@ -1135,11 +1154,11 @@ function viewOrders(){
   h+='<div class="card">';
   var ordRow=function(x){
     var left=owed(x)-(x.paid||0);
-    return '<div class="row"><div><b>'+esc(x.name)+'</b><span class="mut">'+(x.item?esc(x.item)+' · ':'')+'הוזמן '+fdate(x.date)+dueTag(x)+'</span>'+
+    return '<div class="row orow"><div class="osum" onclick="togOrder(this)"><span class="chev">&#9664;</span><b>'+esc(x.name)+'</b>'+(x.item?'<span class="mut oitem">'+esc(x.item)+'</span>':'')+'<span class="oleft '+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם ✓')+'</span></div><div class="obody"><div><b>'+esc(x.name)+'</b><span class="mut">'+(x.item?esc(x.item)+' · ':'')+'הוזמן '+fdate(x.date)+dueTag(x)+'</span>'+
     (x.rid?'<span class="mut">🔁 הזמנה קבועה</span>':'')+(x.email?'<span class="mut">✉️ '+esc(x.email)+'</span>':'')+(x.phone?'<span class="mut">📞 <a href="tel:'+telNum(x.phone)+'">'+esc(x.phone)+'</a> · <a target="_blank" rel="noopener" href="https://wa.me/'+waNum(x.phone)+'">וואטסאפ</a></span>':'')+(x.note?'<span class="mut">'+esc(x.note)+'</span>':'')+(x.adj?'<span class="mut">'+(x.adj>0?'תוספת ':'הנחה ')+money(Math.abs(x.adj))+'</span>':'')+(x.extras||[]).map(function(e){return '<span class="mut">'+esc(e.l||(e.a>0?'תוספת':'הנחה'))+' '+moneyS(e.a)+'</span>'}).join('')+'<span class="mut">סך הכל '+money(owed(x))+' · שולם '+money(x.paid)+' · <span class="'+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם במלואו')+'</span></span>'+
     (x.svc?'<span class="mut">עמלת תיווך שלי '+money(x.svc)+'</span>':'')+(x.brk?'<span class="mut">מתוכו עמלת המתווך '+money(brkFee(x))+(x.brkn?' · '+esc(x.brkn):'')+' · לי '+money(x.price+(x.svc||0))+'</span>':'')+(buyTot(x.id)?'<span class="mut">קניות להזמנה '+money(buyTot(x.id))+' · יתרה אחרי קניות, ספק והגהה '+moneyS(x.price-buyTot(x.id)-proofAmount(x)-supplierCost(x).total)+'</span>':'')+partsRow(x)+supplierInfo(x)+proofOrderInfo(x)+docBlock(x)+'<div style="display:flex;gap:6px;margin-top:4px;align-items:center"><select class="st" onchange="setStatus('+x.id+',this.value)">'+STAT.map(function(s){return '<option'+(s===x.status?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'+
     '<input class="paid" type="number" inputmode="decimal" placeholder="עדכן שולם" onchange="setPaid('+x.id+',this.value)"></div>'+waBtns(x)+'</div>'+
-    '<div style="text-align:left"><span class="amt">'+money(owed(x))+'</span><br><button class="x" onclick="editOrder('+x.id+')">✏️ ערוך</button><br>'+(x.status==='נמסר'&&x.wx&&Object.keys(x.wx).length?'<button class="x" onclick="stopWrite('+x.id+')">הפסק המשך כתיבה</button><br>':(x.status==='נמסר'&&PAIRS.some(function(p){return !hasPar(x,p[0])})?'<button class="x" onclick="contWrite('+x.id+')">✍️ המשך כתיבה בזוג חסר</button><br>':''))+'<button class="x" onclick="invOrder('+x.id+')">🧾 חשבונית</button><br>'+delBtn('orders',x.id)+'</div></div>'};
+    '<div style="text-align:left"><span class="amt">'+money(owed(x))+'</span><br><button class="x" onclick="editOrder('+x.id+')">✏️ ערוך</button><br>'+(x.status==='נמסר'&&x.wx&&Object.keys(x.wx).length?'<button class="x" onclick="stopWrite('+x.id+')">הפסק המשך כתיבה</button><br>':(x.status==='נמסר'&&PAIRS.some(function(p){return !hasPar(x,p[0])})?'<button class="x" onclick="contWrite('+x.id+')">✍️ המשך כתיבה בזוג חסר</button><br>':''))+'<button class="x" onclick="invOrder('+x.id+')">🧾 חשבונית</button><br>'+delBtn('orders',x.id)+'</div></div></div>'};
   var groups=[['הוזמן','הזמנות חדשות'],['בכתיבה','הזמנות בכתיבה'],['מוכן','מוכנות למסירה'],['deliveredDue','נמסרו - יתרה לבדיקה'],['settled','נמסרו ושולמו']];
   h+=groups.map(function(g){var list=S.orders.filter(function(x){var done=x.status==='נמסר',due=owed(x)-(x.paid||0);return g[0]==='settled'?done&&due<=0:g[0]==='deliveredDue'?done&&due>0:x.status===g[0]});return '<details class="order-group"><summary>'+g[1]+' ('+list.length+')</summary>'+list.map(ordRow).join('')+'</details>'}).join('');
   return h+'</div>';
@@ -1153,7 +1172,7 @@ function viewPay(){
 
 var sectionOpen={};
 function quietSections(){
- if(tab==='income'||tab==='today'||tab==='cash')return;
+ if(tab==='income'||tab==='today'||tab==='cash'||tab==='home')return;
  var app=document.getElementById('app');
  Array.from(app.children).filter(function(e){return e.classList.contains('card')}).forEach(function(card,i){
   var key=tab+':'+i,title='פרטים',count=null;
@@ -1339,17 +1358,61 @@ function viewIncome(){
  h+='</details></div>';return h;
 }
 
+
+// ===== v2.10: מסך סיכום ביתי + כרטיסי הזמנה סגורים =====
+var ICONS={
+ orders:'<rect x="5" y="4" width="13" height="16" rx="2"/><line x1="8.5" y1="8.5" x2="14.5" y2="8.5"/><line x1="8.5" y1="12" x2="14.5" y2="12"/><line x1="8.5" y1="15.5" x2="12" y2="15.5"/>',
+ tefillin:'<rect x="6" y="9" width="12" height="11" rx="1.5"/><line x1="6" y1="13" x2="18" y2="13"/><line x1="9.5" y1="9" x2="9.5" y2="4.5"/><line x1="14.5" y1="9" x2="14.5" y2="4.5"/>',
+ pen:'<path d="M4 20l1.2-4.2L16 5l3 3L8.2 18.8 4 20z"/>',
+ cart:'<path d="M4 6h2.2l2 9.5h9.3l2.2-6.5H7"/><circle cx="10.5" cy="19.5" r="1.3"/><circle cx="16.5" cy="19.5" r="1.3"/>',
+ cap:'<path d="M12 5l9 4-9 4-9-4 9-4z"/><path d="M7.5 11.5V15c0 1.6 9 1.6 9 0v-3.5"/>',
+ books:'<rect x="4.5" y="4" width="5.5" height="16" rx="1"/><rect x="13" y="4" width="5.5" height="16" rx="1"/>',
+ coin:'<circle cx="12" cy="12" r="8"/><text x="12" y="16.5" text-anchor="middle" font-size="12" font-weight="700" fill="#8b5e1a" stroke="none">₪</text>',
+ receipt:'<path d="M6 3.5h12V21l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6L6 21z"/><line x1="9" y1="8.5" x2="15" y2="8.5"/><line x1="9" y1="12.5" x2="15" y2="12.5"/>',
+ sum:'<line x1="4" y1="19.5" x2="20" y2="19.5"/><line x1="6.5" y1="16" x2="6.5" y2="10"/><line x1="12" y1="16" x2="12" y2="5.5"/><line x1="17.5" y1="16" x2="17.5" y2="12.5"/>',
+ link:'<path d="M9.5 14.5l5-5"/><path d="M11 6.8l1.8-1.8a3.6 3.6 0 015.1 5.1L16.1 11.9"/><path d="M13 17.2l-1.8 1.8a3.6 3.6 0 01-5.1-5.1l1.8-1.8"/>'
+};
+function ico(k,size){return '<svg width="'+(size||30)+'" height="'+(size||30)+'" viewBox="0 0 24 24" fill="none" stroke="#8b5e1a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[k]||'')+'</svg>'}
+function homeTiles(){
+  var t0=today();
+  var open=S.orders.filter(function(o){return o.status!=='נמסר'}).length;
+  var late=S.orders.filter(function(o){return o.status!=='נמסר'&&o.due&&o.due<t0}).length;
+  var tiles=[
+   ['orders','הזמנות','orders',open?open+' פתוחות'+(late?' · '+late+' באיחור':''):'אין פתוחות ✓',late>0],
+   ['write','כתיבה','pen','יעד ורישום יומי',false],
+   ['lessons','שיעורים','cap','קורסים ותלמידים',false],
+   ['bill','חיוב קורסים','books','חיוב חודשי',false],
+   ['buys','קניות','cart','הוצאות להזמנות',false],
+   ['cash','הכנסות בפועל','coin','לפי חודש ומקור',false],
+   ['sum','סיכום','sum','חובות ומצב כללי',false],
+   ['pay','תשלומים','receipt','יומן תשלומים',false],
+   ['links','קישורים','link','מחירים ואתר הזמנות',false]
+  ];
+  return '<div class="tiles">'+tiles.map(function(t){return '<button class="tile" onclick="setTab(\''+t[0]+'\')"><span>'+ico(t[2],30)+'</span><span class="tnm">'+t[1]+'</span><span class="tbd'+(t[4]?' alert':'')+'">'+t[3]+'</span></button>'}).join('')+'</div>';
+}
+function viewHome(){
+  var h='<div class="home-hdr"><img class="home-logo" src="./3-logo-finalB-192.png" alt="לוגו עזרא הסופר"><div class="home-title">ניהול סת״ם</div><div class="mut">שיעורים · תפילין · תשלומים</div></div>';
+  h+=viewToday();
+  h+=homeTiles();
+  return h;
+}
+function togOrder(el){
+  var b=el.nextElementSibling;if(!b||!b.classList.contains('obody'))return;
+  var open=b.classList.toggle('open');el.classList.toggle('open',open);
+  if(open&&typeof hydrateImgs==='function')hydrateImgs();
+}
+
 function render(){
   if(typeof privateSyncRender==='function')privateSyncRender();
   var keep={};
   document.querySelectorAll('#app input[id],#app select[id],#app textarea[id]').forEach(function(e){keep[e.id]=e.type==='checkbox'?e.checked:e.value});
   var ae=document.activeElement,aid=ae&&ae.id;
-  document.getElementById('nav').innerHTML=TABS.map(function(t){return '<button class="'+(t[0]===tab?'on':'')+'" onclick="setTab(\''+t[0]+'\')">'+t[1]+'</button>'}).join('');
-  var v={today:viewToday,income:viewIncome,cash:viewCash,sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
+  document.getElementById('nav').innerHTML=tab==='home'?'':'<button class="navback" onclick="setTab(\'home\')">&#8594; סיכום</button>';;
+  var v={home:viewHome,today:viewToday,income:viewIncome,cash:viewCash,sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
   document.getElementById('app').innerHTML=names()+((tab==='sum'||tab==='pay')?'<button class="add" style="margin:0 0 12px" onclick="openIncome()">חישוב חודשי</button>':'')+v;quietSections();
   setTimeout(calcTotal,0);
   setTimeout(hydrateImgs,0);
-  if(tab==='today')setTimeout(todaySiteCount,0);
+  if(tab==='today'||tab==='home')setTimeout(todaySiteCount,0);
   for(var k in keep){var e=document.getElementById(k);if(e&&k!=='l_course'&&k!=='w_order'&&k!=='income_month'&&k!=='income_exclude'){if(e.type==='checkbox')e.checked=keep[k];else e.value=keep[k]}}
   document.querySelectorAll('#app input[type=date]').forEach(updHd);
   var t=document.getElementById('today');if(t)t.textContent=hdate(today());
@@ -1471,5 +1534,4 @@ async function privateSyncUpload(){
 </script>
 </body>
 </html>
-
 
