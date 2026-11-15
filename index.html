@@ -62,6 +62,13 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 .tile .tnm{font-weight:700;font-size:16px}
 .tile .tbd{font-size:12px;color:var(--mut)}
 .tile .tbd.alert{color:#a33;font-weight:700}
+
+.hrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.hrow:last-child{border-bottom:none}
+.hrow .hic{flex:none;display:flex}
+.hrow .htx{flex:1;font-size:14px;min-width:0}
+.hrow.alert .htx{color:#a33;font-weight:700}
+.hrow .hbtn{flex:none;font-size:13px;padding:6px 10px;white-space:nowrap}
 .orow{flex-direction:column;align-items:stretch}
 .osum{display:flex;align-items:center;gap:8px;cursor:pointer;width:100%}
 .osum .chev{transition:transform .2s;color:var(--mut);font-size:12px;flex:none}
@@ -89,7 +96,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10 - אחסון מקומי</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10.1 - אחסון מקומי</div>
 </main>
 <script>
 var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='home',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
@@ -1384,15 +1391,32 @@ function homeTiles(){
    ['bill','חיוב קורסים','books','חיוב חודשי',false],
    ['buys','קניות','cart','הוצאות להזמנות',false],
    ['cash','הכנסות בפועל','coin','לפי חודש ומקור',false],
-   ['sum','סיכום','sum','חובות ומצב כללי',false],
+   ['sum','סיכום כספי','sum','חובות ומצב כללי',false],
    ['pay','תשלומים','receipt','יומן תשלומים',false],
    ['links','קישורים','link','מחירים ואתר הזמנות',false]
   ];
   return '<div class="tiles">'+tiles.map(function(t){return '<button class="tile" onclick="setTab(\''+t[0]+'\')"><span>'+ico(t[2],30)+'</span><span class="tnm">'+t[1]+'</span><span class="tbd'+(t[4]?' alert':'')+'">'+t[3]+'</span></button>'}).join('')+'</div>';
 }
+function hRow(ic,txt,btn,cb,alert){
+  return '<div class="hrow'+(alert?' alert':'')+'"><span class="hic">'+ico(ic,20)+'</span><span class="htx">'+txt+'</span>'+(btn?'<button class="x hbtn" onclick="'+cb+'">'+btn+'</button>':'')+'</div>';
+}
 function viewHome(){
-  var h='<div class="home-hdr"><img class="home-logo" src="./3-logo-finalB-192.png" alt="לוגו עזרא הסופר"><div class="home-title">ניהול סת״ם</div><div class="mut">שיעורים · תפילין · תשלומים</div></div>';
-  h+=viewToday();
+  var t0=today(),rows=[];
+  var lb=lastBackup(),days=lb?Math.floor((Date.now()-lb)/864e5):-1;
+  if(days<0||days>=7)rows.push(hRow('receipt',days<0?'עוד לא נוצר גיבוי':'עברו '+days+' ימים מהגיבוי האחרון','גבה עכשיו','backupData()',true));
+  var late=S.orders.filter(function(o){return o.status!=='נמסר'&&o.due&&o.due<t0}).length;
+  if(late)rows.push(hRow('orders',late+(late===1?' הזמנה עברה':' הזמנות עברו')+' את היעד','פתח',"setTab('orders')",true));
+  var openW=S.orders.filter(function(o){return wopen(o)&&writingRemaining(o)>0});
+  if(openW.length){
+    var tw=S.writing.filter(function(w){return w.date===t0}).reduce(function(a,w){return a+w.words},0);
+    var goal=0;
+    openW.forEach(function(o){if(!o.due)return;var dl=o.due<t0?1:Math.max(1,dayNum(o.due)-dayNum(t0));goal+=Math.ceil(writingRemaining(o)/dl)});
+    if(!goal)goal=Math.round(avgPace())||200;
+    rows.push(hRow('pen','כתיבה היום: '+tw+' מתוך '+goal+' מילים'+(tw>=goal?' ✓':''),'רשום כתיבה',"setTab('write')",false));
+  }
+  if(new Date().getDate()<=3)rows.push(hRow('coin','התחיל חודש חדש - לראות כמה נכנס ב'+esc(billMonthName(prevMonthIso())),'סיכום הכנסות',"setTab('cash')",false));
+  rows.push(hRow('link','פניות מהאתר: <span class="mut" id="today_site">בודק…</span>','פתח','siteOrders()',false));
+  var h='<div class="card"><b>היום</b>'+rows.join('')+'</div>';
   h+=homeTiles();
   return h;
 }
@@ -1407,7 +1431,7 @@ function render(){
   var keep={};
   document.querySelectorAll('#app input[id],#app select[id],#app textarea[id]').forEach(function(e){keep[e.id]=e.type==='checkbox'?e.checked:e.value});
   var ae=document.activeElement,aid=ae&&ae.id;
-  document.getElementById('nav').innerHTML=tab==='home'?'':'<button class="navback" onclick="setTab(\'home\')">&#8594; סיכום</button>';;
+  document.getElementById('nav').innerHTML=tab==='home'?'':'<button class="navback" onclick="setTab(\'home\')">&#8594; בית</button>';;
   var v={home:viewHome,today:viewToday,income:viewIncome,cash:viewCash,sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
   document.getElementById('app').innerHTML=names()+((tab==='sum'||tab==='pay')?'<button class="add" style="margin:0 0 12px" onclick="openIncome()">חישוב חודשי</button>':'')+v;quietSections();
   setTimeout(calcTotal,0);
