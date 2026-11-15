@@ -73,16 +73,17 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 .section-fold>summary{cursor:pointer;list-style:none;font-weight:700;display:flex;justify-content:space-between;gap:10px;padding:4px 0}.section-fold>summary:after{content:'▾';color:var(--gold)}.section-fold[open]>summary:after{content:'▴'}.fold-body{padding-top:10px}.section-fold .card{margin:8px 0}.order-group{border-top:1px solid var(--line);padding:10px 0}
 
 .navback{display:block;width:calc(100% - 20px);margin:0 10px 10px;background:linear-gradient(160deg,#a5762c,#8b5e1a);color:var(--accfg);border:none;font-size:17px;font-weight:700;padding:12px;border-radius:12px;cursor:pointer;text-align:center}
-.top.tophome{display:block;text-align:center;padding:18px 12px 14px;border-bottom-width:3px}
-.tophome .hdr-logo{float:none;margin:0 auto 8px;width:88px;height:88px;border-radius:22px;box-shadow:0 4px 14px rgba(60,40,10,.22);border:1px solid var(--line)}
-.tophome:before{content:'';display:block;height:180px;border-radius:18px;background:url(../1-7-hero-megillah.jpg) center 42%/cover no-repeat;box-shadow:0 6px 18px rgba(60,40,10,.25);margin-bottom:12px}
-.tophome h1{font-size:30px}
+.top.tophome{display:block;text-align:right;padding:0 0 10px}
+.tophome .hdr-logo{float:right;margin:2px 0 0 12px;width:52px;height:52px;border-radius:12px;box-shadow:0 2px 8px rgba(60,40,10,.20);border:1px solid var(--line)}
+.tophome:before{content:'';display:block;height:64px;border-radius:14px;background:url(../1-7-hero-megillah.jpg) center 42%/cover no-repeat;box-shadow:0 3px 10px rgba(60,40,10,.22);margin-bottom:8px}
+.tophome h1{font-size:24px;margin-top:6px}
 .hdr-logo{width:56px;height:56px;border-radius:12px;float:right;margin-left:10px;background:#fff url(../3-logo-finalB-192.png) center 43%/158% no-repeat}
 .home-hdr{text-align:center;padding:10px 0 4px}
 .home-logo{width:72px;height:72px;border-radius:16px}
 .home-title{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:24px;margin-top:6px}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;font:inherit;cursor:pointer;color:var(--ink);box-shadow:0 1px 3px rgba(60,40,10,.06)}
+.home-foot{display:none}
 .tile .tic{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;margin-bottom:2px}
 .tile .tnm{font-weight:700;font-size:16px}
 .tile .tbd{font-size:12px;color:var(--mut)}
@@ -1481,7 +1482,7 @@ function viewHome(){
   if(new Date().getDate()<=3)rows.push(hRow('coin','התחיל חודש חדש - לראות כמה נכנס ב'+esc(billMonthName(prevMonthIso())),'סיכום הכנסות',"setTab('cash')",false));
   rows.push(hRow('link','פניות מהאתר: <span class="mut" id="today_site">בודק…</span>','פתח','siteOrders()',false));
   var h='<div class="card"><b>היום</b>'+rows.join('')+'</div>';
-  h+=homeTiles();
+  h+=homeTiles()+'<div class="home-foot"></div>';
   return h;
 }
 function togOrder(el){
