@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ניהול סת״ם - טיוטת עיצוב חדש</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf5e8;--page:#f4ecd8;--card:#ffffff;--ink:#1c1a16;--mut:#7c705a;--line:#e3d8c0;--acc:#8b5e1a;--accfg:#fffdf7;--gold:#b5832a;--red:#a33;--green:#2e7d32}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"Heebo",Arial,sans-serif;line-height:1.5;padding:0 10px 40px}
+.wrap{max-width:480px;margin:0 auto}
+h1{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:26px;margin:0}
+.sub{color:var(--mut);font-size:13px;margin-top:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(60,40,10,.06)}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px}
+/* demo ribbon */
+.ribbon{background:var(--gold);color:#fff;text-align:center;font-weight:700;font-size:14px;padding:8px;border-radius:0 0 12px 12px;margin:0 -10px 14px}
+/* header */
+.hdr{text-align:center;padding:18px 0 10px;border-bottom:2px solid var(--gold);margin-bottom:14px}
+/* today strip */
+.today{display:flex;gap:10px;align-items:center}
+.today .ring{font-size:26px}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:6px}
+.bar>i{display:block;height:100%;background:var(--gold);border-radius:99px}
+/* tile grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(60,40,10,.06);display:flex;flex-direction:column;gap:4px;align-items:center}
+.tile .ico{font-size:30px}
+.tile .nm{font-weight:700;font-size:16px}
+.tile .bd{font-size:12px;color:var(--mut)}
+.tile .bd.alert{color:var(--red);font-weight:700}
+/* internal screens */
+.topbar{position:sticky;top:0;background:var(--page);padding:10px 0;z-index:5;display:flex;gap:10px;align-items:center}
+.back{background:var(--acc);color:var(--accfg);border:none;font-size:17px;font-weight:700;padding:12px 18px;border-radius:12px}
+.topbar h2{font-family:"Frank Ruhl Libre",Georgia,serif;margin:0;font-size:22px}
+.big-add{width:100%;background:var(--acc);color:var(--accfg);border:none;font-size:18px;font-weight:700;padding:14px;margin-bottom:12px}
+.chips{display:flex;gap:8px;margin-bottom:12px}
+.chip{flex:1;padding:10px 4px;font-size:14px;border-radius:99px}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+/* order rows */
+.orow{padding:12px 14px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.orow .nm{font-weight:700;font-size:17px}
+.orow .amt{margin-inline-start:auto;font-weight:700;color:var(--red)}
+.orow .amt.ok{color:var(--green)}
+.st{font-size:12px;border:1px solid var(--line);border-radius:99px;padding:2px 10px;color:var(--mut)}
+.st.hot{background:#fdecea;border-color:#e5b3ae;color:var(--red)}
+.odetail{border-top:1px dashed var(--line);padding:12px 14px;font-size:14px;color:var(--mut)}
+.odetail .row{display:flex;gap:8px;margin-top:10px}
+.odetail .row button{flex:1;font-size:15px;padding:12px 6px}
+.wa{background:#e9f7ee;border-color:#bfe3cb}
+.chev{transition:transform .2s;color:var(--mut)}
+.orow.open .chev{transform:rotate(90deg)}
+.note{text-align:center;color:var(--mut);font-size:12px;margin-top:18px}
+.stub{text-align:center;padding:40px 16px;color:var(--mut)}
+.stub .big{font-size:40px;margin-bottom:8px}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font:inherit;font-size:16px;margin-bottom:8px}
+label{font-size:13px;color:var(--mut)}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="ribbon">טיוטת עיצוב בלבד · הנתונים כאן הם דוגמה, לא ההזמנות האמיתיות שלך</div>
+
+<!-- ============ מסך סיכום (הבית) ============ -->
+<div id="scr-home">
+  <div class="hdr">
+    <h1>ניהול סת״ם</h1>
+    <div class="sub">יום ראשון · ו׳ בכסלו תשפ״ז · 15.11.2026</div>
+  </div>
+
+  <div class="card today">
+    <div class="ring"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5e1a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16 5l3 3L8.2 18.8 4 20z"/></svg></div>
+    <div style="flex:1">
+      <b>יעד כתיבה להיום: 180 מילים</b>
+      <div class="bar"><i style="width:35%"></i></div>
+      <div class="sub">נכתבו 63 · נותרו 117</div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:#e5b3ae;background:#fffaf5">
+    ⚠ <b>2 הזמנות עברו את תאריך היעד</b> · לא נוצר גיבוי עדיין
+  </div>
+
+  <div class="grid" id="tiles"></div>
+
+  <div class="note">בחודש נכנסו בפועל ₪4,250 · לחיצה על כל ריבוע פותחת מסך פנימי אחד בלבד</div>
+</div>
+
+<!-- ============ מסך פנימי גנרי ============ -->
+<div id="scr-inner" class="hidden">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">→ סיכום</button>
+    <h2 id="inner-title"></h2>
+  </div>
+  <div id="inner-body"></div>
+</div>
+
+</div>
+
+<script>
+// ===== נתוני דוגמה בלבד - לא נשמר דבר בטלפון =====
+var ORDERS=[
+ {name:"ישראל ישראלי",st:"בכתיבה",item:"תפילין רש״י · דעת רצוני",total:3200,paid:1000,due:"13.11",hot:true},
+ {name:"משה כהן",st:"הוזמן",item:"מזוזה 12 ס״מ",total:250,paid:0,due:"25.11",hot:false},
+ {name:"דוד לוי",st:"בכתיבה",st2:"באיחור",item:"פרשיות רב״ת",total:2800,paid:1400,due:"12.11",hot:true},
+ {name:"אברהם אבינו",st:"מוכן",item:"מזוזה 15 ס״מ",total:300,paid:300,due:"",hot:false},
+ {name:"יעקב יוסף",st:"נמסר",item:"תפילין רש״י",total:3500,paid:3500,due:"",hot:false},
+ {name:"שמעון שמש",st:"נמסר",item:"מגילה",total:900,paid:450,due:"",hot:false}
+];
+var TILES=[
+ {ico:"orders",nm:"הזמנות",bd:"3 פתוחות · 2 באיחור",alert:true,scr:"orders"},
+ {ico:"tefillin",nm:"תפילין",bd:"2 בכתיבה",scr:"tefillin"},
+ {ico:"pen",nm:"כתיבה",bd:"יעד: 180 מילים",scr:"writing"},
+ {ico:"cart",nm:"קניות",bd:"2 פתוחות",scr:"stub"},
+ {ico:"cap",nm:"שיעורים",bd:"3 השבוע",scr:"stub"},
+ {ico:"books",nm:"קורסים",bd:"חיוב קורסים",scr:"stub"},
+ {ico:"coin",nm:"הכנסות",bd:"₪4,250 החודש",scr:"stub"},
+ {ico:"receipt",nm:"תשלומים",bd:"יומן תשלומים",scr:"stub"},
+ {ico:"dots",nm:"עוד",bd:"קישורים · גיבוי",scr:"stub"}
+];
+var ICONS={
+ orders:'<rect x="5" y="4" width="13" height="16" rx="2"/><line x1="8.5" y1="8.5" x2="14.5" y2="8.5"/><line x1="8.5" y1="12" x2="14.5" y2="12"/><line x1="8.5" y1="15.5" x2="12" y2="15.5"/>',
+ tefillin:'<rect x="6" y="9" width="12" height="11" rx="1.5"/><line x1="6" y1="13" x2="18" y2="13"/><line x1="9.5" y1="9" x2="9.5" y2="4.5"/><line x1="14.5" y1="9" x2="14.5" y2="4.5"/>',
+ pen:'<path d="M4 20l1.2-4.2L16 5l3 3L8.2 18.8 4 20z"/>',
+ cart:'<path d="M4 6h2.2l2 9.5h9.3l2.2-6.5H7"/><circle cx="10.5" cy="19.5" r="1.3"/><circle cx="16.5" cy="19.5" r="1.3"/>',
+ cap:'<path d="M12 5l9 4-9 4-9-4 9-4z"/><path d="M7.5 11.5V15c0 1.6 9 1.6 9 0v-3.5"/>',
+ books:'<rect x="4.5" y="4" width="5.5" height="16" rx="1"/><rect x="13" y="4" width="5.5" height="16" rx="1"/>',
+ coin:'<circle cx="12" cy="12" r="8"/><text x="12" y="16.5" text-anchor="middle" font-size="12" font-weight="700" fill="#8b5e1a" stroke="none">₪</text>',
+ receipt:'<path d="M6 3.5h12V21l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6L6 21z"/><line x1="9" y1="8.5" x2="15" y2="8.5"/><line x1="9" y1="12.5" x2="15" y2="12.5"/>',
+ dots:'<circle cx="5.5" cy="12" r="1.7" fill="#8b5e1a" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="#8b5e1a" stroke="none"/><circle cx="18.5" cy="12" r="1.7" fill="#8b5e1a" stroke="none"/>',
+ wa:'<path d="M4.5 4.5h15v10.5h-9.8L4.5 19z"/>',
+ back:'<path d="M15 5l-7 7 7 7"/>'
+};
+function ico(k,size){return '<svg width="'+(size||30)+'" height="'+(size||30)+'" viewBox="0 0 24 24" fill="none" stroke="#8b5e1a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[k]||'')+'</svg>'}
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+
+// build tiles
+$("#tiles").innerHTML=TILES.map(function(t,i){
+ return '<button class="tile" onclick="openScr('+i+')"><span class="ico">'+ico(t.ico)+'</span><span class="nm">'+t.nm+'</span><span class="bd'+(t.alert?' alert':'')+'">'+t.bd+'</span></button>';
+}).join("");
+
+function goHome(){$("#scr-inner").classList.add("hidden");$("#scr-home").classList.remove("hidden");window.scrollTo(0,0)}
+function openScr(i){
+ var t=TILES[i];
+ $("#scr-home").classList.add("hidden");$("#scr-inner").classList.remove("hidden");
+ $("#inner-title").textContent=t.nm;
+ if(t.scr==="orders")renderOrders();
+ else if(t.scr==="tefillin")renderTefillin();
+ else if(t.scr==="writing")renderWriting();
+ else renderStub(t);
+ window.scrollTo(0,0);
+}
+function renderStub(t){
+ $("#inner-body").innerHTML='<div class="card stub"><div class="big">'+ico(t.ico,44)+'</div>כאן יופיע מסך <b>'+esc(t.nm)+'</b> באותו הסגנון:<br>רשימה סגורה, וכל פריט נפתח רק בלחיצה.</div>';
+}
+
+// ===== הזמנות =====
+var FILTER="פתוחות",EXPAND=-1,SHOWFORM=false;
+function orderRow(o,i){
+ var bal=o.total-o.paid;
+ var chip=o.hot?'<span class="st hot">באיחור</span>':'<span class="st">'+esc(o.st)+'</span>';
+ var amt=bal>0?'<span class="amt">נשאר ₪'+bal.toLocaleString()+'</span>':'<span class="amt ok">שולם ✓</span>';
+ var h='<div class="card" style="padding:0;overflow:hidden">';
+ h+='<div class="orow'+(EXPAND===i?' open':'')+'" onclick="toggle('+i+')"><span class="chev">◀</span><span class="nm">'+esc(o.name)+'</span>'+chip+amt+'</div>';
+ if(EXPAND===i){
+  h+='<div class="odetail">'+esc(o.item)+' · הזמנה: '+o.total.toLocaleString()+' ₪ · שולם: '+o.paid.toLocaleString()+' ₪'+(o.due?' · יעד: '+o.due:'')+
+  '<div class="row"><button class="wa" onclick="demo(event)">'+ico('wa',16)+' אישור קבלה</button><button class="wa" onclick="demo(event)">'+ico('wa',16)+' תזכורת יתרה</button></div>'+
+  '<div class="row"><button onclick="demo(event)">עריכה</button><button class="wa" onclick="demo(event)">'+ico('wa',16)+' וואטסאפ ללקוח</button></div></div>';
+ }
+ return h+'</div>';
+}
+function renderOrders(){
+ var list=ORDERS.map(function(o,i){return {o:o,i:i}}).filter(function(x){
+  if(FILTER==="פתוחות")return x.o.st==="הוזמן"||x.o.st==="בכתיבה";
+  if(FILTER==="מוכנות")return x.o.st==="מוכן";
+  return x.o.st==="נמסר";
+ });
+ var counts={};
+ ORDERS.forEach(function(o){var k=(o.st==="נמסר")?"נמסרו":(o.st==="מוכן"?"מוכנות":"פתוחות");counts[k]=(counts[k]||0)+1});
+ var h='<button class="big-add" onclick="SHOWFORM=!SHOWFORM;renderOrders()">＋ הזמנה חדשה</button>';
+ if(SHOWFORM)h+='<div class="card"><label>שם הלקוח</label><input placeholder="לדוגמה: ישראל ישראלי"><label>טלפון (לוואטסאפ)</label><input placeholder="050-"><label>מה מזמינים</label><input><label>מחיר</label><input inputmode="numeric"><button class="big-add" onclick="demo(event)">שמור הזמנה</button></div>';
+ h+='<div class="chips">'+["פתוחות","מוכנות","נמסרו"].map(function(f){
+   return '<button class="chip'+(FILTER===f?' on':'')+'" onclick="FILTER=\''+f+'\';EXPAND=-1;renderOrders()">'+f+' ('+(counts[f]||0)+')</button>';
+ }).join('')+'</div>';
+ h+=list.length?list.map(function(x){return orderRow(x.o,x.i)}).join(""):'<div class="card stub">אין הזמנות כאן</div>';
+ h+='<div class="note">ההזמנות סגורות - לחיצה על שורה פותחת רק אותה</div>';
+ $("#inner-body").innerHTML=h;
+}
+function toggle(i){EXPAND=EXPAND===i?-1:i;renderOrders()}
+function demo(e){e.stopPropagation();alert("בדגם הזה הכפתור רק מראה איך זה ייראה - הוא לא שולח באמת 🙂")}
+
+
+// ===== תפילין =====
+var TEF=[
+ {name:"ישראל ישראלי",pair:"רש״י",a:400,b:230},
+ {name:"דוד לוי",pair:"רב״ת",a:400,b:80}
+];
+function renderTefillin(){
+ var h='<div class="note" style="margin:0 0 12px">כל קלף מוצג סגור, עם סרגל התקדמות אחד</div>';
+ h+=TEF.map(function(t){
+  var pct=Math.round((t.a+t.b)/800*100);
+  return '<div class="card"><b>'+esc(t.name)+'</b> · תפילין '+t.pair+'<div class="bar"><i style="width:'+pct+'%"></i></div><div class="sub">ראש '+t.a+'/400 · יד '+t.b+'/400</div></div>';
+ }).join("");
+ $("#inner-body").innerHTML=h;
+}
+
+// ===== כתיבה =====
+function renderWriting(){
+ $("#inner-body").innerHTML='<div class="card today"><div class="ring"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5e1a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16 5l3 3L8.2 18.8 4 20z"/></svg></div><div style="flex:1"><b>היום: 63 מתוך 180 מילים</b><div class="bar"><i style="width:35%"></i></div></div></div>'+
+ '<div class="card"><b>＋ רישום כתיבה חדש</b><div class="sub">לחיצה אחת: כמה מילים כתבת ובאיזו הזמנה</div></div>'+
+ '<div class="card stub">רשימת הרישומים האחרונים תופיע כאן סגורה</div>';
+}
+(function(){var h=location.hash.slice(1);if(!h)return;if(h==='orders-open'){openScr(0);toggle(0);return}if(h==='orders-form'){openScr(0);SHOWFORM=true;renderOrders();return}var i=TILES.findIndex(function(t){return t.scr===h});if(i>=0)openScr(i)})();
+</script>
+</body>
+</html>
