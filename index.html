@@ -70,7 +70,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.8 - אחסון מקומי</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.9.1 - אחסון מקומי</div>
 </main>
 <script>
 var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='today',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
@@ -1443,7 +1443,7 @@ init();
 var privateSyncBusy=false;
 function privateSyncPick(o,keys){var r={};keys.forEach(function(k){if(o[k]!==undefined)r[k]=o[k]});return r}
 function privateSyncProject(s){
- return {schema:1,sourceTs:Date.now(),orders:(s.orders||[]).map(function(o){var q=privateSyncPick(o,['id','name','date','due','item','status','rid','rdate','wx']);q.parts={};Object.keys(o.parts||{}).filter(function(k){return ['rp','tp','p'].includes(k)}).forEach(function(k){q.parts[k]=privateSyncPick(o.parts[k]||{},['ok','self'])});return q}),writing:(s.writing||[]).map(function(w){return privateSyncPick(w,['id','date','oid','pair','part','words'])}),recurring:(s.recurring||[]).map(function(t){var q=privateSyncPick(t,['id','name','item','mode','wd','start','first','count','dueDays','next','off']);q.partKeys=Object.keys(t.parts||{});return q}),cfg:privateSyncPick(s.cfg||{},['head','hand'])};
+ return {schema:1,sourceTs:Date.now(),orders:(s.orders||[]).map(function(o){var q=privateSyncPick(o,['id','name','date','due','item','status','rid','rdate']);q.parts={};Object.keys(o.parts||{}).filter(function(k){return ['rp','tp','p'].includes(k)}).forEach(function(k){q.parts[k]=privateSyncPick(o.parts[k]||{},['ok','self'])});return q}),writing:(s.writing||[]).map(function(w){return privateSyncPick(w,['id','date','oid','pair','part','words'])}),recurring:(s.recurring||[]).map(function(t){var q=privateSyncPick(t,['id','name','item','mode','wd','start','first','count','dueDays','next','off']);q.partKeys=Object.keys(t.parts||{});return q}),cfg:privateSyncPick(s.cfg||{},['head','hand'])};
 }
 async function privateSyncHash(text){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
 function privateSyncInfo(){try{return JSON.parse(localStorage.getItem('sofer_private_sync')||'null')}catch(e){return null}}
@@ -1471,4 +1471,5 @@ async function privateSyncUpload(){
 </script>
 </body>
 </html>
+
 
