@@ -21,7 +21,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background-color:var(--page);padding:0 10px;background-image:radial-gradient(ellipse at 50% -10%,rgba(181,131,42,.10),transparent 60%),linear-gradient(var(--wash),var(--wash)),var(--feather);background-size:auto,auto,360px 360px;color:var(--ink);font-family:"Heebo","Assistant",Arial,sans-serif;line-height:1.5}
 main{max-width:640px;margin:16px auto 30px;padding:18px 16px 36px;background-color:var(--sheet);background-image:radial-gradient(ellipse at 0 0,rgba(181,131,42,.12),transparent 42%),radial-gradient(ellipse at 100% 100%,rgba(181,131,42,.12),transparent 42%),var(--grain);border-radius:10px;box-shadow:inset 0 0 0 7px var(--sheet),inset 0 0 0 8px rgba(181,131,42,.5),inset 0 0 60px rgba(181,131,42,.10),0 8px 26px rgba(90,60,20,.16)}
-.top{display:flex;align-items:center;gap:14px;margin:2px 0 14px;padding-bottom:12px;border-bottom:2px solid var(--gold)}
+.top{display:flex;align-items:center;gap:14px;margin:2px 0 14px;padding-bottom:12px;border-bottom:3px double var(--gold)}
 .logo{width:92px;height:92px;flex:none}
 h1{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:28px;line-height:1.1;margin:0 0 2px}
 .stat b{font-family:"Frank Ruhl Libre",Georgia,serif}
@@ -29,13 +29,13 @@ h1{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:28px;line-height:1.1;m
 :root[data-theme="dark"] .logo{filter:invert(1)}
 nav{display:flex;gap:3px;margin-bottom:14px;overflow-x:auto}
 nav button{flex:1 0 auto;min-width:0;white-space:nowrap;padding:10px 8px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-size:12px}
-nav button.on{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
-.bcard,.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(60,40,10,.06)}
+nav button.on{background:linear-gradient(160deg,#a5762c,#8b5e1a);color:var(--accfg);border-color:#8b5e1a}
+.bcard,.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(60,40,10,.06)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .full{grid-column:1/-1}
 label{font-size:12px;color:var(--mut);display:block;margin-bottom:2px}
-input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:16px}
-.add{width:100%;margin-top:10px;padding:11px;border:0;border-radius:10px;background:var(--acc);color:var(--accfg);font:inherit;font-weight:700}
+input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;font-size:16px}
+.add{width:100%;margin-top:10px;padding:11px;border:0;border-radius:14px;background:linear-gradient(160deg,#a5762c,#8b5e1a);color:var(--accfg);font:inherit;font-weight:700;box-shadow:0 2px 6px rgba(139,94,26,.30)}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
 .row:last-child{border:0}
 .row b{display:block}
@@ -52,13 +52,28 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 
 .section-fold>summary{cursor:pointer;list-style:none;font-weight:700;display:flex;justify-content:space-between;gap:10px;padding:4px 0}.section-fold>summary:after{content:'▾';color:var(--gold)}.section-fold[open]>summary:after{content:'▴'}.fold-body{padding-top:10px}.section-fold .card{margin:8px 0}.order-group{border-top:1px solid var(--line);padding:10px 0}
 
-.navback{display:block;width:calc(100% - 20px);margin:0 10px 10px;background:var(--acc);color:var(--accfg);border:none;font-size:17px;font-weight:700;padding:12px;border-radius:12px;cursor:pointer;text-align:center}
-.hdr-logo{width:46px;height:46px;border-radius:12px;float:right;margin-left:10px}
+.navback{display:block;width:calc(100% - 20px);margin:0 10px 10px;background:linear-gradient(160deg,#a5762c,#8b5e1a);color:var(--accfg);border:none;font-size:17px;font-weight:700;padding:12px;border-radius:12px;cursor:pointer;text-align:center}
+.top.tophome{display:block;text-align:right;padding:0 0 10px}
+.tophome .hdr-logo{float:right;margin:2px 0 0 12px;width:52px;height:52px;border-radius:12px;box-shadow:0 2px 8px rgba(60,40,10,.20);border:1px solid var(--line)}
+.tophome:before{content:'';display:block;height:84px;margin:0 0 8px;border-radius:10px 10px 0 0;background:url(./1-7-hero-megillah.jpg) center 36%/cover no-repeat;-webkit-mask-image:linear-gradient(to bottom,#000 58%,transparent 97%);mask-image:linear-gradient(to bottom,#000 58%,transparent 97%)}
+.tophome h1{font-size:24px;margin-top:6px}
+.hdr-logo{width:56px;height:56px;border-radius:12px;float:right;margin-left:10px;background:#fff url(./3-logo-finalB-192.png) center 43%/158% no-repeat}
 .home-hdr{text-align:center;padding:10px 0 4px}
 .home-logo{width:72px;height:72px;border-radius:16px}
 .home-title{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:24px;margin-top:6px}
+.swipe{overflow-x:auto;margin:12px 0 2px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.swipe-track{display:flex;transition:none}
+.slide{flex:0 0 42%;padding:0 5px;scroll-snap-align:center}
+.slide .tile{width:100%;height:128px;justify-content:center;font-size:15px;border-radius:22px}
+.swipe-dots{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:6px}
+.swipe-dots .dot{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:var(--line);transition:all .25s;cursor:pointer}
+.swipe-dots .dot.on{background:var(--gold);width:18px;border-radius:4px}
+.swipe-arr{border:0;background:none;color:var(--mut);font-size:20px;padding:2px 10px;cursor:pointer}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;font:inherit;cursor:pointer;color:var(--ink);box-shadow:0 1px 3px rgba(60,40,10,.06)}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;transition:transform .2s ease,box-shadow .2s ease;padding:14px 10px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;font:inherit;cursor:pointer;color:var(--ink);box-shadow:0 1px 3px rgba(60,40,10,.06)}
+.home-foot{display:none}
+.tile .tic{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;margin-bottom:2px}
+.tile:active{transform:scale(.97)}
 .tile .tnm{font-weight:700;font-size:16px}
 .tile .tbd{font-size:12px;color:var(--mut)}
 .tile .tbd.alert{color:#a33;font-weight:700}
@@ -81,14 +96,14 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 </head>
 <body>
 <main>
-<header class="top"><div><img class="hdr-logo" src="./3-logo-finalB-192.png" alt="לוגו עזרא הסופר"><h1>ניהול סת״ם</h1><div class="mut">שיעורים · תפילין · תשלומים</div><div class="mut" id="today"></div><button class="x" id="thm" onclick="toggleTheme()" style="padding:4px 0"></button><button class="x" onclick="backupData()" style="padding:4px 0">💾 גיבוי</button><button class="x" onclick="document.getElementById('impfile').click()" style="padding:4px 0">📥 שחזור</button><button class="x" onclick="siteOrders()" style="padding:4px 0">🌐 מהאתר<span id="sitebdg"></span></button></div></header>
+<header class="top"><div><div class="hdr-logo" role="img" aria-label="לוגו עזרא הסופר"></div><h1>ניהול סת״ם</h1><div class="mut">שיעורים · תפילין · תשלומים</div><div class="mut" id="today"></div><button class="x" id="thm" onclick="toggleTheme()" style="padding:4px 0"></button><button class="x" onclick="backupData()" style="padding:4px 0">💾 גיבוי</button><button class="x" onclick="document.getElementById('impfile').click()" style="padding:4px 0">📥 שחזור</button><button class="x" onclick="siteOrders()" style="padding:4px 0">🌐 מהאתר<span id="sitebdg"></span></button></div></header>
 <section style="padding:8px 16px;border-bottom:1px solid var(--line);margin-bottom:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="x" id="private-sync-btn" onclick="privateSyncUpload()" style="padding:10px 14px;min-height:44px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;border-radius:8px">🔒 סנכרון פרטי</button><span class="mut" id="private-sync-info" aria-live="polite">טרם סונכרן עותק פרטי</span></section>
 <nav id="nav"></nav>
 <div id="app"></div>
 <div id="toast"></div>
 <input type="file" id="impfile" accept=".json,application/json" style="display:none" onchange="importData(this)">
 <div id="sbox"><div class="invbox" style="max-width:640px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>חדש מהאתר — הזמנות ונרשמים</b><button class="x" onclick="siteClose()">סגור ✕</button></div><div id="sbox_b" style="margin-top:8px"></div></div></div>
-<div id="led"><div class="invbox"><b>עריכת שיעור</b><div class="grid" style="margin-top:8px"><div class="full"><label for="le_course">קורס</label><select id="le_course"></select></div><div class="full"><label for="le_name">תלמיד / קבוצה</label><input id="le_name" type="text"></div><div><label for="le_date">תאריך</label><input id="le_date" type="date"></div><div><label for="le_hours">שעות</label><input id="le_hours" type="number" step="0.5" inputmode="decimal"></div><div><label for="le_price">מחיר לשעה ₪</label><input id="le_price" type="number" inputmode="decimal"></div><div class="full"><label for="le_topic">מה לימדתי</label><input id="le_topic" type="text"></div><div class="full"><label for="le_wrote">הערה / מה התלמיד כתב</label><input id="le_wrote" type="text"></div></div><div style="display:flex;gap:8px;margin-top:10px"><button class="add" style="margin:0;flex:1" onclick="leSave()">שמור</button><button class="x" onclick="leClose()">בטל</button></div></div></div>
+<div id="led"><div class="invbox"><b>עריכת שיעור</b><div class="grid" style="margin-top:8px"><div class="full"><label for="le_course">קורס</label><select id="le_course"></select></div><div class="full"><label for="le_name">תלמיד / קבוצה</label><input id="le_name" type="text"></div><div><label for="le_date">תאריך</label><input id="le_date" type="date"></div><div><label for="le_hours">שעות</label><input id="le_hours" type="number" step="0.5" inputmode="decimal"></div><div><label for="le_price">מחיר לשעה ₪</label><input id="le_price" type="number" inputmode="decimal"></div><div class="full"><label for="le_plan">שיעור מהתכנית</label><select id="le_plan"></select></div><div class="full"><label for="le_topic">מה לימדתי</label><input id="le_topic" type="text"></div><div class="full"><label for="le_wrote">הערה / מה התלמיד כתב</label><input id="le_wrote" type="text"></div></div><div style="display:flex;gap:8px;margin-top:10px"><button class="add" style="margin:0;flex:1" onclick="leSave()">שמור</button><button class="x" onclick="leClose()">בטל</button></div></div></div>
 <div id="stu"><div class="invbox" style="max-width:640px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b id="stu_t"></b><button class="x" onclick="stuClose()">סגור ✕</button></div><label style="display:flex;gap:6px;align-items:center;margin:6px 0;font-size:14px;color:var(--ink)"><input type="checkbox" id="stu_f" style="width:auto" checked onchange="stuRender()"> רק מה שנכתב או צולם</label><div id="stu_b"></div></div></div>
 <div id="ped"><div class="invbox"><b>עריכת שיעור בתכנית</b><div style="margin-top:8px"><label for="pe_t">כותרת</label><input id="pe_t" type="text"><label for="pe_u" style="margin-top:6px">יחידה / פרק</label><input id="pe_u" type="text"><label for="pe_b" style="margin-top:6px">תוכן</label><textarea id="pe_b" style="height:170px"></textarea></div><div style="display:flex;gap:8px;margin-top:10px"><button class="add" style="margin:0;flex:1" onclick="pedSave()">שמור</button><button class="x" onclick="pedClose()">בטל</button></div></div></div>
 <div id="inv"><div class="invbox"><b id="inv_t"></b><div class="mut" id="inv_n" style="margin:4px 0 8px"></div><textarea id="inv_x" readonly></textarea><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="add" style="margin:0;flex:1" onclick="invCopy()">העתק</button><a id="inv_mail" class="add" style="margin:0;flex:1;text-decoration:none;text-align:center;display:none" href="#">✉️ פתח במייל</a><button class="add" id="inv_m" style="margin:0;flex:1" onclick="invMarkDo()">סמן כהוצאה חשבונית</button><button class="add" id="inv_f" style="margin:0;flex:1;display:none" onclick="shareFile(invPlan,invPlanC)">📤 שתף עם הקובץ</button><button class="add" id="inv_s" style="margin:0;flex:1;display:none" onclick="planSent()">סמן כנשלח</button><button class="x" onclick="invClose()">סגור</button></div></div></div>
@@ -96,7 +111,7 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:8
 <input type="file" id="pickcam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10.1 - אחסון מקומי</div>
+<div class="mut" style="font-size:11px;text-align:center;margin-top:24px">גרסה 2.10.2 - אחסון מקומי</div>
 </main>
 <script>
 var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='home',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
@@ -272,7 +287,7 @@ function setTab(t){if(editId&&t!=='orders'){editId=null;exN=1}tab=t;render()}
 function course(id){for(var i=0;i<S.courses.length;i++)if(S.courses[i].id===id)return S.courses[i]}
 function addCourse(){var n=val('c_new');if(!n)return;S.courses.push({id:Date.now(),name:n,students:[]});save()}
 function addStu(cid){var n=val('cs_'+cid);var c=course(cid);if(!n||!c||c.students.indexOf(n)>-1)return;c.students.push(n);save()}
-function pickCourse(v){curCourse=v;render()}
+function pickCourse(v){curCourse=v;render();setPlanSelectDefault(Number(v)||0)}
 function add(kind){
   var id=Date.now(),wasEdit=!!editId&&kind==='orders';
   if(kind==='lessons'){
@@ -288,7 +303,7 @@ function add(kind){
     var n3=val('p_name'),a=Number(val('p_amt'))||0;if(!n3||!a){toast('חסר שם או סכום');return}
     S.payments.unshift({id:id,date:val('p_date')||today(),name:n3,amount:a,for:val('p_for')||'o',note:val('p_note')});
   }
-  clearForm(kind);save();toast(kind==='orders'?(wasEdit?'ההזמנה עודכנה ✓':'ההזמנה נוספה ✓'):kind==='lessons'?'השיעור נוסף ✓ (בתוך הקורס)':'התשלום נוסף ✓');
+  clearForm(kind);save();if(kind==='lessons')setPlanSelectDefault(Number(curCourse)||0);toast(kind==='orders'?(wasEdit?'ההזמנה עודכנה ✓':'ההזמנה נוספה ✓'):kind==='lessons'?'השיעור נוסף ✓ (בתוך הקורס)':'התשלום נוסף ✓');
   if(kind!=='lessons')setTimeout(function(){var c=document.querySelectorAll('#app .card')[1];if(c)c.scrollIntoView({behavior:'smooth',block:'start'})},60);
 }
 window.addEventListener('error',function(e){toast('שגיאה: '+(e.message||'לא ידועה'))});
@@ -594,7 +609,7 @@ function viewLessons(){
   var c=course(Number(curCourse));
   h+='<div class="card"><b>רישום שיעור</b><div class="grid" style="margin-top:8px"><div class="full"><label for="l_course">קורס</label><select id="l_course" onchange="pickCourse(this.value)"><option value="">בחר קורס</option>'+S.courses.map(function(x){return '<option value="'+x.id+'"'+(String(x.id)===String(curCourse)?' selected':'')+'>'+esc(x.name)+'</option>'}).join('')+'</select></div>'+
   '<div class="full"><label for="l_name">תלמיד</label>'+(c?'<select id="l_name">'+(c.students.length?'<option value="__all__">כולם — שיעור קבוצתי, חיוב אחד ('+c.students.length+')</option>':'')+c.students.map(function(n){return '<option>'+esc(n)+'</option>'}).join('')+'</select>':'<input id="l_name" list="nl" placeholder="בחר קורס, או הקלד שם">')+'</div>'+
-  field('l_date','תאריך','date','value="'+today()+'"')+field('l_hours','שעות','number','value="1" step="0.5" inputmode="decimal"')+field('l_price','מחיר לשעה ₪','number','inputmode="decimal"','full')+(c&&S.plans.length?'<div class="full"><label for="l_plan">שיעור מהתכנית (לא חובה)</label><select id="l_plan"><option value="0">ללא, שיעור חופשי</option>'+S.plans.map(function(p,i){var n=planStat(p.id,c.id).n;return '<option value="'+p.id+'">'+(i+1)+'. '+esc(p.title)+(n?' · נלמד בקורס '+n+'×':'')+'</option>'}).join('')+'</select></div>':'')+field('l_topic','מה לימדתי (נושא)','text','','full')+field('l_wrote','מה התלמיד כתב (אפשר גם להוסיף אחר כך)','text','','full')+'</div><p class="mut">📷 תמונות וצילום מוסיפים אחרי שמירת השיעור, בכרטיס השיעור או ליד כל תלמיד.</p><button class="add" onclick="add(\'lessons\')">הוסף שיעור</button></div>';
+  field('l_date','תאריך','date','value="'+today()+'"')+field('l_hours','שעות','number','value="1" step="0.5" inputmode="decimal"')+field('l_price','מחיר לשעה ₪','number','inputmode="decimal"','full')+(c&&S.plans.length?'<div class="full"><label for="l_plan">שיעור מהתכנית (ברירת מחדל: הבא בתור)</label><select id="l_plan"><option value="0">ללא, שיעור חופשי</option>'+(function(){var nx=0;S.plans.forEach(function(p){if(!nx&&!planTaught(p.id,c.id))nx=p.id});return S.plans.map(function(p,i){var n=planStat(p.id,c.id).n;return '<option value="'+p.id+'"'+(p.id===nx?' selected':'')+'>'+(i+1)+'. '+esc(p.title)+(n?' · נלמד בקורס '+n+'×':'')+'</option>'}).join('')})()+'</select></div>':'')+field('l_topic','מה לימדתי (נושא)','text','','full')+field('l_wrote','מה התלמיד כתב (אפשר גם להוסיף אחר כך)','text','','full')+'</div><p class="mut">📷 תמונות וצילום מוסיפים אחרי שמירת השיעור, בכרטיס השיעור או ליד כל תלמיד.</p><button class="add" onclick="add(\'lessons\')">הוסף שיעור</button></div>';
   return h;
 }
 var PARTS=[['p','פרשיות'],['b','בתים'],['i','הכנסה לבתים'],['r','רצועות']],DEF={p:3000,b:1350,i:150,r:150},PAIRS=[['r','תפילין רש״י'],['t','תפילין ר״ת']];
@@ -849,6 +864,8 @@ function planStat(id,cid){
   return {n:n,last:last,man:man,done:n>0||man};
 }
 function planTaught(id,cid){return planStat(id,cid).done}
+function nextPlanFor(cid){var c=course(cid);if(!c)return 0;var nx=0;S.plans.forEach(function(p){if(!nx&&!planTaught(p.id,c.id))nx=p.id});return nx}
+function setPlanSelectDefault(cid){var lp=document.getElementById('l_plan');if(!lp)return;var nx=cid?nextPlanFor(cid):0;lp.value=nx?String(nx):'0'}
 function togProg(cid,pid){
   var s=planStat(pid,cid);
   if(s.n>0){toast('נרשם בשיעורים: '+s.n+' פעמים');return}
@@ -888,6 +905,35 @@ function bulkPlans(){
   var e=document.getElementById('mp_bulk');if(e)e.value='';
   save();toast('נוספו '+lines.length+' שיעורים ✓');
 }
+function updatePlanTitles(){
+  var raw=val('mp_rename').split('\n').map(function(x){return x.trim()}).filter(function(x){return x});
+  var upd=0,skip=0;
+  raw.forEach(function(t){
+    var m=t.match(/^(\d{1,2})\s*[.)\-׳:]\s*(.+)$/);
+    if(!m){skip++;return}
+    var pos=Number(m[1]);
+    if(pos<1||pos>S.plans.length){skip++;return}
+    if(S.plans[pos-1].title!==m[2]){S.plans[pos-1].title=m[2];upd++}
+  });
+  if(!upd&&!skip){toast('הדבק שורות בצורה: 27. שם השיעור');return}
+  save();toast('עודכנו '+upd+' שמות ✓'+(skip?' · דולגו '+skip+' שורות בלי מספר תקין':''));
+}
+var KNOWN_TITLES={'1':'הכרת הקולמוס','2':'הכרת הדף','3':'אות ב','4':'אות ד','5':'אות ת','6':'אות ה','7':'אות ו','8':'אות י','9':'אות מ','10':'עצירה לבדיקה וביקורת','27':'סיום אותיות ועמוד ניסיון','28':'תחילת מגילה','29':'ביקורת מגילה','30':'סיום קורס'};
+function applyKnownTitles(){
+  if(!S.plans.length){toast('אין עדיין שיעורים בתכנית');return}
+  if(!confirm('לעדכן את שמות השיעורים שהוכתבו (1-10 ו-27-30)? משנה שמות בלבד בשורות קיימות. שיעורים 11-26, ההתקדמות, הקבצים והרישומים נשארים בדיוק כמו שהם.'))return;
+  var upd=0,skip=0;
+  Object.keys(KNOWN_TITLES).forEach(function(k){
+    var pos=Number(k);
+    if(pos>S.plans.length){skip++;return}
+    if(S.plans[pos-1].title!==KNOWN_TITLES[k]){S.plans[pos-1].title=KNOWN_TITLES[k];upd++}
+  });
+  save();toast('עודכנו '+upd+' שמות ✓'+(skip?' · דולגו '+skip+' שאין להם שורה':'')+(upd===0&&!skip?' · הכל כבר מעודכן':''));
+}
+function fillPlanTitles(){
+  var e=document.getElementById('mp_rename');if(!e)return;
+  e.value=S.plans.map(function(p,i){return (i+1)+'. '+p.title}).join('\n');
+}
 function seedPlans(){
   var base=Date.now();
   for(var i=1;i<=30;i++)S.plans.push({id:base+i,title:'שיעור '+i,unit:'',body:''});
@@ -899,14 +945,18 @@ function masterBlock(){
   if(!op)return h+'</div>';
   var units=[];S.plans.forEach(function(p){if(p.unit&&units.indexOf(p.unit)<0)units.push(p.unit)});
   if(!n)h+='<div style="margin-top:8px"><button class="add" onclick="seedPlans()">צור 30 שיעורים ריקים לעריכה</button></div>';
-  h+='<div class="sub"><b>הוספת שיעור</b><div class="grid" style="margin-top:6px"><input id="mp_t" type="text" placeholder="כותרת השיעור" style="grid-column:1/-1"><input id="mp_u" type="text" list="mpu" placeholder="יחידה / פרק (לא חובה)" style="grid-column:1/-1"><textarea id="mp_b" placeholder="תוכן השיעור (אפשר לשלוח במייל)" style="grid-column:1/-1;height:90px"></textarea></div><datalist id="mpu">'+units.map(function(u){return '<option value="'+esc(u)+'">'}).join('')+'</datalist><button class="add" onclick="addPlan()">הוסף לתכנית</button></div>';
-  h+='<div class="sub"><label for="mp_bulk">או הדבק רשימה, שורה לכל שיעור (ייכנסו ליחידה שכתבת למעלה)</label><textarea id="mp_bulk" style="height:90px"></textarea><button class="add" onclick="bulkPlans()">הוסף את הרשימה</button></div>';
+  var tools='';
+  if(n)tools+='<div class="sub"><b>עדכון שמות שהוכתבו</b><div class="mut" style="margin:2px 0 6px">מלחיצה אחת: מעדכן את השמות של שיעורים 1-10 ו-27-30 לפי מה שהוכתב. משנה שמות בלבד; שיעורים 11-26, ההתקדמות, הקבצים והרישומים נשארים כמו שהם.</div><button class="add" style="margin:0" onclick="applyKnownTitles()">עדכן את השמות שהוכתבו</button></div>';
+  tools+='<div class="sub"><b>הוספת שיעור</b><div class="grid" style="margin-top:6px"><input id="mp_t" type="text" placeholder="כותרת השיעור" style="grid-column:1/-1"><input id="mp_u" type="text" list="mpu" placeholder="יחידה / פרק (לא חובה)" style="grid-column:1/-1"><textarea id="mp_b" placeholder="תוכן השיעור (אפשר לשלוח במייל)" style="grid-column:1/-1;height:90px"></textarea></div><datalist id="mpu">'+units.map(function(u){return '<option value="'+esc(u)+'">'}).join('')+'</datalist><button class="add" onclick="addPlan()">הוסף לתכנית</button></div>';
+  tools+='<div class="sub"><label for="mp_bulk">או הדבק רשימה, שורה לכל שיעור (ייכנסו ליחידה שכתבת למעלה)</label><textarea id="mp_bulk" style="height:90px"></textarea><button class="add" onclick="bulkPlans()">הוסף את הרשימה</button></div>';
+  if(n)tools+='<div class="sub"><label for="mp_rename">עדכון שמות לפי מספר שיעור - שורה בצורה ״27. שם השיעור״. משנה רק שמות של שורות קיימות, בלי להוסיף ולמחוק. ההתקדמות, הקבצים והרישומים נשמרים.</label><textarea id="mp_rename" style="height:140px"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="x" onclick="fillPlanTitles()">מלא את השמות הנוכחיים</button><button class="add" style="margin:0" onclick="updatePlanTitles()">עדכן שמות לפי הרשימה</button></div></div>';
   var prev='';
   h+=S.plans.map(function(p,i){
     var k=S.courses.filter(function(c){return planTaught(p.id,c.id)}).length,u=p.unit||'',head='';
     if(u!==prev){head=u?'<div class="mut" style="margin-top:8px;font-weight:700;color:var(--gold)">'+esc(u)+'</div>':'';prev=u}
     return head+'<div class="row"><div style="flex:1"><b>'+(i+1)+'. '+esc(p.title)+'</b><span class="mut">נלמד ב־'+k+' קורסים</span>'+(p.body?'<div class="mut" style="white-space:pre-wrap">'+esc(p.body.length>110?p.body.slice(0,110)+'…':p.body)+'</div>':'')+(p.file?'<div><a href="/_blob/'+p.file.id+'" target="_blank" rel="noopener" style="color:var(--acc)">📎 '+esc(p.file.name)+'</a> '+xb('pf'+p.id,'delPlanFile('+p.id+')','הסר קובץ')+'</div>':(busy==='f'+p.id?'<div class="mut">מעלה קובץ…</div>':''))+'</div><div style="text-align:left"><button class="x" onclick="movePlan('+p.id+',-1)">▲</button><button class="x" onclick="movePlan('+p.id+',1)">▼</button><br><button class="x" onclick="editPlan('+p.id+')">✏️ ערוך</button><br><button class="x" onclick="pickFile('+p.id+')">📎 '+(p.file?'החלף קובץ':'קובץ')+'</button><br>'+xb('pl'+p.id,'delPlan('+p.id+')','מחק')+'</div></div>';
   }).join('');
+  h+='<details class="sub" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">⚙️ ניהול התכנית (הוספה ועריכת שמות)</summary><div style="margin-top:6px">'+tools+'</div></details>';
   return h+'</div>';
 }
 function plansBlock(c){
@@ -992,6 +1042,9 @@ function editLesson(id){
   var sel=document.getElementById('le_course');
   sel.innerHTML='<option value="0">ללא קורס</option>'+S.courses.map(function(c){return '<option value="'+c.id+'">'+esc(c.name)+'</option>'}).join('');
   sel.value=String(l.course||0);
+  var ps=document.getElementById('le_plan');
+  ps.innerHTML='<option value="0">ללא / שיעור חופשי</option>'+S.plans.map(function(p,i){return '<option value="'+p.id+'">'+(i+1)+'. '+esc(p.title)+'</option>'}).join('');
+  ps.value=String(l.plan||0);
   function sv(i,v){document.getElementById(i).value=v==null?'':v}
   sv('le_name',l.name);document.getElementById('le_name').disabled=!!l.all;
   sv('le_date',l.date);sv('le_hours',l.hours||1);sv('le_price',l.price||0);sv('le_topic',l.topic);sv('le_wrote',l.wrote);
@@ -1002,7 +1055,7 @@ function leSave(){
   var l=findL(leId);if(!l){leClose();return}
   var cid=Number(val('le_course'))||0,c=course(cid),nm=val('le_name');
   if(!l.all&&!nm){toast('חסר שם תלמיד');return}
-  l.course=cid;l.date=val('le_date')||l.date;l.hours=Number(val('le_hours'))||1;l.price=Number(val('le_price'))||0;l.topic=val('le_topic');l.wrote=val('le_wrote');
+  l.course=cid;l.plan=Number(val('le_plan'))||0;l.date=val('le_date')||l.date;l.hours=Number(val('le_hours'))||1;l.price=Number(val('le_price'))||0;l.topic=val('le_topic');l.wrote=val('le_wrote');
   l.name=l.all?((c?c.name:'ללא קורס')+' (כולם)'):nm;
   leClose();save();toast('השיעור עודכן ✓');
 }
@@ -1368,18 +1421,18 @@ function viewIncome(){
 
 // ===== v2.10: מסך סיכום ביתי + כרטיסי הזמנה סגורים =====
 var ICONS={
- orders:'<rect x="5" y="4" width="13" height="16" rx="2"/><line x1="8.5" y1="8.5" x2="14.5" y2="8.5"/><line x1="8.5" y1="12" x2="14.5" y2="12"/><line x1="8.5" y1="15.5" x2="12" y2="15.5"/>',
+ orders:'<rect x="3.5" y="7.5" width="7" height="8" rx="1"/><rect x="2.5" y="15.5" width="9" height="2.2" rx="1"/><line x1="5.8" y1="7.5" x2="5.8" y2="15.5"/><line x1="8.2" y1="7.5" x2="8.2" y2="15.5"/><rect x="13.5" y="7.5" width="7" height="8" rx="1"/><rect x="12.5" y="15.5" width="9" height="2.2" rx="1"/>',
  tefillin:'<rect x="6" y="9" width="12" height="11" rx="1.5"/><line x1="6" y1="13" x2="18" y2="13"/><line x1="9.5" y1="9" x2="9.5" y2="4.5"/><line x1="14.5" y1="9" x2="14.5" y2="4.5"/>',
- pen:'<path d="M4 20l1.2-4.2L16 5l3 3L8.2 18.8 4 20z"/>',
+ pen:'<path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="4.5" y2="19.5"/><line x1="17.5" y1="15" x2="9" y2="15"/>',
  cart:'<path d="M4 6h2.2l2 9.5h9.3l2.2-6.5H7"/><circle cx="10.5" cy="19.5" r="1.3"/><circle cx="16.5" cy="19.5" r="1.3"/>',
- cap:'<path d="M12 5l9 4-9 4-9-4 9-4z"/><path d="M7.5 11.5V15c0 1.6 9 1.6 9 0v-3.5"/>',
+ cap:'<text x="1.5" y="18" font-size="17" font-weight="700" font-family="\'Frank Ruhl Libre\',Georgia,serif" fill="currentColor" stroke="none">א</text><text x="14.5" y="10.5" font-size="9" font-weight="700" font-family="\'Frank Ruhl Libre\',Georgia,serif" fill="currentColor" stroke="none">ב</text><text x="16" y="20" font-size="9" font-weight="700" font-family="\'Frank Ruhl Libre\',Georgia,serif" fill="currentColor" stroke="none">ג</text>',
  books:'<rect x="4.5" y="4" width="5.5" height="16" rx="1"/><rect x="13" y="4" width="5.5" height="16" rx="1"/>',
  coin:'<circle cx="12" cy="12" r="8"/><text x="12" y="16.5" text-anchor="middle" font-size="12" font-weight="700" fill="#8b5e1a" stroke="none">₪</text>',
  receipt:'<path d="M6 3.5h12V21l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6L6 21z"/><line x1="9" y1="8.5" x2="15" y2="8.5"/><line x1="9" y1="12.5" x2="15" y2="12.5"/>',
  sum:'<line x1="4" y1="19.5" x2="20" y2="19.5"/><line x1="6.5" y1="16" x2="6.5" y2="10"/><line x1="12" y1="16" x2="12" y2="5.5"/><line x1="17.5" y1="16" x2="17.5" y2="12.5"/>',
  link:'<path d="M9.5 14.5l5-5"/><path d="M11 6.8l1.8-1.8a3.6 3.6 0 015.1 5.1L16.1 11.9"/><path d="M13 17.2l-1.8 1.8a3.6 3.6 0 01-5.1-5.1l1.8-1.8"/>'
 };
-function ico(k,size){return '<svg width="'+(size||30)+'" height="'+(size||30)+'" viewBox="0 0 24 24" fill="none" stroke="#8b5e1a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[k]||'')+'</svg>'}
+function ico(k,size,color){var c=color||'#8b5e1a';return '<svg width="'+(size||30)+'" height="'+(size||30)+'" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:'+c+'" aria-hidden="true">'+(ICONS[k]||'')+'</svg>'}
 function homeTiles(){
   var t0=today();
   var open=S.orders.filter(function(o){return o.status!=='נמסר'}).length;
@@ -1395,11 +1448,36 @@ function homeTiles(){
    ['pay','תשלומים','receipt','יומן תשלומים',false],
    ['links','קישורים','link','מחירים ואתר הזמנות',false]
   ];
-  return '<div class="tiles">'+tiles.map(function(t){return '<button class="tile" onclick="setTab(\''+t[0]+'\')"><span>'+ico(t[2],30)+'</span><span class="tnm">'+t[1]+'</span><span class="tbd'+(t[4]?' alert':'')+'">'+t[3]+'</span></button>'}).join('')+'</div>';
+  var TC={orders:'#2563eb',pen:'#b5832a',cap:'#7c3aed',books:'#0d9488',cart:'#ea580c',coin:'#16a34a',sum:'#0284c7',receipt:'#e11d48',link:'#4f46e5'};
+  var slides=tiles.map(function(t){var c=TC[t[2]]||'#8b5e1a';return '<div class="slide" dir="rtl"><button class="tile" onclick="setTab(\''+t[0]+'\')"><span class="tic" style="background:'+c+'1f">'+ico(t[2],30,c)+'</span><span class="tnm">'+t[1]+'</span><span class="tbd'+(t[4]?' alert':'')+'">'+t[3]+'</span></button></div>'}).join('');
+  var dots=tiles.map(function(t,i){return '<button class="dot" onclick="swipeTo('+i+')" aria-label="'+t[1]+'"></button>'}).join('');
+  return '<div class="swipe" dir="ltr"><div class="swipe-track" id="swtrack">'+slides+'</div></div><div class="mut" style="text-align:center;font-size:12px;margin-top:4px">&#8249; החליקו לעוד פעולות &#8250;</div>';
 }
 function hRow(ic,txt,btn,cb,alert){
   return '<div class="hrow'+(alert?' alert':'')+'"><span class="hic">'+ico(ic,20)+'</span><span class="htx">'+txt+'</span>'+(btn?'<button class="x hbtn" onclick="'+cb+'">'+btn+'</button>':'')+'</div>';
 }
+
+var swI=0;
+function swipeTo(i,instant){
+  var tr=document.getElementById('swtrack');if(!tr)return;
+  var n=tr.children.length;i=Math.max(0,Math.min(n-1,i));swI=i;
+  var w=tr.children[0].offsetWidth;
+  tr.style.transition=instant?'none':'';
+  tr.style.transform='translateX('+(-i*w)+'px)';
+  var ds=document.querySelectorAll('.swipe-dots .dot');
+  for(var k=0;k<ds.length;k++)ds[k].classList.toggle('on',k===i);
+}
+function swipeInit(){
+  var tr=document.getElementById('swtrack');if(!tr)return;
+  var sx=0,sy=0;
+  tr.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  tr.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy))swipeTo(swI+(dx<0?1:-1));
+  },{passive:true});
+  swipeTo(swI,true);
+}
+
 function viewHome(){
   var t0=today(),rows=[];
   var lb=lastBackup(),days=lb?Math.floor((Date.now()-lb)/864e5):-1;
@@ -1413,11 +1491,21 @@ function viewHome(){
     openW.forEach(function(o){if(!o.due)return;var dl=o.due<t0?1:Math.max(1,dayNum(o.due)-dayNum(t0));goal+=Math.ceil(writingRemaining(o)/dl)});
     if(!goal)goal=Math.round(avgPace())||200;
     rows.push(hRow('pen','כתיבה היום: '+tw+' מתוך '+goal+' מילים'+(tw>=goal?' ✓':''),'רשום כתיבה',"setTab('write')",false));
+    var AB=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳'];
+    var wl=openW.map(function(o,i){
+      var tot=0;PAIRS.forEach(function(pr){if(hasW(o,pr[0]))tot+=(S.cfg.head||400)+(S.cfg.hand||400)});
+      var done=tot-writingRemaining(o),st;
+      if(o.due&&o.due<t0)st='<span class="bad">בפיגור '+(dayNum(t0)-dayNum(o.due))+' ימים</span>';
+      else if(o.due)st='<span class="mut">יעד '+fdate(o.due)+'</span>';
+      else st='<span class="mut">ללא יעד</span>';
+      return '<div style="padding:5px 0'+(i?';border-top:1px dashed var(--line)':'')+'"><b>'+(AB[i]||(i+1)+'.')+'</b> <b>'+esc(o.name)+'</b>'+(o.item?' <span class="mut">· '+esc(o.item)+'</span>':'')+'<div style="font-size:13px;margin-top:1px">'+done+'/'+tot+' מילים · '+st+'</div></div>';
+    }).join('');
+    rows.push('<div style="border-top:1px solid var(--line);margin-top:6px;padding-top:6px"><b style="font-size:14px">איפה אני עומד בכתיבה</b>'+wl+'</div>');
   }
   if(new Date().getDate()<=3)rows.push(hRow('coin','התחיל חודש חדש - לראות כמה נכנס ב'+esc(billMonthName(prevMonthIso())),'סיכום הכנסות',"setTab('cash')",false));
   rows.push(hRow('link','פניות מהאתר: <span class="mut" id="today_site">בודק…</span>','פתח','siteOrders()',false));
   var h='<div class="card"><b>היום</b>'+rows.join('')+'</div>';
-  h+=homeTiles();
+  h+=homeTiles()+'<div class="home-foot"></div>';
   return h;
 }
 function togOrder(el){
@@ -1432,11 +1520,13 @@ function render(){
   document.querySelectorAll('#app input[id],#app select[id],#app textarea[id]').forEach(function(e){keep[e.id]=e.type==='checkbox'?e.checked:e.value});
   var ae=document.activeElement,aid=ae&&ae.id;
   document.getElementById('nav').innerHTML=tab==='home'?'':'<button class="navback" onclick="setTab(\'home\')">&#8594; בית</button>';;
+  document.querySelector('.top').classList.toggle('tophome',tab==='home');
   var v={home:viewHome,today:viewToday,income:viewIncome,cash:viewCash,sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
   document.getElementById('app').innerHTML=names()+((tab==='sum'||tab==='pay')?'<button class="add" style="margin:0 0 12px" onclick="openIncome()">חישוב חודשי</button>':'')+v;quietSections();
   setTimeout(calcTotal,0);
   setTimeout(hydrateImgs,0);
   if(tab==='today'||tab==='home')setTimeout(todaySiteCount,0);
+  if(tab==='home')setTimeout(swipeInit,0);
   for(var k in keep){var e=document.getElementById(k);if(e&&k!=='l_course'&&k!=='w_order'&&k!=='income_month'&&k!=='income_exclude'){if(e.type==='checkbox')e.checked=keep[k];else e.value=keep[k]}}
   document.querySelectorAll('#app input[type=date]').forEach(updHd);
   var t=document.getElementById('today');if(t)t.textContent=hdate(today());
@@ -1556,6 +1646,40 @@ async function privateSyncUpload(){
 }
 
 </script>
-</body>
+<script>
+function siteOrders(){
+  if(!adminKey()||!siteEndpoint()){siteConnect();return}
+  document.getElementById('sbox').style.display='flex';
+  document.getElementById('sbox_b').innerHTML='<div class="mut">טוען מהאתר…</div>';
+  loadPending(function(d){
+    if(!d||!d.ok){document.getElementById('sbox_b').innerHTML='<div class="mut">לא הצלחתי לקרוא מהאתר. נסה שוב עוד רגע.</div>';return}
+    window._site={orders:d.orders||[],signups:d.signups||[]};
+    renderSiteBox();
+  },function(){document.getElementById('sbox_b').innerHTML='<div class="mut">אין חיבור לאתר כרגע. בדוק אינטרנט ונסה שוב.</div>'});
+}
+function todaySiteCount(){
+  var e=document.getElementById('today_site');if(!e)return;
+  if(!adminKey()){e.textContent='';return}
+  loadPending(function(d){var e2=document.getElementById('today_site');if(!e2)return;if(!d||!d.ok){e2.textContent='';return}var n=(d.orders||[]).length+(d.signups||[]).length;e2.textContent=n?n+' ממתינות':'אין חדשות ✓';e2.className=n?'bad':'mut'},function(){var e2=document.getElementById('today_site');if(e2)e2.textContent='אין חיבור כרגע'});
+}
+async function privateSyncUpload(){
+ if(privateSyncBusy)return;
+ if(!siteEndpoint()||!adminKey()){toast('יש להגדיר חיבור פרטי דרך "מהאתר" לפני הסנכרון');return}
+ if(!(S.orders||[]).length){toast('אין כאן הזמנות. סנכרון ריק נחסם כדי להגן על העותק הקיים.');return}
+ if(!confirm('לשלוח לגיליון הפרטי עותק של ההזמנות והתקדמות הכתיבה? המקור בטלפון לא ישתנה. לא יישלחו טלפונים, מיילים, כסף, הערות, קורסים, הוצאות או תמונות.'))return;
+ privateSyncBusy=true;var btn=document.getElementById('private-sync-btn');if(btn)btn.disabled=true;privateSyncShow('מסנכרן עותק פרטי…');
+ try{
+  var snapshot=privateSyncProject(S),text=JSON.stringify(snapshot),digest=await privateSyncHash(text),last=privateSyncInfo();
+  var remote=await adminRequest('snapshot_status');
+  if(remote.digest&&(!last||last.digest!==remote.digest)&&remote.digest!==digest)throw Error('העותק בגיליון עודכן ממכשיר אחר. לא דרסתי אותו. יש לבדוק לפני סנכרון.');
+  var c=new AbortController(),timer=setTimeout(function(){c.abort()},45000),res;
+  try{var r=await fetch(siteEndpoint(),{method:'POST',credentials:'omit',signal:c.signal,body:new URLSearchParams({type:'snapshot_upload',admin_key:adminKey(),base_digest:remote.digest||'',digest:digest,payload:text})});if(!r.ok)throw Error('לא התקבל מענה תקין מהשרת');res=await r.json()}finally{clearTimeout(timer)}
+  if(!res.ok||res.digest!==digest||res.count!==snapshot.orders.length||!res.received_at)throw Error(res.error||'לא התקבל אישור קליטה מלא');
+  try{localStorage.setItem('sofer_private_sync',JSON.stringify({digest:res.digest,count:res.count,received_at:res.received_at,source_ts:S.ts||0}))}catch(e){throw Error('העותק נקלט, אך אישור הסנכרון לא נשמר במכשיר')}
+  privateSyncRender();toast('העותק הפרטי נקלט ✓ · '+res.count+' הזמנות');
+ }catch(e){privateSyncShow('הסנכרון לא אושר. המקור בטלפון לא השתנה. אפשר לנסות שוב.');toast('סנכרון פרטי: '+(e.name==='AbortError'?'תם הזמן. ייתכן שנקלט; ניסיון נוסף בטוח.':e.message))}
+ finally{privateSyncBusy=false;if(btn)btn.disabled=false}
+}
+function privateSyncRender(){var i=privateSyncInfo();if(!i){privateSyncShow('טרם סונכרן עותק פרטי');return}privateSyncShow('עותק פרטי: '+new Date(i.received_at).toLocaleString('he-IL')+' · '+i.count+' הזמנות'+(i.source_ts!==(S.ts||0)?' · יש שינויים מאז הסנכרון':''))}
+</script></body>
 </html>
-
