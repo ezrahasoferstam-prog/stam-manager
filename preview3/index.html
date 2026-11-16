@@ -956,7 +956,7 @@ function applyKnownTitles(){
   Object.keys(KNOWN_TITLES).forEach(function(k){
     var pos=Number(k);
     if(pos>S.plans.length){
-      if(pos===S.plans.length+1){S.plans.push({id:Date.now()+pos,title:KNOWN_TITLES[k],unit:'',body:''});added++}
+      if(pos>=29&&pos===S.plans.length+1){S.plans.push({id:Date.now()+pos,title:KNOWN_TITLES[k],unit:'',body:''});added++}
       else skip++;
       return;
     }
