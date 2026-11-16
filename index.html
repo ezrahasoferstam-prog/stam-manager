@@ -92,6 +92,9 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:1
 .osum .oleft{margin-inline-start:auto;font-weight:700;white-space:nowrap;font-size:13px;flex:none}
 .obody{display:none;margin-top:6px}
 .obody.open{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+
+.overdue-link{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;color:inherit;font:inherit;text-align:right;cursor:pointer;margin:0}
+.overdue-link:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -1211,18 +1214,27 @@ function availCard(){
   else h+='<div class="mut" style="margin-top:6px">עוד אין נתוני כתיבה מ־7 הימים האחרונים. כתוב קצב לתכנון בשדה למעלה כדי לראות תאריך.</div>';
   return h+'</div>';
 }
-function viewOrders(){
-  if(editId&&!findO(editId)){editId=null;exN=1}
-  var h='<div class="card"><p class="mut">📷 שומרים את ההזמנה, ואז מוסיפים תמונות או מצלמים בכרטיס שלה, תחת תיעוד מה שיצא.</p>'+(editId?'<div class="mut" style="margin-bottom:6px">✏️ עריכת הזמנה: <b>'+esc(findO(editId).name)+'</b></div>':'')+'<div class="grid">'+field('o_name','שם המזמין','text','list="ol"','full')+field('o_email','מייל הלקוח (לא חובה, לשליחת חשבונית)','email','inputmode="email"','full')+field('o_phone','טלפון הלקוח (לא חובה, לוואטסאפ)','tel','inputmode="tel"','full')+field('o_item','מה הוזמן','text','placeholder="למשל תפילין פשוטות"','full')+partsForm()+field('o_date','תאריך הזמנה','date','value="'+today()+'"')+field('o_due','יעד סיום','date')+field('o_paid','שולם עד כה ₪','number','inputmode="decimal"')+'<div class="full"><label for="o_status">סטטוס</label><select id="o_status">'+STAT.map(function(s){return '<option>'+s+'</option>'}).join('')+'</select></div></div><button class="add" onclick="add(\'orders\')">'+(editId?'שמור שינויים':'הוסף הזמנה')+'</button>'+(editId?'<button class="x" onclick="cancelEdit()">בטל עריכה</button>':'')+'</div>';
-  h+=recCard();
-  h+='<div class="card">';
-  var ordRow=function(x){
+function ordRow(x){
     var left=owed(x)-(x.paid||0);
     return '<div class="row orow"><div class="osum" onclick="togOrder(this)"><span class="chev">&#9664;</span><b>'+esc(x.name)+'</b>'+(x.item?'<span class="mut oitem">'+esc(x.item)+'</span>':'')+'<span class="oleft '+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם ✓')+'</span></div><div class="obody"><div><b>'+esc(x.name)+'</b><span class="mut">'+(x.item?esc(x.item)+' · ':'')+'הוזמן '+fdate(x.date)+dueTag(x)+'</span>'+
     (x.rid?'<span class="mut">🔁 הזמנה קבועה</span>':'')+(x.email?'<span class="mut">✉️ '+esc(x.email)+'</span>':'')+(x.phone?'<span class="mut">📞 <a href="tel:'+telNum(x.phone)+'">'+esc(x.phone)+'</a> · <a target="_blank" rel="noopener" href="https://wa.me/'+waNum(x.phone)+'">וואטסאפ</a></span>':'')+(x.note?'<span class="mut">'+esc(x.note)+'</span>':'')+(x.adj?'<span class="mut">'+(x.adj>0?'תוספת ':'הנחה ')+money(Math.abs(x.adj))+'</span>':'')+(x.extras||[]).map(function(e){return '<span class="mut">'+esc(e.l||(e.a>0?'תוספת':'הנחה'))+' '+moneyS(e.a)+'</span>'}).join('')+'<span class="mut">סך הכל '+money(owed(x))+' · שולם '+money(x.paid)+' · <span class="'+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם במלואו')+'</span></span>'+
     (x.svc?'<span class="mut">עמלת תיווך שלי '+money(x.svc)+'</span>':'')+(x.brk?'<span class="mut">מתוכו עמלת המתווך '+money(brkFee(x))+(x.brkn?' · '+esc(x.brkn):'')+' · לי '+money(x.price+(x.svc||0))+'</span>':'')+(buyTot(x.id)?'<span class="mut">קניות להזמנה '+money(buyTot(x.id))+' · יתרה אחרי קניות, ספק והגהה '+moneyS(x.price-buyTot(x.id)-proofAmount(x)-supplierCost(x).total)+'</span>':'')+partsRow(x)+supplierInfo(x)+proofOrderInfo(x)+docBlock(x)+'<div style="display:flex;gap:6px;margin-top:4px;align-items:center"><select class="st" onchange="setStatus('+x.id+',this.value)">'+STAT.map(function(s){return '<option'+(s===x.status?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'+
     '<input class="paid" type="number" inputmode="decimal" placeholder="עדכן שולם" onchange="setPaid('+x.id+',this.value)"></div>'+waBtns(x)+'</div>'+
-    '<div style="text-align:left"><span class="amt">'+money(owed(x))+'</span><br><button class="x" onclick="editOrder('+x.id+')">✏️ ערוך</button><br>'+(x.status==='נמסר'&&x.wx&&Object.keys(x.wx).length?'<button class="x" onclick="stopWrite('+x.id+')">הפסק המשך כתיבה</button><br>':(x.status==='נמסר'&&PAIRS.some(function(p){return !hasPar(x,p[0])})?'<button class="x" onclick="contWrite('+x.id+')">✍️ המשך כתיבה בזוג חסר</button><br>':''))+'<button class="x" onclick="invOrder('+x.id+')">🧾 חשבונית</button><br>'+delBtn('orders',x.id)+'</div></div></div>'};
+    '<div style="text-align:left"><span class="amt">'+money(owed(x))+'</span><br><button class="x" onclick="editOrder('+x.id+')">✏️ ערוך</button><br>'+(x.status==='נמסר'&&x.wx&&Object.keys(x.wx).length?'<button class="x" onclick="stopWrite('+x.id+')">הפסק המשך כתיבה</button><br>':(x.status==='נמסר'&&PAIRS.some(function(p){return !hasPar(x,p[0])})?'<button class="x" onclick="contWrite('+x.id+')">✍️ המשך כתיבה בזוג חסר</button><br>':''))+'<button class="x" onclick="invOrder('+x.id+')">🧾 חשבונית</button><br>'+delBtn('orders',x.id)+'</div></div></div>'}
+function overdueOrders(){
+  var t0=today();
+  return S.orders.filter(function(o){return o.status!=='נמסר'&&o.due&&o.due<t0}).sort(function(a,b){return a.due<b.due?-1:a.due>b.due?1:0});
+}
+function viewOverdue(){
+  var late=overdueOrders();
+  return '<div class="card"><b>הזמנות בפיגור ('+late.length+')</b><div class="mut" style="margin-top:4px">לחץ על הזמנה לפתיחת הפרטים</div>'+(late.length?late.map(ordRow).join(''):'<div class="empty">אין הזמנות בפיגור ✓</div>')+'</div>';
+}
+function viewOrders(){
+  if(editId&&!findO(editId)){editId=null;exN=1}
+  var h='<div class="card"><p class="mut">📷 שומרים את ההזמנה, ואז מוסיפים תמונות או מצלמים בכרטיס שלה, תחת תיעוד מה שיצא.</p>'+(editId?'<div class="mut" style="margin-bottom:6px">✏️ עריכת הזמנה: <b>'+esc(findO(editId).name)+'</b></div>':'')+'<div class="grid">'+field('o_name','שם המזמין','text','list="ol"','full')+field('o_email','מייל הלקוח (לא חובה, לשליחת חשבונית)','email','inputmode="email"','full')+field('o_phone','טלפון הלקוח (לא חובה, לוואטסאפ)','tel','inputmode="tel"','full')+field('o_item','מה הוזמן','text','placeholder="למשל תפילין פשוטות"','full')+partsForm()+field('o_date','תאריך הזמנה','date','value="'+today()+'"')+field('o_due','יעד סיום','date')+field('o_paid','שולם עד כה ₪','number','inputmode="decimal"')+'<div class="full"><label for="o_status">סטטוס</label><select id="o_status">'+STAT.map(function(s){return '<option>'+s+'</option>'}).join('')+'</select></div></div><button class="add" onclick="add(\'orders\')">'+(editId?'שמור שינויים':'הוסף הזמנה')+'</button>'+(editId?'<button class="x" onclick="cancelEdit()">בטל עריכה</button>':'')+'</div>';
+  h+=recCard();
+  h+='<div class="card">';
+
   var groups=[['הוזמן','הזמנות חדשות'],['בכתיבה','הזמנות בכתיבה'],['מוכן','מוכנות למסירה'],['deliveredDue','נמסרו - יתרה לבדיקה'],['settled','נמסרו ושולמו']];
   h+=groups.map(function(g){var list=S.orders.filter(function(x){var done=x.status==='נמסר',due=owed(x)-(x.paid||0);return g[0]==='settled'?done&&due<=0:g[0]==='deliveredDue'?done&&due>0:x.status===g[0]});return '<details class="order-group"><summary>'+g[1]+' ('+list.length+')</summary>'+list.map(ordRow).join('')+'</details>'}).join('');
   return h+'</div>';
@@ -1236,7 +1248,7 @@ function viewPay(){
 
 var sectionOpen={};
 function quietSections(){
- if(tab==='income'||tab==='today'||tab==='cash'||tab==='home')return;
+ if(tab==='income'||tab==='today'||tab==='cash'||tab==='home'||tab==='overdue')return;
  var app=document.getElementById('app');
  Array.from(app.children).filter(function(e){return e.classList.contains('card')}).forEach(function(card,i){
   var key=tab+':'+i,title='פרטים',count=null;
@@ -1440,7 +1452,7 @@ function ico(k,size,color){var c=color||'#8b5e1a';return '<svg width="'+(size||3
 function homeTiles(){
   var t0=today();
   var open=S.orders.filter(function(o){return o.status!=='נמסר'}).length;
-  var late=S.orders.filter(function(o){return o.status!=='נמסר'&&o.due&&o.due<t0}).length;
+  var late=overdueOrders().length;
   var tiles=[
    ['orders','הזמנות','orders',open?open+' פתוחות'+(late?' · '+late+' באיחור':''):'אין פתוחות ✓',late>0],
    ['write','כתיבה','pen','יעד ורישום יומי',false],
@@ -1486,8 +1498,8 @@ function viewHome(){
   var t0=today(),rows=[];
   var lb=lastBackup(),days=lb?Math.floor((Date.now()-lb)/864e5):-1;
   if(days<0||days>=7)rows.push(hRow('receipt',days<0?'עוד לא נוצר גיבוי':'עברו '+days+' ימים מהגיבוי האחרון','גבה עכשיו','backupData()',true));
-  var late=S.orders.filter(function(o){return o.status!=='נמסר'&&o.due&&o.due<t0}).length;
-  if(late)rows.push(hRow('orders',late===1?'הזמנה אחת בפיגור':late+' הזמנות בפיגור','','',true));
+  var late=overdueOrders().length;
+  if(late)rows.push('<button type="button" class="hrow alert overdue-link" onclick="setTab(\'overdue\')"><span class="hic">'+ico('orders',20)+'</span><span class="htx">'+(late===1?'הזמנה אחת בפיגור':late+' הזמנות בפיגור')+'</span><span aria-hidden="true">&#8592;</span></button>');
   var openW=S.orders.filter(function(o){return wopen(o)&&writingRemaining(o)>0});
   if(openW.length){
     var tw=S.writing.filter(function(w){return w.date===t0}).reduce(function(a,w){return a+w.words},0);
@@ -1526,7 +1538,7 @@ function render(){
   var ae=document.activeElement,aid=ae&&ae.id;
   document.getElementById('nav').innerHTML=tab==='home'?'':'<button class="navback" onclick="setTab(\'home\')">&#8594; בית</button>';;
   document.querySelector('.top').classList.toggle('tophome',tab==='home');
-  var v={home:viewHome,today:viewToday,income:viewIncome,cash:viewCash,sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
+  var v={home:viewHome,overdue:viewOverdue,today:viewToday,income:viewIncome,cash:viewCash,sum:viewSum,lessons:viewLessons,bill:viewBill,orders:viewOrders,write:viewWrite,buys:viewBuys,pay:viewPay,links:viewLinks}[tab]();
   document.getElementById('app').innerHTML=names()+((tab==='sum'||tab==='pay')?'<button class="add" style="margin:0 0 12px" onclick="openIncome()">חישוב חודשי</button>':'')+v;quietSections();
   setTimeout(calcTotal,0);
   setTimeout(hydrateImgs,0);
