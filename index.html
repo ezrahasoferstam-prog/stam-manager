@@ -918,17 +918,21 @@ function updatePlanTitles(){
   if(!upd&&!skip){toast('הדבק שורות בצורה: 27. שם השיעור');return}
   save();toast('עודכנו '+upd+' שמות ✓'+(skip?' · דולגו '+skip+' שורות בלי מספר תקין':''));
 }
-var KNOWN_TITLES={'1':'הכרת הקולמוס','2':'הכרת הדף','3':'אות ב','4':'אות ד','5':'אות ת','6':'אות ה','7':'אות ו','8':'אות י','9':'אות מ','10':'עצירה לבדיקה וביקורת','27':'סיום אותיות ועמוד ניסיון','28':'תחילת מגילה','29':'ביקורת מגילה','30':'סיום קורס'};
+var KNOWN_TITLES={'1':'הכרת הקולמוס','2':'הכרת הדף','3':'אות ב','4':'אות ד','5':'אות ת','6':'אות ה','7':'אות ו','8':'אות י','9':'אות מ','10':'עצירה לבדיקה וביקורת','27':'סיום אותיות ועמוד ניסיון','28':'תחילת מגילה','29':'שיעור ביקורת נוסף מגילה','30':'סיכום הקורס'};
 function applyKnownTitles(){
   if(!S.plans.length){toast('אין עדיין שיעורים בתכנית');return}
-  if(!confirm('לעדכן את שמות השיעורים שהוכתבו (1-10 ו-27-30)? משנה שמות בלבד בשורות קיימות. שיעורים 11-26, ההתקדמות, הקבצים והרישומים נשארים בדיוק כמו שהם.'))return;
-  var upd=0,skip=0;
+  if(!confirm('לעדכן את שמות השיעורים שהוכתבו (1-10 ו-27-30)? משנה שמות בלבד בשורות קיימות, ואם שיעורים 29-30 חסרים בסוף - מוסיף אותם. שיעורים 11-26, ההתקדמות, הקבצים והרישומים נשארים בדיוק כמו שהם.'))return;
+  var upd=0,added=0,skip=0;
   Object.keys(KNOWN_TITLES).forEach(function(k){
     var pos=Number(k);
-    if(pos>S.plans.length){skip++;return}
+    if(pos>S.plans.length){
+      if(pos===S.plans.length+1){S.plans.push({id:Date.now()+pos,title:KNOWN_TITLES[k],unit:'',body:''});added++}
+      else skip++;
+      return;
+    }
     if(S.plans[pos-1].title!==KNOWN_TITLES[k]){S.plans[pos-1].title=KNOWN_TITLES[k];upd++}
   });
-  save();toast('עודכנו '+upd+' שמות ✓'+(skip?' · דולגו '+skip+' שאין להם שורה':'')+(upd===0&&!skip?' · הכל כבר מעודכן':''));
+  save();toast('עודכנו '+upd+' שמות ✓'+(added?' · נוספו '+added+' שיעורים חסרים (29-30)':'')+(skip?' · דולגו '+skip:'')+(upd===0&&!added&&!skip?' · הכל כבר מעודכן':''));
 }
 function fillPlanTitles(){
   var e=document.getElementById('mp_rename');if(!e)return;
@@ -946,7 +950,7 @@ function masterBlock(){
   var units=[];S.plans.forEach(function(p){if(p.unit&&units.indexOf(p.unit)<0)units.push(p.unit)});
   if(!n)h+='<div style="margin-top:8px"><button class="add" onclick="seedPlans()">צור 30 שיעורים ריקים לעריכה</button></div>';
   var tools='';
-  if(n)tools+='<div class="sub"><b>עדכון שמות שהוכתבו</b><div class="mut" style="margin:2px 0 6px">מלחיצה אחת: מעדכן את השמות של שיעורים 1-10 ו-27-30 לפי מה שהוכתב. משנה שמות בלבד; שיעורים 11-26, ההתקדמות, הקבצים והרישומים נשארים כמו שהם.</div><button class="add" style="margin:0" onclick="applyKnownTitles()">עדכן את השמות שהוכתבו</button></div>';
+  if(n)tools+='<div class="sub"><b>עדכון שמות שהוכתבו</b><div class="mut" style="margin:2px 0 6px">מלחיצה אחת: מעדכן את השמות של שיעורים 1-10 ו-27-30 לפי מה שהוכתב, ומשלים בסוף את שיעורים 29-30 אם הם חסרים. משנה שמות בלבד בשורות קיימות; שיעורים 11-26, ההתקדמות, הקבצים והרישומים נשארים כמו שהם.</div><button class="add" style="margin:0" onclick="applyKnownTitles()">עדכן את השמות שהוכתבו</button></div>';
   tools+='<div class="sub"><b>הוספת שיעור</b><div class="grid" style="margin-top:6px"><input id="mp_t" type="text" placeholder="כותרת השיעור" style="grid-column:1/-1"><input id="mp_u" type="text" list="mpu" placeholder="יחידה / פרק (לא חובה)" style="grid-column:1/-1"><textarea id="mp_b" placeholder="תוכן השיעור (אפשר לשלוח במייל)" style="grid-column:1/-1;height:90px"></textarea></div><datalist id="mpu">'+units.map(function(u){return '<option value="'+esc(u)+'">'}).join('')+'</datalist><button class="add" onclick="addPlan()">הוסף לתכנית</button></div>';
   tools+='<div class="sub"><label for="mp_bulk">או הדבק רשימה, שורה לכל שיעור (ייכנסו ליחידה שכתבת למעלה)</label><textarea id="mp_bulk" style="height:90px"></textarea><button class="add" onclick="bulkPlans()">הוסף את הרשימה</button></div>';
   if(n)tools+='<div class="sub"><label for="mp_rename">עדכון שמות לפי מספר שיעור - שורה בצורה ״27. שם השיעור״. משנה רק שמות של שורות קיימות, בלי להוסיף ולמחוק. ההתקדמות, הקבצים והרישומים נשמרים.</label><textarea id="mp_rename" style="height:140px"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="x" onclick="fillPlanTitles()">מלא את השמות הנוכחיים</button><button class="add" style="margin:0" onclick="updatePlanTitles()">עדכן שמות לפי הרשימה</button></div></div>';
