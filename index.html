@@ -1487,7 +1487,7 @@ function viewHome(){
   var lb=lastBackup(),days=lb?Math.floor((Date.now()-lb)/864e5):-1;
   if(days<0||days>=7)rows.push(hRow('receipt',days<0?'עוד לא נוצר גיבוי':'עברו '+days+' ימים מהגיבוי האחרון','גבה עכשיו','backupData()',true));
   var late=S.orders.filter(function(o){return o.status!=='נמסר'&&o.due&&o.due<t0}).length;
-  if(late)rows.push(hRow('orders',late+(late===1?' הזמנה עברה':' הזמנות עברו')+' את היעד','פתח',"setTab('orders')",true));
+  if(late)rows.push(hRow('orders',late===1?'הזמנה אחת בפיגור':late+' הזמנות בפיגור','','',true));
   var openW=S.orders.filter(function(o){return wopen(o)&&writingRemaining(o)>0});
   if(openW.length){
     var tw=S.writing.filter(function(w){return w.date===t0}).reduce(function(a,w){return a+w.words},0);
@@ -1495,8 +1495,9 @@ function viewHome(){
     openW.forEach(function(o){if(!o.due)return;var dl=o.due<t0?1:Math.max(1,dayNum(o.due)-dayNum(t0));goal+=Math.ceil(writingRemaining(o)/dl)});
     if(!goal)goal=Math.round(avgPace())||200;
     rows.push(hRow('pen','כתיבה היום: '+tw+' מתוך '+goal+' מילים'+(tw>=goal?' ✓':''),'רשום כתיבה',"setTab('write')",false));
+    var activeW=openW.filter(function(o){return o.status==='בכתיבה'||!!(o.wx&&Object.keys(o.wx).some(function(k){return o.wx[k]}))});
     var AB=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳'];
-    var wl=openW.map(function(o,i){
+    var wl=activeW.map(function(o,i){
       var tot=0;PAIRS.forEach(function(pr){if(hasW(o,pr[0]))tot+=(S.cfg.head||400)+(S.cfg.hand||400)});
       var done=tot-writingRemaining(o),st;
       if(o.due&&o.due<t0)st='<span class="bad">בפיגור '+(dayNum(t0)-dayNum(o.due))+' ימים</span>';
@@ -1504,7 +1505,7 @@ function viewHome(){
       else st='<span class="mut">ללא יעד</span>';
       return '<div style="padding:5px 0'+(i?';border-top:1px dashed var(--line)':'')+'"><b>'+(AB[i]||(i+1)+'.')+'</b> <b>'+esc(o.name)+'</b>'+(o.item?' <span class="mut">· '+esc(o.item)+'</span>':'')+'<div style="font-size:13px;margin-top:1px">'+done+'/'+tot+' מילים · '+st+'</div></div>';
     }).join('');
-    rows.push('<div style="border-top:1px solid var(--line);margin-top:6px;padding-top:6px"><b style="font-size:14px">איפה אני עומד בכתיבה</b>'+wl+'</div>');
+    rows.push('<div style="border-top:1px solid var(--line);margin-top:6px;padding-top:6px"><b style="font-size:14px">הזמנות בכתיבה</b>'+(wl||'<div class="mut" style="margin-top:6px">אין כרגע הזמנות בכתיבה</div>')+'</div>');
   }
   if(new Date().getDate()<=3)rows.push(hRow('coin','התחיל חודש חדש - לראות כמה נכנס ב'+esc(billMonthName(prevMonthIso())),'סיכום הכנסות',"setTab('cash')",false));
   rows.push(hRow('link','פניות מהאתר: <span class="mut" id="today_site">בודק…</span>','פתח','siteOrders()',false));
