@@ -1105,7 +1105,7 @@ function recPace(){
   if(!tp.length)return '';
   var hd=S.cfg.head||400,hn=S.cfg.hand||400,need=hd+hn,t0=today(),from=isoAdd(-6);
   var w7=S.writing.filter(function(w){return w.date>=from&&w.date<=t0}).reduce(function(a,w){return a+w.words},0);
-  var weekly=tp.length*need;
+  var weekly=tp.length*need,personalWeekly=1200;
   var open=S.orders.filter(function(o){return o.rid&&o.status!=='נמסר'&&tp.some(function(t){return t.id===o.rid})});
   var rem=0,late=0,first=null;
   open.forEach(function(o){PAIRS.forEach(function(pr){if(hasPar(o,pr[0])){
@@ -1113,13 +1113,16 @@ function recPace(){
     rem+=r;
     if(r>0){if(o.due&&o.due<t0)late++;if(!first||(o.due||'9999')<(first.o.due||'9999'))first={o:o,r:r}}
   }})});
-  var behind=late>0||w7<weekly;
-  var h='<div class="card"><b>קצב ההזמנות הקבועות</b> <span class="'+(behind?'bad':'ok')+'">'+(behind?'⚠️ מאחר':'✓ בקצב')+'</span>';
-  h+='<div class="row"><span>דרוש בשבוע</span><span class="amt">'+weekly+' מילים</span></div>';
-  h+='<div class="row"><span>כתבת ב־7 הימים האחרונים</span><span class="amt '+(w7>=weekly?'ok':'bad')+'">'+w7+' מילים</span></div>';
-  if(w7<weekly)h+='<div class="mut">חסרות '+(weekly-w7)+' מילים לשבוע כדי לעמוד בקצב</div>';
+  var h='<div class="card"><b>יעד שבועי ומצב ההזמנות</b>';
+  h+='<div class="row"><span>יעד כתיבה אישי לשבוע</span><span class="amt">'+personalWeekly+' מילים</span></div>';
+  h+='<div class="mut">נמדד לפי 7 הימים האחרונים. יעד אישי בלבד, ללא שינוי הזמנות או תאריכי מסירה.</div>';
+  h+='<div class="row"><span>דרוש בשבוע להזמנות הקבועות</span><span class="amt">'+weekly+' מילים</span></div>';
+  h+='<div class="row"><span>כתבת ב־7 הימים האחרונים</span><span class="amt '+(w7>=personalWeekly?'ok':'')+'">'+w7+' מילים</span></div>';
+  h+='<div class="mut '+(w7>=personalWeekly?'ok':'')+'">'+(w7>=personalWeekly?'✓ היעד האישי הושלם':'נותרו '+(personalWeekly-w7)+' מילים ליעד האישי')+'</div>';
+  h+='<div class="mut">סך הכתיבה כולל את כל ההזמנות, לא רק הקבועות. עמידה ביעד אינה אישור לעמידה בתאריכי המסירה.</div>';
   h+='<div class="row"><span>נשארו לכתוב בהזמנות קבועות פתוחות</span><span class="amt">'+rem+' מילים</span></div>';
-  if(late)h+='<div class="bad">'+late+' הזמנות עברו את יעד ההגשה</div>';
+  if(late)h+='<div class="bad">'+late+' זוגות בהזמנות קבועות עם מילים שנותרו ותאריך מסירה שעבר</div>';
+  else h+='<div class="mut">לא נמצאה חריגה מתאריך מסירה בהזמנות הקבועות שנכללות בחישוב. זה לא אישור שהקצב מספיק לתאריכים הבאים.</div>';
   if(first){var dl=first.o.due?Math.max(1,dayNum(first.o.due)-dayNum(t0)):0;if(dl&&first.o.due>=t0)h+='<div class="mut">כדי לסיים את '+esc(first.o.name)+' עד '+gd(first.o.due)+' צריך בערך '+Math.ceil(first.r/dl)+' מילים ליום</div>'}
   tp.forEach(function(t){var nx=t.next||t.first,idx=Math.round((dayNum(nx)-dayNum(t.first))/7);if(idx<(t.count||52))h+='<div class="mut">ההזמנה הבאה של '+esc(t.name)+': '+fdate(nx)+'</div>'});
   return h+'</div>';
