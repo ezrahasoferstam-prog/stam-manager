@@ -9,7 +9,7 @@ var REL='release-20261123-cand-8';
 var CORE=["./", "./index.html", "./6-manifest-finalB.webmanifest", "./1-practice-feature.js", "./1-2-lesson-mail.js?v=20261117", "./offline-support.js", "./1-logo-finalB-32.png", "./2-logo-finalB-180.png", "./3-logo-finalB-192.png", "./4-logo-finalB-512.png", "./5-logo-finalB-maskable-512.png", "./1-7-hero-megillah.jpg", "./icons/apple-touch-icon-180.png", "./icons/favicon-32.png", "./icons/favicon-48.png"];
 var DIGESTS={
  "index.html": "7fed150c0150784c736d01f4ed251b850b3b9d081757290b98ed91c8bcf92516",
- "6-manifest-finalB.webmanifest": "c472be59899443f6759316427a260188def53e20e4176a2fd2f4800421143803",
+ "6-manifest-finalB.webmanifest": "72ceca5eb63f4c40e7e3e466ec8e2b5740eb74c5c618b3cf135fd4332759312f",
  "1-practice-feature.js": "3dafe5a3dcfb7602e507f5901c61a1b6fc6858bd93f3271ec28176fdafcb7985",
  "1-2-lesson-mail.js": "ad1d3c8a2ab09db811177853238a0379b044ffce4d594abd42a9a9a48feb3ed5",
  "offline-support.js": "ac713d821dab3bad11a2a0c0b099d40adfc7f88a8b9a5e0deb85155f6e2d8e43",
