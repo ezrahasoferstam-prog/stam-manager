@@ -1,27 +1,27 @@
-/* שירות offline של גרסת הבדיקה המבודדת (עיצוב ב׳). שחרור: release-20261124-cand-1
+/* שירות offline של גרסת הבדיקה המבודדת (עיצוב ב׳). שחרור: release-20261124-cand-2
    עקרונות:
    1. גרסה היא חבילה שלמה. כל הקבצים מורדים ומאומתים מול רשימת הגיבובים של השחרור הזה לפני שנכתב אחד מהם למטמון.
       כשל (קובץ חסר או גיבוב שגוי) מבטל את ההתקנה, והגרסה התקינה הקודמת ממשיכה לעבוד, גם בלי אינטרנט.
    2. קבצי אפליקציה מוגשים רק מהמטמון המאומת של השחרור הפעיל. תגובות רשת של קבצי אפליקציה לעולם לא נכנסות למטמון ולא משמשות.
    3. שמות המטמונים נושאים את נתיב ההתקנה ואת השחרור. חיפוש, שמירה וניקוי נוגעים רק במטמונים של אותה התקנה.
    4. אינו שולח נתונים, אינו מסנכרן, ואינו נוגע בנתוני המשתמש או בשום אחסון אחר. */
-var REL='release-20261124-cand-1';
-var CORE=["./", "./index.html", "./6-manifest-finalB.webmanifest", "./1-practice-feature.js", "./1-2-lesson-mail.js?v=20261117", "./offline-support.js", "./1-logo-finalB-32.png", "./2-logo-finalB-180.png", "./3-logo-finalB-192.png", "./4-logo-finalB-512.png", "./5-logo-finalB-maskable-512.png", "./1-7-hero-megillah.jpg", "./icons/apple-touch-icon-180.png", "./icons/favicon-32.png", "./icons/favicon-48.png"];
+var REL='release-20261124-cand-2';
+var CORE=["./", "./index.html", "./6-manifest-finalB.webmanifest", "./1-practice-feature.js", "./1-2-lesson-mail.js?v=20261117", "./offline-support.js", "./1-1-logo-finalB-32.png", "./2-2-logo-finalB-180.png", "./3-3-logo-finalB-192.png", "./4-4-logo-finalB-512.png", "./5-5-logo-finalB-maskable-512.png", "./1-7-hero-megillah.jpg", "./6-apple-touch-icon-180.png", "./7-favicon-32.png", "./8-favicon-48.png"];
 var DIGESTS={
- "index.html": "19d9d166e3c6cf605a411da4eace87f4090f8b7fdec81264906173ff1efc5954",
- "6-manifest-finalB.webmanifest": "72ceca5eb63f4c40e7e3e466ec8e2b5740eb74c5c618b3cf135fd4332759312f",
+ "index.html": "cc9314a1de3ceff90c7c229c24cecd04b3eddc89fd09b9c28dc6a3048ff548d3",
+ "6-manifest-finalB.webmanifest": "3b2d442b2537833621097bca6c83c2b0864f0ab39791aab1f7b40d241fd57a96",
  "1-practice-feature.js": "3dafe5a3dcfb7602e507f5901c61a1b6fc6858bd93f3271ec28176fdafcb7985",
  "1-2-lesson-mail.js": "ad1d3c8a2ab09db811177853238a0379b044ffce4d594abd42a9a9a48feb3ed5",
  "offline-support.js": "ac713d821dab3bad11a2a0c0b099d40adfc7f88a8b9a5e0deb85155f6e2d8e43",
- "1-logo-finalB-32.png": "29b10b789e4df88f45d2b2be8699a7fbb261d165bade141e79ce46cec745fbd0",
- "2-logo-finalB-180.png": "485b1393b6cec0ed31627eed5f0b5662715f4c4fb87fc961afb784b9981fd8c1",
- "3-logo-finalB-192.png": "fe9e19368299810911f5b3749f1226fcb98940d92f4077e3ad43839a18699d67",
- "4-logo-finalB-512.png": "c9317e2c860efd25a0ad947fa8be8c6a4219e0cad6e3e48a4e862e70c237c52c",
- "5-logo-finalB-maskable-512.png": "c9317e2c860efd25a0ad947fa8be8c6a4219e0cad6e3e48a4e862e70c237c52c",
+ "1-1-logo-finalB-32.png": "70896fb819c355970cb67e848c09dc3213e001afdf527ba7b3d016d1be7a2481",
+ "2-2-logo-finalB-180.png": "dbcda958519cc9e7650bbf54581d2e3f19c6c6cf16d45434361c2ae955786906",
+ "3-3-logo-finalB-192.png": "426882189d231560499deafa680aca06f50e35994efc8c208752d79a2c088f71",
+ "4-4-logo-finalB-512.png": "43818f2508a75a70165da18f2811785d37ec4f2eed4445098eaa87950f619e95",
+ "5-5-logo-finalB-maskable-512.png": "5acabee5cfc582ca938a6f04c4cf62c712c38e93c20168e15049f24c255ad4ce",
  "1-7-hero-megillah.jpg": "4927a609cfd4c053f1d8f4d6d4a2133abff5f51f7c38a60921eb74bb967530eb",
- "icons/apple-touch-icon-180.png": "35c4c8c486ab11dfaf7d1aef8965775953105adcf3d266106b220e5a0341206a",
- "icons/favicon-32.png": "b20fcebae4d451a0967c15ccf081aa9238c22d1b76354d645b68d310bd68de77",
- "icons/favicon-48.png": "f6c673e8b7ff338c377b484a0116b38ecfbbbee26f5d9c3e7d8c0bd91c48c209"
+ "6-apple-touch-icon-180.png": "dbcda958519cc9e7650bbf54581d2e3f19c6c6cf16d45434361c2ae955786906",
+ "7-favicon-32.png": "70896fb819c355970cb67e848c09dc3213e001afdf527ba7b3d016d1be7a2481",
+ "8-favicon-48.png": "08d508b8c17c1384374cbae934d5abf864ebfc51571ac0a09431879940fdb646"
 };
 var SCOPE_URL=new URL('./',self.location.href),SCOPE=SCOPE_URL.pathname;
 function slug(p){return p.replace(/[^A-Za-z0-9]/g,function(c){return '_'+c.charCodeAt(0).toString(16)})}
