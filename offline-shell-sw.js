@@ -1,14 +1,14 @@
-/* שירות offline של גרסת הבדיקה המבודדת (עיצוב ב׳). שחרור: release-20261124-cand-2
+/* שירות offline של האפליקציה. שחרור: release-20261125-home-3d
    עקרונות:
    1. גרסה היא חבילה שלמה. כל הקבצים מורדים ומאומתים מול רשימת הגיבובים של השחרור הזה לפני שנכתב אחד מהם למטמון.
       כשל (קובץ חסר או גיבוב שגוי) מבטל את ההתקנה, והגרסה התקינה הקודמת ממשיכה לעבוד, גם בלי אינטרנט.
    2. קבצי אפליקציה מוגשים רק מהמטמון המאומת של השחרור הפעיל. תגובות רשת של קבצי אפליקציה לעולם לא נכנסות למטמון ולא משמשות.
    3. שמות המטמונים נושאים את נתיב ההתקנה ואת השחרור. חיפוש, שמירה וניקוי נוגעים רק במטמונים של אותה התקנה.
    4. אינו שולח נתונים, אינו מסנכרן, ואינו נוגע בנתוני המשתמש או בשום אחסון אחר. */
-var REL='release-20261124-cand-2';
+var REL='release-20261125-home-3d';
 var CORE=["./", "./index.html", "./6-manifest-finalB.webmanifest", "./1-practice-feature.js", "./1-2-lesson-mail.js?v=20261117", "./offline-support.js", "./1-1-logo-finalB-32.png", "./2-2-logo-finalB-180.png", "./3-3-logo-finalB-192.png", "./4-4-logo-finalB-512.png", "./5-5-logo-finalB-maskable-512.png", "./1-7-hero-megillah.jpg", "./6-apple-touch-icon-180.png", "./7-favicon-32.png", "./8-favicon-48.png"];
 var DIGESTS={
- "index.html": "cc9314a1de3ceff90c7c229c24cecd04b3eddc89fd09b9c28dc6a3048ff548d3",
+ "index.html": "6e7f743c5ae2e0c748c784cb652db02392a8df41274c05feb5fab296a100184c",
  "6-manifest-finalB.webmanifest": "3b2d442b2537833621097bca6c83c2b0864f0ab39791aab1f7b40d241fd57a96",
  "1-practice-feature.js": "3dafe5a3dcfb7602e507f5901c61a1b6fc6858bd93f3271ec28176fdafcb7985",
  "1-2-lesson-mail.js": "ad1d3c8a2ab09db811177853238a0379b044ffce4d594abd42a9a9a48feb3ed5",
