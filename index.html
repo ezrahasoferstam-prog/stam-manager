@@ -1373,18 +1373,6 @@ function viewWriteActive(){
   field('w_date','תאריך','date','value="'+today()+'"')+field('w_words','כמה מילים כתבת','number','inputmode="numeric" oninput="wpSel()"')+
   '</div><button class="add" onclick="addW()">רשום כתיבה</button>'+
   '<div class="mut" style="margin-top:8px">יעד לכל זוג: ראש <input class="paid" id="cfg_h" type="number" value="'+(S.cfg.head||400)+'" onchange="setCfg()"> יד <input class="paid" id="cfg_y" type="number" value="'+(S.cfg.hand||400)+'" onchange="setCfg()"> מילים</div></div>';
-  var items=[];
-  el.forEach(function(o){PAIRS.forEach(function(pr){if(hasW(o,pr[0])){
-    var rem=Math.max(0,(S.cfg.head||400)-sumW(o.id,pr[0],'h'))+Math.max(0,(S.cfg.hand||400)-sumW(o.id,pr[0],'y'));
-    items.push({o:o,k:pr[0],lab:pr[1].replace('תפילין ',''),rem:rem})}})});
-  items.sort(function(a,b){var sa=wLast[a.o.id]||'',sb=wLast[b.o.id]||'';if(!!sa!==!!sb)return sa?-1:1;if(sa&&sa!==sb)return sa>sb?-1:1;var da=a.o.due||'9999',db=b.o.due||'9999';return da<db?-1:da>db?1:a.o.id-b.o.id});
-  var cum=0;
-  items.forEach(function(it){
-    cum+=it.rem;
-    var eta='';
-    if(it.rem>0&&avg>0){var dt=isoAdd(Math.ceil(cum/avg)),late=it.o.due&&dt>it.o.due;eta=' · סיום משוער <span class="'+(late?'bad':'')+'">'+fdate(dt)+(late?' (אחרי היעד)':'')+'</span>'}
-    h+='<div class="card"><b>'+esc(it.o.name)+(it.o.item&&it.o.item!==it.lab?' · '+esc(it.o.item):'')+' · '+(function(d){return d.length===3?d[2]+'.'+d[1]:''})((it.o.date||'').split('-'))+' · '+it.lab+'</b> <span class="mut">'+(it.o.due?' · יעד '+fdate(it.o.due):'')+'</span>'+(it.o.due&&it.o.due<today()?' <span class="bad"><b>\u25CF באיחור</b></span>':'')+progressHtml(it.o,it.k)+(it.rem>0?'<div class="mut">נשארו '+it.rem+' מילים'+eta+'</div>':'')+'</div>';
-  });
   var log=S.writing.filter(function(w){var o=findO(w.oid);return o&&wopen(o)&&writingRemaining(o)>0}).slice(0,30);
   h+='<div class="card"><b>יומן כתיבה</b>'+(log.length?log.map(function(w){var o=findO(w.oid);return '<div class="row"><div><b>'+w.words+' מילים</b><span class="mut">'+fdate(w.date)+' · '+ordLabel(o)+' · '+(w.pair==='t'?'ר״ת':'רש״י')+' · '+(w.part==='h'?'ראש':'יד')+'</span></div>'+xb('w'+w.id,'delW('+w.id+')','מחק')+'</div>'}).join(''):'<div class="empty">עוד לא נרשמה כתיבה</div>')+'</div>';
   return h;
