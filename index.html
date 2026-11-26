@@ -115,10 +115,11 @@ input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:1
 .hrow.alert .htx{color:#a33;font-weight:700}
 .hrow .hbtn{flex:none;font-size:13px;padding:6px 10px;white-space:nowrap}
 .orow{flex-direction:column;align-items:stretch}
-.osum{display:flex;align-items:center;gap:8px;cursor:pointer;width:100%}
+.osum{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;cursor:pointer;width:100%}
+.osum b{min-width:5em;overflow-wrap:anywhere}
 .osum .chev{transition:transform .2s;color:var(--mut);font-size:12px;flex:none}
 .osum.open .chev{transform:rotate(90deg)}
-.osum .oitem{color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.osum .oitem{color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:3.6em}
 .osum .oleft{margin-inline-start:auto;font-weight:700;white-space:nowrap;font-size:13px;flex:none}
 .obody{display:none;margin-top:6px}
 .obody.open{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
@@ -226,7 +227,8 @@ textarea{min-height:90px}
 box-shadow:0 10px 20px var(--d-fabsh),inset 0 2px 0 var(--d-hi),inset 0 -4px 8px var(--d-lo);text-decoration:none}
 .x{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:22px;border:1.5px solid var(--d-act);background:transparent;color:var(--d-tx);font:600 15px/1 inherit;font-family:inherit;cursor:pointer;box-shadow:none}
 .x.arm,.x.armed{border-color:var(--bad);color:var(--bad)}
-.fchip{display:inline-block;max-width:170px;min-height:44px;line-height:28px;padding:7px 12px;padding-inline-start:34px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:inherit;font-size:13px;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-sizing:border-box}.th{position:relative}.th .x{position:absolute;top:2px;inset-inline-start:2px;min-height:0;width:26px;height:26px;padding:0;border-radius:50%;background:var(--d-solid)}
+.fchip{display:inline-block;max-width:170px;min-height:44px;line-height:28px;padding:7px 12px;padding-inline-start:34px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:inherit;font-size:13px;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-sizing:border-box}.oschips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}.oschip{border:1px solid var(--line);background:var(--card);color:inherit;border-radius:999px;min-height:44px;padding:0 14px;font-size:14px;font-family:inherit;cursor:pointer}.oschip.on{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700}.oschip.owe{border-color:var(--bad);color:var(--bad)}.oschip.owe.on{background:var(--bad);color:#fff}:root[data-theme="dark"] .oschip.owe.on{color:#1b1812}.ostag{flex:none;font-size:12px;padding:2px 9px;border-radius:12px;border:1px solid var(--line);white-space:nowrap}.ostag.late{border-color:var(--bad);color:var(--bad);font-weight:700}
+.th{position:relative}.th .x{position:absolute;top:2px;inset-inline-start:2px;min-height:0;width:26px;height:26px;padding:0;border-radius:50%;background:var(--d-solid)}
 .chip .x{min-height:0;padding:0 4px;border:0}
 #thm{display:none !important}
 /* אייקונים במקום אימוג׳ים */
@@ -545,7 +547,7 @@ body.dz-home main.dz-col{background-image:none;background-color:#EFE8DA}
 <input type="file" id="pickfile" accept=".pdf,image/*,.txt,.md,application/pdf,text/plain" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <input type="file" id="pickany" accept="*/*" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="lb" onclick="this.style.display='none'"><img alt=""></div>
-<div class="mut" style="font-size:11px;text-align:center;margin:24px 0 130px">גרסה 2.18.0 - קבצים לצד תמונות · מסך בית מחודש · שורת מצב ואזהרות · אחסון מקומי</div>
+<div class="mut" style="font-size:11px;text-align:center;margin:24px 0 130px">גרסה 2.19.0 - הזמנות ברשימה אחת, שלבי הגהה וסגירה · קבצים לצד תמונות · מסך בית מחודש · שורת מצב ואזהרות · אחסון מקומי</div>
 </main>
 <div class="dz-fixed"><div class="dz-bn" role="navigation" aria-label="ניווט ראשי"><button type="button" data-dzn="home"><span class="dzbnic"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/></svg></span><span>בית</span></button><button type="button" data-dzn="orders"><span class="dzbnic"><svg viewBox="0 0 24 24"><path d="M7.5 7.5h8v8h-8z" fill="currentColor" stroke="none"/><path d="M7.5 7.5l2.5-2.5h8l-2.5 2.5" stroke-width="1.2"/><path d="M15.5 7.5l2.5-2.5v8l-2.5 2.5" stroke-width="1.2"/><path d="M4.5 15.5h15v4H4.5z"/></svg></span><span>הזמנות</span></button><button type="button" data-dzn="write"><span class="dzbnic"><svg viewBox="0 0 24 24"><path d="M20 4c-8 1-13 6-15 14l-1 3 3-1c8-2 13-7 13-16z"/><path d="M8 16l7-7"/></svg></span><span>כתיבה</span></button><button type="button" data-dzn="lessons"><span class="lt h">א</span><span>שיעורים</span></button><button type="button" data-dzn="more"><span class="dzbnic"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18" cy="12" r="1.2"/></svg></span><span>עוד</span></button></div><button type="button" class="dz-fab" onclick="dzOpen('add')" aria-label="הוספה"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
 <div id="dz-ov" class="dz-ov" hidden><div class="fl" role="dialog" aria-modal="true" aria-labelledby="dz-pt"><div class="fl-top"><button type="button" class="bk" id="dz-bk" onclick="dzBack()" aria-label="חזרה לבחירה הקודמת" hidden><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg><span>חזרה</span></button><button type="button" class="dz-cl" onclick="dzClose()" aria-label="סגירה"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><span>סגירה</span></button></div><h3 class="h" id="dz-pt"></h3><div class="fl-grid two" id="dz-g-add" hidden><button type="button" class="bub big" style="--i:0" onclick="dzStep('course')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M7 4h11a2 2 0 012 2v1H9v10a2 2 0 01-2 2 2 2 0 01-2-2V6a2 2 0 012-2z"/><path d="M11 10h6M11 13h6M11 16h4"/></svg></span><span class="bl">קורס</span></button><button type="button" class="bub big" style="--i:1" onclick="dzStep('write')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M20 4c-8 1-13 6-15 14l-1 3 3-1c8-2 13-7 13-16z"/><path d="M8 16l7-7"/></svg></span><span class="bl">כתיבה</span></button></div><div class="fl-grid" id="dz-g-course" hidden><button type="button" class="bub " style="--i:0" onclick="dzGo('lessons')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M7 4h11a2 2 0 012 2v1H9v10a2 2 0 01-2 2 2 2 0 01-2-2V6a2 2 0 012-2z"/><path d="M11 10h6M11 13h6M11 16h4"/></svg></span><span class="bl">שיעור חדש</span></button><button type="button" class="bub " style="--i:1" onclick="dzQuick()"><span class="bi"><svg viewBox="0 0 24 24"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg></span><span class="bl">שיעור מהיר</span></button><button type="button" class="bub " style="--i:2" onclick="dzGo('buys')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1.3"/><circle cx="17" cy="19" r="1.3"/></svg></span><span class="bl">קנייה לקורס</span></button><button type="button" class="bub " style="--i:3" onclick="dzGo('bill')"><span class="bi"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 10h16M8 15h4"/></svg></span><span class="bl">חיוב קורסים</span></button><button type="button" class="bub " style="--i:4" onclick="dzGo('pay')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span><span class="bl">תשלום</span></button></div><div class="fl-grid" id="dz-g-write" hidden><button type="button" class="bub " style="--i:0" onclick="dzGo('write')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M20 4c-8 1-13 6-15 14l-1 3 3-1c8-2 13-7 13-16z"/><path d="M8 16l7-7"/></svg></span><span class="bl">רישום כתיבה</span></button><button type="button" class="bub " style="--i:1" onclick="dzGo('orders')"><span class="bi"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="13" rx="3"/><path d="M5 10h14M12 17v4M9 21h6"/></svg></span><span class="bl">הזמנה חדשה</span></button><button type="button" class="bub " style="--i:2" onclick="dzGo('buys')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1.3"/><circle cx="17" cy="19" r="1.3"/></svg></span><span class="bl">חומרים</span></button><button type="button" class="bub " style="--i:3" onclick="dzGo('overdue')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg><em class="bdg" id="dz-late"></em></span><span class="bl">באיחור</span></button><button type="button" class="bub" style="--i:4" onclick="dzClose();siteOrders()"><span class="bi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3 3 14 0 17M12 3.5c-3 3-3 14 0 17"/></svg></span><span class="bl">מהאתר</span></button></div><div class="fl-grid" id="dz-g-more" hidden><button type="button" class="bub " style="--i:0" onclick="dzGo('overdue')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg><em class="bdg" id="dz-late2"></em></span><span class="bl">באיחור</span></button><button type="button" class="bub " style="--i:1" onclick="dzQuick()"><span class="bi"><svg viewBox="0 0 24 24"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg></span><span class="bl">שיעור מהיר</span></button><button type="button" class="bub " style="--i:2" onclick="dzGo('bill')"><span class="bi"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 10h16M8 15h4"/></svg></span><span class="bl">חיוב קורסים</span></button><button type="button" class="bub " style="--i:3" onclick="dzGo('buys')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1.3"/><circle cx="17" cy="19" r="1.3"/></svg></span><span class="bl">קניות</span></button><button type="button" class="bub " style="--i:4" onclick="dzGo('cash')"><span class="bi"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="7" rx="6" ry="3"/><path d="M6 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></span><span class="bl">הכנסות</span></button><button type="button" class="bub " style="--i:5" onclick="dzGo('sum')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M5 19V9M12 19V5M19 19v-7"/></svg></span><span class="bl">סיכום</span></button><button type="button" class="bub " style="--i:6" onclick="dzGo('pay')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span><span class="bl">תשלומים</span></button><button type="button" class="bub " style="--i:7" onclick="dzGo('links')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg></span><span class="bl">קישורים</span></button><button type="button" class="bub " style="--i:8" onclick="dzStep('backup')"><span class="bi"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg></span><span class="bl">גיבוי ושחזור</span></button><button type="button" class="bub " style="--i:9" onclick="dzStep('install')"><span class="bi"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></svg></span><span class="bl">התקנה בטלפון</span></button><button type="button" class="bub" style="--i:10" onclick="dzClose();privateSyncUpload()" id="private-sync-btn"><span class="bi"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></span><span class="bl">סנכרון פרטי</span></button></div><p class="note" id="private-sync-info" aria-live="polite" hidden>טרם סונכרן עותק פרטי</p><div class="fl-bk" id="dz-g-install" hidden><div class="fl-card"><b class="h" id="dz-in-st">התקנה בטלפון</b><p id="dz-in-sub">אפשר להוסיף את האפליקציה למסך הבית. היא תיפתח במסך מלא בלי שורת דפדפן, וגם בלי אינטרנט.</p><button type="button" class="dzbtn" id="dz-in-btn" onclick="dzInstall()" hidden><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></svg><span>התקנה עכשיו</span></button></div><div class="fl-card"><b class="h">אנדרואיד (Chrome)</b><ol class="fl-ol"><li>פותחים את הכתובת ב-Chrome.</li><li>לוחצים על התפריט <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></svg></span> בפינה.</li><li>בוחרים "התקנת אפליקציה" או "הוספה למסך הבית".</li><li>מאשרים. האייקון יופיע במסך הבית.</li></ol></div><div class="fl-card"><b class="h">אייפון (Safari)</b><ol class="fl-ol"><li>פותחים את הכתובת ב-Safari.</li><li>לוחצים על כפתור השיתוף <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M7 11H6a1 1 0 00-1 1v7a1 1 0 001 1h12a1 1 0 001-1v-7a1 1 0 00-1-1h-1"/></svg></span> בתחתית המסך.</li><li>גוללים ובוחרים "הוספה למסך הבית".</li><li>לוחצים "הוספה". האייקון יופיע במסך הבית.</li></ol></div><div class="fl-card"><b class="h">חשוב לדעת</b><p>הנתונים נשמרים בנפרד בכל מקום: מה שיש בדפדפן לא עובר אוטומטית לאפליקציה המותקנת (באייפון זה תמיד כך). לכן לפני ההתקנה יוצרים גיבוי, ואחרי ההתקנה משחזרים אותו באפליקציה המותקנת.</p><button type="button" class="dzbtn" onclick="dzStep('backup')"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg><span>גיבוי ושחזור</span></button><p class="note" style="margin-top:10px">לפני כל עדכון מומלץ ליצור גיבוי. הגיבוי נשמר כקובץ במכשיר.</p></div></div><div class="fl-bk" id="dz-g-backup" hidden><div class="fl-card"><b class="h">ייצוא</b><p>הורדת קובץ גיבוי (JSON) של כל הנתונים באפליקציה.</p><button type="button" class="dzbtn" onclick="backupData()"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg><span>יצירת גיבוי</span></button></div><div class="fl-card"><b class="h">ייבוא / שחזור</b><p>בחרי קובץ גיבוי (JSON). השחזור מחליף את כל הנתונים שיש עכשיו באפליקציה, ויוצג אישור לפני כן. מומלץ ליצור גיבוי עכשיו לפני שמשחזרים.</p><label class="dzbtn" for="dz-impfile"><svg viewBox="0 0 24 24"><path d="M12 4v10M8 10l4 4 4-4"/><path d="M5 19h14"/></svg><span>בחירת קובץ גיבוי</span></label><input type="file" id="dz-impfile" class="vh" accept=".json,application/json,text/plain,*/*" onchange="dzImpPick(this)"><details class="fl-paste"><summary>בחירת הקובץ לא נפתחת? הדבקת תוכן הגיבוי</summary><textarea id="dz-paste" rows="5" dir="ltr" placeholder="הדביקי כאן את התוכן של קובץ ה-JSON"></textarea><button type="button" class="dzbtn" onclick="dzImpPaste()"><svg viewBox="0 0 24 24"><path d="M12 4v10M8 10l4 4 4-4"/><path d="M5 19h14"/></svg><span>טעינה מהטקסט</span></button></details><p class="note" id="dz-imp-res" aria-live="polite"></p></div></div></div></div>
@@ -677,40 +679,59 @@ function wpSel(){
   if(live.textContent!==txt)live.textContent=txt}
 (function(){var app=document.getElementById('app');if(!app)return;new MutationObserver(function(){if(document.getElementById('wp_box'))wpSel()}).observe(app,{childList:true,subtree:true})})();
 /* ---- הזמנות: רשימה מסודרת, חיפוש וסינון. פותחת את כרטיס ההזמנה הקיים (ordRow) ולא יוצרת עותק ---- */
-var osQ='',osS='';
+var osQ='',osF='open';
 function osNorm(x){return String(x==null?'':x).toLowerCase().replace(/[\u0591-\u05C7]/g,'').replace(/[״"׳'`]/g,'').replace(/\s+/g,' ').trim()}
 function osHay(o){
   var p=[o.name,o.item,o.note,o.phone,o.email,o.brkn,o.status,o.date,o.due];
   Object.keys(o.parts||{}).forEach(function(k){var q=o.parts[k];if(q&&typeof q==='object'){p.push(q.note,q.type)}});
   (o.extras||[]).forEach(function(e){p.push(e&&e.l)});
   return osNorm(p.join(' '))}
+function osLeft(o){return owed(o)-(o.paid||0)}
+function osIn(o,f){
+  if(f==='all')return true;
+  if(f==='open')return o.status!=='נמסר';
+  if(f==='new')return o.status==='הוזמן';
+  if(f==='write')return o.status==='בכתיבה';
+  if(f==='prep')return PREP.indexOf(o.status)>-1;
+  if(f==='ready')return o.status==='מוכן';
+  if(f==='done')return o.status==='נמסר';
+  if(f==='owed')return o.status==='נמסר'&&osLeft(o)>0;
+  return true}
 function osMatch(o){
-  if(osS&&o.status!==osS)return false;
-  var q=osNorm(osQ);if(!q)return true;var h=osHay(o);
-  return q.split(' ').every(function(w){return h.indexOf(w)>-1})}
+  var q=osNorm(osQ);
+  if(q){var h=osHay(o);return q.split(' ').every(function(w){return h.indexOf(w)>-1})}
+  return osIn(o,osF)}
+function osSort(a,b){
+  var ad=a.status==='נמסר',bd=b.status==='נמסר';
+  if(ad!==bd)return ad?1:-1;
+  if(ad){var da=a.date||'',db=b.date||'';return da<db?1:da>db?-1:b.id-a.id}
+  var xa=a.due||'9999-99-99',xb=b.due||'9999-99-99';
+  return xa<xb?-1:xa>xb?1:a.id-b.id}
+function osChips(){
+  var C=[['open','פתוחות'],['new','חדשות'],['write','בכתיבה'],['prep','בהכנה'],['ready','מוכן'],['done','נמסרו'],['all','הכל']];
+  var h=C.map(function(c){var n=S.orders.filter(function(o){return osIn(o,c[0])}).length;return '<button type="button" class="oschip'+(!osNorm(osQ)&&osF===c[0]?' on':'')+'" onclick="osSet(\''+c[0]+'\')">'+c[1]+' '+n+'</button>'}).join('');
+  var ow=S.orders.filter(function(o){return osIn(o,'owed')}).length;
+  if(ow)h+='<button type="button" class="oschip owe'+(!osNorm(osQ)&&osF==='owed'?' on':'')+'" onclick="osSet(\'owed\')">נמסרו, נשאר חוב '+ow+'</button>';
+  return h}
 function osRows(){
-  var list=S.orders.filter(osMatch).slice().sort(function(a,b){var da=a.date||'',db=b.date||'';return da<db?1:da>db?-1:b.id-a.id});
-  var n=document.getElementById('os_n');
+  var list=S.orders.filter(osMatch).slice().sort(osSort);
   if(!S.orders.length)return {n:'אין עדיין הזמנות',h:'<div class="empty">אין עדיין הזמנות</div>'};
-  var cnt=list.length+' מתוך '+S.orders.length+' הזמנות';
-  if(!list.length)return {n:cnt,h:'<div class="empty">אין הזמנות שמתאימות לחיפוש או לסינון</div>'};
-  return {n:cnt,h:list.map(function(x){var left=owed(x)-(x.paid||0);
-    return '<div class="row os-row"><div><b>'+esc(x.name)+'</b><span class="mut">'+(x.item?esc(x.item)+' · ':'')+'הוזמן '+fdate(x.date)+dueTag(x)+'</span><span class="osst">'+esc(x.status||'')+'</span><span class="'+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם במלואו')+'</span></div><div class="osb"><button type="button" class="x" onclick="osOpen('+x.id+')">פתח כרטיס</button><button type="button" class="x" onclick="editOrder('+x.id+')">עריכה</button></div></div>'}).join('')}}
+  var cnt=osNorm(osQ)?list.length+' תוצאות מתוך '+S.orders.length+' הזמנות':list.length+' הזמנות';
+  if(!list.length)return {n:cnt,h:'<div class="empty">אין הזמנות כאן ✓</div>'};
+  return {n:cnt,h:list.map(ordRow).join('')}}
+function osSet(f){osF=f;osQ='';var q=document.getElementById('os_q');if(q)q.value='';osUpd()}
 function osUpd(){
-  var q=document.getElementById('os_q'),s=document.getElementById('os_s');osQ=q?q.value:osQ;osS=s?s.value:osS;
-  var r=osRows(),l=document.getElementById('os_list'),n=document.getElementById('os_n');if(l)l.innerHTML=r.h;if(n)n.textContent=r.n}
+  var q=document.getElementById('os_q');osQ=q?q.value:osQ;
+  var r=osRows(),l=document.getElementById('os_list'),n=document.getElementById('os_n'),c=document.getElementById('os_chips');if(l)l.innerHTML=r.h;if(n)n.textContent=r.n;if(c)c.innerHTML=osChips()}
 function osCard(){
   var r=osRows();
-  return '<div class="card" data-section-title="כל ההזמנות" data-section-count="'+S.orders.length+'"><b>כל ההזמנות</b><div class="grid" style="margin-top:8px"><div class="full"><label for="os_q">חיפוש לפי שם המזמין או פרטי ההזמנה</label><input id="os_q" type="search" autocomplete="off" value="'+esc(osQ)+'" oninput="osUpd()"></div>'+
-  '<div class="full"><label for="os_s">סינון לפי סטטוס</label><select id="os_s" onchange="osUpd()"><option value="">הכל</option>'+STAT.map(function(s){return '<option value="'+esc(s)+'"'+(s===osS?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select></div></div>'+
-  '<div class="mut" id="os_n" style="margin-top:8px">'+r.n+'</div><div id="os_list">'+r.h+'</div></div>'}
+  return '<div class="card" data-nofold="1"><b>הזמנות</b><div id="os_chips" class="oschips">'+osChips()+'</div><div class="full" style="margin-top:6px"><label for="os_q">חיפוש לפי שם או פרטי הזמנה</label><input id="os_q" type="search" autocomplete="off" value="'+esc(osQ)+'" oninput="osUpd()"></div>'+
+  '<div class="mut" id="os_n" style="margin:8px 0">'+r.n+'</div><div id="os_list">'+r.h+'</div></div>'}
 function osOpen(id){
-  var app=document.getElementById('app');
-  var gf=Array.prototype.filter.call(app.querySelectorAll('details.section-fold'),function(d){return d.querySelector('.order-group')})[0];
-  if(gf&&!gf.open)gf.open=true;
+  var app=document.getElementById('app'),o=findO(id);
+  if(o&&!osMatch(o)){osF='all';osQ='';osUpd()}
   var row=Array.prototype.filter.call(app.querySelectorAll('.orow'),function(r){return r.querySelector('[onclick^="editOrder('+id+')"]')})[0];
   if(!row){toast('כרטיס ההזמנה לא נמצא');return}
-  var g=row.closest('details.order-group');if(g&&!g.open)g.open=true;
   var sm=row.querySelector('.osum'),bd=row.querySelector('.obody');if(sm&&bd&&!bd.classList.contains('open'))togOrder(sm);
   setTimeout(function(){row.scrollIntoView({block:'center',behavior:'smooth'})},60)}
 
@@ -718,7 +739,7 @@ function osOpen(id){
 <script>
 var S={income:{},courses:[],lessons:[],orders:[],payments:[],expenses:[],writing:[],buys:[],plans:[],contacts:{},cprog:{},recurring:[],billing:{rates:{},inst:{}},cfg:{head:400,hand:400}},ref=null,tab='home',armed='',curCourse='',assets=null,busy=0,showPaid=false,showDoneO=false,showSett=false,showClosedSum=false,showOpenSum=false;
 var TABS=[['sum','סיכום'],['cash','הכנסות בפועל'],['lessons','שיעורים'],['bill','חיוב קורסים'],['orders','תפילין'],['write','כתיבה'],['buys','קניות'],['pay','תשלומים'],['links','קישורים']];
-var STAT=['הוזמן','בכתיבה','מוכן','נמסר'];
+var STAT=['הוזמן','בכתיבה','נשלח להגהה','נשלח לסגירה','מוכן','נמסר'];var PREP=['נשלח להגהה','נשלח לסגירה'];
 var IDS=['l_wrote','l_hours','c_new','l_course','l_name','l_date','l_price','l_topic','o_name','o_item','o_date','o_due','o_price','o_paid','o_status','p_name','p_date','p_amt','p_note'];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -954,6 +975,7 @@ function dueTag(o){
   return ' · <span class="'+(late?'bad':'')+'">יעד '+fdate(o.due)+(late?' (באיחור)':'')+'</span>';
 }
 function lc(x){return (x.price||0)*(x.hours||1)}
+function stageSummary(){var o=S.orders,c=function(f){return o.filter(f).length};return 'בכתיבה '+c(function(x){return x.status==='בכתיבה'})+' · בהכנה '+c(function(x){return PREP.indexOf(x.status)>-1})+' · מוכן '+c(function(x){return x.status==='מוכן'})+' · נמסרו '+c(function(x){return x.status==='נמסר'})}
 function st(x){return x.status||'open'}
 var ROWS=[];
 function setL(id,v){S.lessons.forEach(function(l){if(l.id===id)l.status=v});save()}
@@ -1033,10 +1055,7 @@ function viewSum(){
   var oact=orows.filter(function(r){return r.b!==0}),osett=orows.filter(function(r){return r.b===0});
   h+=orows.length?oact.map(function(r){var os=S.orders.filter(function(o){return o.name===r.n});return '<div class="row"><div><b>'+esc(r.n)+'</b><span class="mut">הוזמן '+money(r.c)+' · שולם '+money(r.p)+'</span>'+(os.length?'<div><button class="x" onclick="editOrder('+os[0].id+')">✏️ ערוך'+(os.length>1?' (האחרונה מתוך '+os.length+')':'')+'</button></div>':'')+'</div>'+bal(r)+'</div>'}).join(''):'<div class="empty">עוד אין הזמנות</div>';
   h+=osett.length?'<div style="margin-top:6px"><button class="x" onclick="showSett=!showSett;render()">'+(showSett?'▴':'▾')+' שולם במלואו ('+osett.length+')</button>'+(showSett?osett.map(function(r){return '<div class="row done"><div><b>'+esc(r.n)+'</b><span class="mut">שולם '+money(r.p)+'</span></div><span class="amt ok">✓</span></div>'}).join(''):'')+'</div>':'';
-  h+='</div><div class="card"><button class="x" onclick="showOpenSum=!showOpenSum;render()">'+(showOpenSum?'▴':'▾')+' תפילין · הזמנות פתוחות ('+open.length+')</button>';
-  h+=showOpenSum?(open.length?open.map(function(o){return '<div class="row"><div><b>'+esc(o.name)+'</b><span class="mut">'+esc(o.item)+dueTag(o)+'</span></div><div style="text-align:left"><span class="mut">'+esc(o.status)+'</span><br><button class="x" onclick="editOrder('+o.id+')">✏️ ערוך</button></div></div>'}).join(''):'<div class="empty">אין הזמנות פתוחות</div>'):'';
-  var closed=S.orders.filter(function(o){return o.status==='נמסר'});
-  h+=closed.length?'<div style="margin-top:6px"><button class="x" onclick="showClosedSum=!showClosedSum;render()">'+(showClosedSum?'▴':'▾')+' נמסרו ('+closed.length+')</button>'+(showClosedSum?closed.map(function(o){return '<div class="row done"><div><b>'+esc(o.name)+'</b><span class="mut">'+esc(o.item)+' · '+fdate(o.date)+'</span></div><div style="text-align:left"><button class="x" onclick="editOrder('+o.id+')">✏️ ערוך</button></div></div>'}).join(''):'')+'</div>':'';
+  h+='</div><div class="card"><div class="mut" id="stg-sum" style="margin-bottom:8px">'+stageSummary()+'</div><button class="x" onclick="osF=\'open\';osQ=\'\';setTab(\'orders\')">לכל ההזמנות ←</button>';
   return h+'</div>'+profitCard();
 }
 function lessonRow(x){
@@ -1336,6 +1355,8 @@ function addW(){
 function delW(id){arm('w'+id,function(){S.writing=S.writing.filter(function(w){return w.id!==id})})}
 function viewWriteActive(){
   var el=S.orders.filter(function(o){return wopen(o)&&writingRemaining(o)>0&&(hasW(o,'r')||hasW(o,'t'))});
+  var wLast={};S.writing.forEach(function(w){if(w.words>0&&(!wLast[w.oid]||w.date>wLast[w.oid]))wLast[w.oid]=w.date});
+  el=el.map(function(o,i){return {o:o,i:i,s:wLast[o.id]||''}}).sort(function(a,b){if(!!a.s!==!!b.s)return a.s?-1:1;if(a.s&&a.s!==b.s)return a.s>b.s?-1:1;var da=a.o.due||'9999',db=b.o.due||'9999';return da<db?-1:da>db?1:a.i-b.i}).map(function(x){return x.o});
   if(!el.length)return weekGoalCard()+availCard()+recPace()+'<div class="card"><div class="empty">אין הזמנות עם פרשיות פתוחות. כשתסמן פרשיות בהזמנת תפילין, תוכל לעקוב כאן אחרי הכתיבה.</div></div>';
   var co=findO(Number(curW));if(!co||el.indexOf(co)<0)co=el[0];curW=String(co.id);
   var pairs=PAIRS.filter(function(pr){return hasW(co,pr[0])});
@@ -1346,7 +1367,7 @@ function viewWriteActive(){
   var h='<div class="stats" style="grid-template-columns:1fr 1fr"><div class="stat"><span class="mut">כתבתי היום</span><b>'+tw+'</b></div><div class="stat"><span class="mut">ממוצע יומי (7 ימים)</span><b>'+avg+'</b></div></div>';
   h+=weekGoalCard()+recPace();
   h+=availCard();
-  h+='<div class="card"><b>רישום כתיבה</b><div class="grid" style="margin-top:8px"><div class="full"><label for="w_order">הזמנה</label><select id="w_order" onchange="pickW(this.value)">'+el.map(function(o){return '<option value="'+o.id+'"'+(o.id===co.id?' selected':'')+'>'+ordLabel(o)+'</option>'}).join('')+'</select></div>'+wpPanel(co)+
+  h+='<div class="card"><b>רישום כתיבה</b><div class="grid" style="margin-top:8px"><div class="full"><label for="w_order">הזמנה</label><select id="w_order" onchange="pickW(this.value)">'+el.map(function(o){return '<option value="'+o.id+'"'+(o.id===co.id?' selected':'')+'>'+ordLabel(o)+(o.due&&o.due<today()?' \u25CF באיחור':'')+'</option>'}).join('')+'</select></div>'+wpPanel(co)+
   '<div><label for="w_pair">זוג</label><select id="w_pair" onchange="wpSel()">'+(function(){var dp=(pairs.filter(function(pr){var m=sumPair(co,pr[0]);return m.h<(S.cfg.head||400)||m.y<(S.cfg.hand||400)})[0]||pairs[0])[0];return pairs.map(function(pr){var m=sumPair(co,pr[0]),dn=m.h>=(S.cfg.head||400)&&m.y>=(S.cfg.hand||400);return '<option value="'+pr[0]+'"'+(pr[0]===dp?' selected':'')+'>'+pr[1].replace('תפילין ','')+(dn?' (הושלם)':'')+'</option>'}).join('')})()+'</select></div>'+
   '<div><label for="w_part">חלק</label><select id="w_part" onchange="wpSel()"><option value="h">ראש</option><option value="y">יד</option></select></div>'+
   field('w_date','תאריך','date','value="'+today()+'"')+field('w_words','כמה מילים כתבת','number','inputmode="numeric" oninput="wpSel()"')+
@@ -1356,13 +1377,13 @@ function viewWriteActive(){
   el.forEach(function(o){PAIRS.forEach(function(pr){if(hasW(o,pr[0])){
     var rem=Math.max(0,(S.cfg.head||400)-sumW(o.id,pr[0],'h'))+Math.max(0,(S.cfg.hand||400)-sumW(o.id,pr[0],'y'));
     items.push({o:o,k:pr[0],lab:pr[1].replace('תפילין ',''),rem:rem})}})});
-  items.sort(function(a,b){var da=a.o.due||'9999',db=b.o.due||'9999';return da<db?-1:da>db?1:a.o.id-b.o.id});
+  items.sort(function(a,b){var sa=wLast[a.o.id]||'',sb=wLast[b.o.id]||'';if(!!sa!==!!sb)return sa?-1:1;if(sa&&sa!==sb)return sa>sb?-1:1;var da=a.o.due||'9999',db=b.o.due||'9999';return da<db?-1:da>db?1:a.o.id-b.o.id});
   var cum=0;
   items.forEach(function(it){
     cum+=it.rem;
     var eta='';
     if(it.rem>0&&avg>0){var dt=isoAdd(Math.ceil(cum/avg)),late=it.o.due&&dt>it.o.due;eta=' · סיום משוער <span class="'+(late?'bad':'')+'">'+fdate(dt)+(late?' (אחרי היעד)':'')+'</span>'}
-    h+='<div class="card"><b>'+esc(it.o.name)+(it.o.item&&it.o.item!==it.lab?' · '+esc(it.o.item):'')+' · '+(function(d){return d.length===3?d[2]+'.'+d[1]:''})((it.o.date||'').split('-'))+' · '+it.lab+'</b> <span class="mut">'+(it.o.due?' · יעד '+fdate(it.o.due):'')+'</span>'+progressHtml(it.o,it.k)+(it.rem>0?'<div class="mut">נשארו '+it.rem+' מילים'+eta+'</div>':'')+'</div>';
+    h+='<div class="card"><b>'+esc(it.o.name)+(it.o.item&&it.o.item!==it.lab?' · '+esc(it.o.item):'')+' · '+(function(d){return d.length===3?d[2]+'.'+d[1]:''})((it.o.date||'').split('-'))+' · '+it.lab+'</b> <span class="mut">'+(it.o.due?' · יעד '+fdate(it.o.due):'')+'</span>'+(it.o.due&&it.o.due<today()?' <span class="bad"><b>\u25CF באיחור</b></span>':'')+progressHtml(it.o,it.k)+(it.rem>0?'<div class="mut">נשארו '+it.rem+' מילים'+eta+'</div>':'')+'</div>';
   });
   var log=S.writing.filter(function(w){var o=findO(w.oid);return o&&wopen(o)&&writingRemaining(o)>0}).slice(0,30);
   h+='<div class="card"><b>יומן כתיבה</b>'+(log.length?log.map(function(w){var o=findO(w.oid);return '<div class="row"><div><b>'+w.words+' מילים</b><span class="mut">'+fdate(w.date)+' · '+ordLabel(o)+' · '+(w.pair==='t'?'ר״ת':'רש״י')+' · '+(w.part==='h'?'ראש':'יד')+'</span></div>'+xb('w'+w.id,'delW('+w.id+')','מחק')+'</div>'}).join(''):'<div class="empty">עוד לא נרשמה כתיבה</div>')+'</div>';
@@ -1956,7 +1977,7 @@ function availCard(){
 }
 function ordRow(x){
     var left=owed(x)-(x.paid||0);
-    return '<div class="row orow"><div class="osum" onclick="togOrder(this)"><span class="chev">&#9664;</span><b>'+esc(x.name)+'</b>'+(x.item?'<span class="mut oitem">'+esc(x.item)+'</span>':'')+'<span class="oleft '+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם ✓')+'</span></div><div class="obody"><div><b>'+esc(x.name)+'</b><span class="mut">'+(x.item?esc(x.item)+' · ':'')+'הוזמן '+fdate(x.date)+dueTag(x)+'</span>'+
+    return '<div class="row orow"><div class="osum" onclick="togOrder(this)"><span class="chev">&#9664;</span><b>'+esc(x.name)+'</b>'+(x.item?'<span class="mut oitem">'+esc(x.item)+'</span>':'')+'<span class="ostag'+(x.status!=='נמסר'&&x.due&&x.due<today()?' late':'')+'">'+esc(x.status||'הוזמן')+(x.status!=='נמסר'&&x.due&&x.due<today()?' · באיחור':'')+'</span><span class="oleft '+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם ✓')+'</span></div><div class="obody"><div><b>'+esc(x.name)+'</b><span class="mut">'+(x.item?esc(x.item)+' · ':'')+'הוזמן '+fdate(x.date)+dueTag(x)+'</span>'+
     (x.rid?'<span class="mut">🔁 הזמנה קבועה</span>':'')+(x.email?'<span class="mut">✉️ '+esc(x.email)+'</span>':'')+(x.phone?'<span class="mut">📞 <a href="tel:'+telNum(x.phone)+'">'+esc(x.phone)+'</a> · <a target="_blank" rel="noopener" href="https://wa.me/'+waNum(x.phone)+'">וואטסאפ</a></span>':'')+(x.note?'<span class="mut">'+esc(x.note)+'</span>':'')+(x.adj?'<span class="mut">'+(x.adj>0?'תוספת ':'הנחה ')+money(Math.abs(x.adj))+'</span>':'')+(x.extras||[]).map(function(e){return '<span class="mut">'+esc(e.l||(e.a>0?'תוספת':'הנחה'))+' '+moneyS(e.a)+'</span>'}).join('')+'<span class="mut">סך הכל '+money(owed(x))+' · שולם '+money(x.paid)+' · <span class="'+(left>0?'bad':'ok')+'">'+(left>0?'נשאר '+money(left):'שולם במלואו')+'</span></span>'+
     (x.svc?'<span class="mut">עמלת תיווך שלי '+money(x.svc)+'</span>':'')+(x.brk?'<span class="mut">מתוכו עמלת המתווך '+money(brkFee(x))+(x.brkn?' · '+esc(x.brkn):'')+' · לי '+money(x.price+(x.svc||0))+'</span>':'')+(buyTot(x.id)?'<span class="mut">קניות להזמנה '+money(buyTot(x.id))+' · יתרה אחרי קניות, ספק והגהה '+moneyS(x.price-buyTot(x.id)-proofAmount(x)-supplierCost(x).total)+'</span>':'')+partsRow(x)+supplierInfo(x)+proofOrderInfo(x)+docBlock(x)+'<div style="display:flex;gap:6px;margin-top:4px;align-items:center"><select class="st" onchange="setStatus('+x.id+',this.value)">'+STAT.map(function(s){return '<option'+(s===x.status?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'+
     '<input class="paid" type="number" inputmode="decimal" placeholder="עדכן שולם" onchange="setPaid('+x.id+',this.value)"></div>'+waBtns(x)+'</div>'+
@@ -1976,11 +1997,7 @@ function viewOrders(){
   h+='<div class="card"><p class="mut">📷 שומרים את ההזמנה, ואז מוסיפים תמונות או מצלמים בכרטיס שלה, תחת תיעוד מה שיצא.</p>'+(editId?'<div class="mut" style="margin-bottom:6px">✏️ עריכת הזמנה: <b>'+esc(findO(editId).name)+'</b></div>':'')+'<div class="grid">'+field('o_name','שם המזמין','text','list="ol"','full')+field('o_email','מייל הלקוח (לא חובה, לשליחת חשבונית)','email','inputmode="email"','full')+field('o_phone','טלפון הלקוח (לא חובה, לוואטסאפ)','tel','inputmode="tel"','full')+field('o_item','מה הוזמן','text','placeholder="למשל תפילין פשוטות"','full')+partsForm()+field('o_date','תאריך הזמנה','date','value="'+today()+'"')+field('o_due','יעד סיום','date')+field('o_paid','שולם עד כה ₪','number','inputmode="decimal"')+'<div class="full"><label for="o_status">סטטוס</label><select id="o_status">'+STAT.map(function(s){return '<option>'+s+'</option>'}).join('')+'</select></div></div><button class="add" onclick="add(\'orders\')">'+(editId?'שמור שינויים':'הוסף הזמנה')+'</button>'+(editId?'<button class="x" onclick="cancelEdit()">בטל עריכה</button>':'')+'</div>';
   h+=osCard();
   h+=recCard();
-  h+='<div class="card">';
-
-  var groups=[['הוזמן','הזמנות חדשות'],['בכתיבה','הזמנות בכתיבה'],['מוכן','מוכנות למסירה'],['deliveredDue','נמסרו - יתרה לבדיקה'],['settled','נמסרו ושולמו']];
-  h+=groups.map(function(g){var list=S.orders.filter(function(x){var done=x.status==='נמסר',due=owed(x)-(x.paid||0);return g[0]==='settled'?done&&due<=0:g[0]==='deliveredDue'?done&&due>0:x.status===g[0]});return '<details class="order-group"><summary>'+g[1]+' ('+list.length+')</summary>'+list.map(ordRow).join('')+'</details>'}).join('');
-  return h+'</div>';
+  return h;
 }
 function viewPay(){
   var h='<div class="card"><div class="grid">'+field('p_name','שולם על ידי','text','list="al"','full')+field('p_date','תאריך','date','value="'+today()+'"')+field('p_amt','סכום ₪','number','inputmode="decimal"')+'<div class="full"><label for="p_for">עבור</label><select id="p_for"><option value="o">תפילין</option><option value="l">שיעורים</option></select></div>'+field('p_note','הערה (מזומן, ביט, העברה…)','text','','full')+'</div><button class="add" onclick="add(\'payments\')">הוסף תשלום</button></div>';
@@ -1994,6 +2011,7 @@ function quietSections(){
  if(tab==='income'||tab==='today'||tab==='cash'||tab==='home'||tab==='overdue'||tab==='quick')return;
  var app=document.getElementById('app');
  Array.from(app.children).filter(function(e){return e.classList.contains('card')}).forEach(function(card,i){
+  if(card.dataset.nofold==='1')return;
   var key=tab+':'+i,title='פרטים',count=null;
   var b=card.querySelector('b');if(b)title=b.textContent;
   if(tab==='orders'){
