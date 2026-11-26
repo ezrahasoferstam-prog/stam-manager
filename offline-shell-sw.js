@@ -1,27 +1,25 @@
-/* שירות offline של האפליקציה. שחרור: release-20261126-writing-2
+/* שירות offline של האפליקציה. שחרור: release-20261126-icon-1
    עקרונות:
    1. גרסה היא חבילה שלמה. כל הקבצים מורדים ומאומתים מול רשימת הגיבובים של השחרור הזה לפני שנכתב אחד מהם למטמון.
       כשל (קובץ חסר או גיבוב שגוי) מבטל את ההתקנה, והגרסה התקינה הקודמת ממשיכה לעבוד, גם בלי אינטרנט.
    2. קבצי אפליקציה מוגשים רק מהמטמון המאומת של השחרור הפעיל. תגובות רשת של קבצי אפליקציה לעולם לא נכנסות למטמון ולא משמשות.
    3. שמות המטמונים נושאים את נתיב ההתקנה ואת השחרור. חיפוש, שמירה וניקוי נוגעים רק במטמונים של אותה התקנה.
    4. אינו שולח נתונים, אינו מסנכרן, ואינו נוגע בנתוני המשתמש או בשום אחסון אחר. */
-var REL='release-20261126-writing-2';
-var CORE=["./", "./index.html", "./6-manifest-finalB.webmanifest", "./1-practice-feature.js", "./1-2-lesson-mail.js?v=20261117", "./offline-support.js", "./1-1-logo-finalB-32.png", "./2-2-logo-finalB-180.png", "./3-3-logo-finalB-192.png", "./4-4-logo-finalB-512.png", "./5-5-logo-finalB-maskable-512.png", "./1-7-hero-megillah.jpg", "./6-apple-touch-icon-180.png", "./7-favicon-32.png", "./8-favicon-48.png"];
+var REL='release-20261126-icon-1';
+var CORE=["./", "./index.html", "./7-stk-manifest.webmanifest", "./1-practice-feature.js", "./1-2-lesson-mail.js?v=20261117", "./offline-support.js", "./1-stk-32.png", "./3-stk-180.png", "./4-stk-192.png", "./5-stk-512.png", "./6-stk-maskable-512.png", "./1-7-hero-megillah.jpg", "./2-stk-48.png"];
 var DIGESTS={
- "index.html": "047f3b4bf424f23315ba40c3afe3819f1a07592423bd23f8e140effdc4b57b6c",
- "6-manifest-finalB.webmanifest": "3b2d442b2537833621097bca6c83c2b0864f0ab39791aab1f7b40d241fd57a96",
+ "index.html": "118ce01980ffed2cd636bb3e6fc0a7aeb57d548c3b0254c63a646ea15a1c2f8d",
+ "7-stk-manifest.webmanifest": "90881559eb1c1c1adc92216a1b9ec93ae5bfb0854c9427ad9ebbd613c1d20759",
  "1-practice-feature.js": "3dafe5a3dcfb7602e507f5901c61a1b6fc6858bd93f3271ec28176fdafcb7985",
  "1-2-lesson-mail.js": "ad1d3c8a2ab09db811177853238a0379b044ffce4d594abd42a9a9a48feb3ed5",
  "offline-support.js": "ac713d821dab3bad11a2a0c0b099d40adfc7f88a8b9a5e0deb85155f6e2d8e43",
- "1-1-logo-finalB-32.png": "70896fb819c355970cb67e848c09dc3213e001afdf527ba7b3d016d1be7a2481",
- "2-2-logo-finalB-180.png": "dbcda958519cc9e7650bbf54581d2e3f19c6c6cf16d45434361c2ae955786906",
- "3-3-logo-finalB-192.png": "426882189d231560499deafa680aca06f50e35994efc8c208752d79a2c088f71",
- "4-4-logo-finalB-512.png": "43818f2508a75a70165da18f2811785d37ec4f2eed4445098eaa87950f619e95",
- "5-5-logo-finalB-maskable-512.png": "5acabee5cfc582ca938a6f04c4cf62c712c38e93c20168e15049f24c255ad4ce",
+ "1-stk-32.png": "0a1aa5d565f0f9975d74b2abbe43fbab0d72dfd6bc9618a2ef1384b7bb38ad1f",
+ "3-stk-180.png": "dfa056f20c25bfbc172a38d629662f910c4d5a02d119fafe0d599c8c02632ae9",
+ "4-stk-192.png": "5c3126add79c106e94e7b1c9709b1f07d6c5033d93c752b99793ee8324e47211",
+ "5-stk-512.png": "56075ab4ca4d674c5db68893819e798218dd9b33817da395c537728428305ca3",
+ "6-stk-maskable-512.png": "ac13856f7f7f578fb39e0b71ce2ad8fb00132dab7b8eb371ad9e356f40e110ef",
  "1-7-hero-megillah.jpg": "4927a609cfd4c053f1d8f4d6d4a2133abff5f51f7c38a60921eb74bb967530eb",
- "6-apple-touch-icon-180.png": "dbcda958519cc9e7650bbf54581d2e3f19c6c6cf16d45434361c2ae955786906",
- "7-favicon-32.png": "70896fb819c355970cb67e848c09dc3213e001afdf527ba7b3d016d1be7a2481",
- "8-favicon-48.png": "08d508b8c17c1384374cbae934d5abf864ebfc51571ac0a09431879940fdb646"
+ "2-stk-48.png": "00c8cffdcf91a8328fc3556bf7050ee9ff71a41c678b503e13f830e034bccb74"
 };
 var SCOPE_URL=new URL('./',self.location.href),SCOPE=SCOPE_URL.pathname;
 function slug(p){return p.replace(/[^A-Za-z0-9]/g,function(c){return '_'+c.charCodeAt(0).toString(16)})}
