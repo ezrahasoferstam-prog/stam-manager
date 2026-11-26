@@ -907,7 +907,7 @@ function hydrateImgs(){
     idbGet(id).then(function(b){if(b){if(e.classList.contains('fchip')){var ty=String(b.type||'');b=new Blob([b],{type:ty==='application/pdf'?ty:'application/octet-stream'})}e.href=URL.createObjectURL(b);e.dataset.done='1'}}).catch(function(){});
   });
 }
-function setTab(t){if(editId&&t!=='orders'){editId=null;exN=1}if(tab==='quick'&&t!=='quick')quickCleanup();tab=t;render()}
+function setTab(t){if(editId&&t!=='orders'){editId=null;exN=1}if(tab==='quick'&&t!=='quick')quickCleanup();tab=t;render();if(t==='write'){try{window.scrollTo(0,0)}catch(e){}}}
 function course(id){for(var i=0;i<S.courses.length;i++)if(S.courses[i].id===id)return S.courses[i]}
 function addCourse(){var n=val('c_new');if(!n)return;S.courses.push({id:Date.now(),name:n,students:[]});save()}
 function addStu(cid){var n=val('cs_'+cid);var c=course(cid);if(!n||!c||c.students.indexOf(n)>-1)return;c.students.push(n);save()}
@@ -1364,15 +1364,15 @@ function viewWriteActive(){
   var tw=S.writing.filter(function(w){return w.date===t0}).reduce(function(a,w){return a+w.words},0);
   var w7=S.writing.filter(function(w){return w.date>=from&&w.date<=t0}).reduce(function(a,w){return a+w.words},0);
   var avg=Math.round(w7/7);
-  var h='<div class="stats" style="grid-template-columns:1fr 1fr"><div class="stat"><span class="mut">כתבתי היום</span><b>'+tw+'</b></div><div class="stat"><span class="mut">ממוצע יומי (7 ימים)</span><b>'+avg+'</b></div></div>';
-  h+=weekGoalCard()+recPace();
-  h+=availCard();
-  h+='<div class="card"><b>רישום כתיבה</b><div class="grid" style="margin-top:8px"><div class="full"><label for="w_order">הזמנה</label><select id="w_order" onchange="pickW(this.value)">'+el.map(function(o){return '<option value="'+o.id+'"'+(o.id===co.id?' selected':'')+'>'+ordLabel(o)+(o.due&&o.due<today()?' \u25CF באיחור':'')+'</option>'}).join('')+'</select></div>'+wpPanel(co)+
+  var sh='<div class="stats" style="grid-template-columns:1fr 1fr"><div class="stat"><span class="mut">כתבתי היום</span><b>'+tw+'</b></div><div class="stat"><span class="mut">ממוצע יומי (7 ימים)</span><b>'+avg+'</b></div></div>';
+  var gl=weekGoalCard()+recPace()+availCard();
+  var h='<div class="card" data-nofold="1"><b>רישום כתיבה</b><div class="grid" style="margin-top:8px"><div class="full"><label for="w_order">הזמנה</label><select id="w_order" onchange="pickW(this.value)">'+el.map(function(o){return '<option value="'+o.id+'"'+(o.id===co.id?' selected':'')+'>'+ordLabel(o)+(o.due&&o.due<today()?' \u25CF באיחור':'')+'</option>'}).join('')+'</select></div>'+wpPanel(co)+
   '<div><label for="w_pair">זוג</label><select id="w_pair" onchange="wpSel()">'+(function(){var dp=(pairs.filter(function(pr){var m=sumPair(co,pr[0]);return m.h<(S.cfg.head||400)||m.y<(S.cfg.hand||400)})[0]||pairs[0])[0];return pairs.map(function(pr){var m=sumPair(co,pr[0]),dn=m.h>=(S.cfg.head||400)&&m.y>=(S.cfg.hand||400);return '<option value="'+pr[0]+'"'+(pr[0]===dp?' selected':'')+'>'+pr[1].replace('תפילין ','')+(dn?' (הושלם)':'')+'</option>'}).join('')})()+'</select></div>'+
   '<div><label for="w_part">חלק</label><select id="w_part" onchange="wpSel()"><option value="h">ראש</option><option value="y">יד</option></select></div>'+
   field('w_date','תאריך','date','value="'+today()+'"')+field('w_words','כמה מילים כתבת','number','inputmode="numeric" oninput="wpSel()"')+
   '</div><button class="add" onclick="addW()">רשום כתיבה</button>'+
   '<div class="mut" style="margin-top:8px">יעד לכל זוג: ראש <input class="paid" id="cfg_h" type="number" value="'+(S.cfg.head||400)+'" onchange="setCfg()"> יד <input class="paid" id="cfg_y" type="number" value="'+(S.cfg.hand||400)+'" onchange="setCfg()"> מילים</div></div>';
+  h+=sh+gl;
   var log=S.writing.filter(function(w){var o=findO(w.oid);return o&&wopen(o)&&writingRemaining(o)>0}).slice(0,30);
   h+='<div class="card"><b>יומן כתיבה</b>'+(log.length?log.map(function(w){var o=findO(w.oid);return '<div class="row"><div><b>'+w.words+' מילים</b><span class="mut">'+fdate(w.date)+' · '+ordLabel(o)+' · '+(w.pair==='t'?'ר״ת':'רש״י')+' · '+(w.part==='h'?'ראש':'יד')+'</span></div>'+xb('w'+w.id,'delW('+w.id+')','מחק')+'</div>'}).join(''):'<div class="empty">עוד לא נרשמה כתיבה</div>')+'</div>';
   return h;
