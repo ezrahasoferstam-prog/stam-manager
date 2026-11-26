@@ -1,25 +1,25 @@
-/* שירות offline של האפליקציה. שחרור: release-20261126-icon-1
+/* שירות offline של האפליקציה. שחרור: release-20261126-icon-2
    עקרונות:
    1. גרסה היא חבילה שלמה. כל הקבצים מורדים ומאומתים מול רשימת הגיבובים של השחרור הזה לפני שנכתב אחד מהם למטמון.
       כשל (קובץ חסר או גיבוב שגוי) מבטל את ההתקנה, והגרסה התקינה הקודמת ממשיכה לעבוד, גם בלי אינטרנט.
    2. קבצי אפליקציה מוגשים רק מהמטמון המאומת של השחרור הפעיל. תגובות רשת של קבצי אפליקציה לעולם לא נכנסות למטמון ולא משמשות.
    3. שמות המטמונים נושאים את נתיב ההתקנה ואת השחרור. חיפוש, שמירה וניקוי נוגעים רק במטמונים של אותה התקנה.
    4. אינו שולח נתונים, אינו מסנכרן, ואינו נוגע בנתוני המשתמש או בשום אחסון אחר. */
-var REL='release-20261126-icon-1';
-var CORE=["./", "./index.html", "./7-stk-manifest.webmanifest", "./1-practice-feature.js", "./1-2-lesson-mail.js?v=20261117", "./offline-support.js", "./1-stk-32.png", "./3-stk-180.png", "./4-stk-192.png", "./5-stk-512.png", "./6-stk-maskable-512.png", "./1-7-hero-megillah.jpg", "./2-stk-48.png"];
+var REL='release-20261126-icon-2';
+var CORE=["./", "./index.html", "./7-stk2-manifest.webmanifest", "./1-practice-feature.js", "./1-2-lesson-mail.js?v=20261117", "./offline-support.js", "./1-stk2-32.png", "./3-stk2-180.png", "./4-stk2-192.png", "./5-stk2-512.png", "./6-stk2-maskable-512.png", "./1-7-hero-megillah.jpg", "./2-stk2-48.png"];
 var DIGESTS={
- "index.html": "118ce01980ffed2cd636bb3e6fc0a7aeb57d548c3b0254c63a646ea15a1c2f8d",
- "7-stk-manifest.webmanifest": "90881559eb1c1c1adc92216a1b9ec93ae5bfb0854c9427ad9ebbd613c1d20759",
+ "index.html": "d3621c0765b4ad702b9cf2ab8c197f91bac9044c0e590581c7de242497c551f8",
+ "7-stk2-manifest.webmanifest": "a305dfff19bbfa038f2f162a1085bf759c0a40eea74895cf312b9288c16db969",
  "1-practice-feature.js": "3dafe5a3dcfb7602e507f5901c61a1b6fc6858bd93f3271ec28176fdafcb7985",
  "1-2-lesson-mail.js": "ad1d3c8a2ab09db811177853238a0379b044ffce4d594abd42a9a9a48feb3ed5",
  "offline-support.js": "ac713d821dab3bad11a2a0c0b099d40adfc7f88a8b9a5e0deb85155f6e2d8e43",
- "1-stk-32.png": "0a1aa5d565f0f9975d74b2abbe43fbab0d72dfd6bc9618a2ef1384b7bb38ad1f",
- "3-stk-180.png": "dfa056f20c25bfbc172a38d629662f910c4d5a02d119fafe0d599c8c02632ae9",
- "4-stk-192.png": "5c3126add79c106e94e7b1c9709b1f07d6c5033d93c752b99793ee8324e47211",
- "5-stk-512.png": "56075ab4ca4d674c5db68893819e798218dd9b33817da395c537728428305ca3",
- "6-stk-maskable-512.png": "ac13856f7f7f578fb39e0b71ce2ad8fb00132dab7b8eb371ad9e356f40e110ef",
+ "1-stk2-32.png": "d72dea63dbe27cebf3d9e78273e9366fa3a4f5c6c0b664056ba93252675a951b",
+ "3-stk2-180.png": "b8dfd2ba934447c51446b488a7c22c66062f5e31525ecd6b6d662d355d14d259",
+ "4-stk2-192.png": "eb33a6fbc3e86eaa5db6e91831b82f5274b55aefd7de001efda93eebec5e7b22",
+ "5-stk2-512.png": "46e865dbd0c87ff5c642dcaf9dfd757c85b63976f6d75fd19d3bdacafa4a2e9b",
+ "6-stk2-maskable-512.png": "1ddc354f8cfed1528724cd661749aea5dacab3514dd17457c207c250cdcc1395",
  "1-7-hero-megillah.jpg": "4927a609cfd4c053f1d8f4d6d4a2133abff5f51f7c38a60921eb74bb967530eb",
- "2-stk-48.png": "00c8cffdcf91a8328fc3556bf7050ee9ff71a41c678b503e13f830e034bccb74"
+ "2-stk2-48.png": "b8cd814f3902fcf3a07dd66081d40bf810d071d24447e8f9a34dbbd08e5844db"
 };
 var SCOPE_URL=new URL('./',self.location.href),SCOPE=SCOPE_URL.pathname;
 function slug(p){return p.replace(/[^A-Za-z0-9]/g,function(c){return '_'+c.charCodeAt(0).toString(16)})}
